@@ -1,0 +1,169 @@
+@charset "utf-8";
+
+/*
+    CSS styling for the HTML edition of The JavaScript Encyclopedia.
+*/
+
+body {
+    background-color: white;
+    font-family: serif;
+    font-size: 12pt;
+    font-style: normal;
+    margin: 0.5in;
+    margin-left: 1.5in;
+}
+
+
+h1 {    /* division */
+    border: 2pt solid black;
+    font-family: Syntax, Helvetica, sans-serif;
+    font-size: 200%;
+    font-weight: bolder;
+    margin-left: -1in;
+	page-break-before: always;
+    page-break-after: avoid;
+    text-align: center;
+}
+
+h2 {  /* specimen */
+    border-top: 1pt solid black;
+    border-left: 1pt solid black;
+    font-family: Syntax, Helvetica, sans-serif;
+    font-size: 100%;
+    font-weight: normal;
+    margin-left: -1in;
+    page-break-after: avoid;
+    padding-left: 0.5em;
+	padding-top: 0.25em;
+    text-align: left;
+}
+
+h3 {  /* article */
+    font-family: Syntax, Helvetica, sans-serif;
+    font-size: 100%;
+    font-weight: normal;
+    font-variant: normal;
+    margin-left: -0.5in;
+    page-break-after: avoid;
+    text-align: left;
+}
+
+h4 {  /* part */
+    font-family: Syntax, Helvetica, sans-serif;
+    font-size: 100%;
+    font-weight: normal;
+    font-variant: normal;
+    page-break-after: avoid;
+    text-align: left;
+}
+
+pre {  /* example */
+    font-family: "Courier New", Courier, mono;
+    font-size: 100%;
+    margin-left: 0.5in;
+	page-break-inside: avoid;
+}
+
+pre a {
+    font-family: "Courier New", Courier, mono;
+    font-size: 100%;
+}
+
+code {  /* literal */
+    font-family: "Courier New", Courier, mono;
+    font-size: 100%;
+    font-style: normal;
+    font-variant:normal;
+    font-weight: normal;
+}
+
+dfn {  /* comment */
+    font-family: serif;
+    font-size: 72%;
+    font-style: italic;
+    font-variant:normal;
+    font-weight: normal;
+}
+
+var {  /* meta variable */
+    font-style: italic;
+}
+
+strong {  /* reserved word */
+    font-family: Syntax, Helvetica, sans-serif;
+    font-size: 60%;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+cite {  /* url */
+    font-family: Syntax, Helvetica, sans-serif;
+    font-size: 90%;
+    font-style: normal;
+}
+
+table {
+    border: 2pt solid black;
+    background-color: white;
+    margin-left: 1em;
+	page-break-inside: avoid;
+}
+
+td {
+    background-color: white;
+    border: black solid 1pt;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+th {
+    background-color: thistle;
+    border: black solid 1pt;
+    text-align: center;
+}
+
+caption {
+    caption-side: bottom;
+    font-size: 90%;
+}
+
+li {
+    list-style-position: outside;
+    margin: 0;
+    padding: 0;
+}
+
+li p {
+	text-indent: 0;
+}
+
+.es3 {  /* ES3 warning */
+    background-image: url(es3.gif);
+    background-repeat: no-repeat;
+    font-size: 90%;
+    margin-left: -0.5in;
+    padding-left: 0.5in;
+}
+
+a {  /* link */
+    font-family: Syntax, Helvetica, sans-serif;
+    font-size: 100%;
+    font-weight: normal;
+    font-variant: normal;
+    text-decoration: none;
+}
+
+a:link {
+    color: midnightblue;
+}
+a:visited {
+    color: purple;
+}
+a:hover {
+    color: blue;
+    text-decoration: underline;
+}
+a:active {
+    color: red;
+}
+

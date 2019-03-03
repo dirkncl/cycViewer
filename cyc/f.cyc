@@ -1,0 +1,347 @@
+@chapter "F"
+
+@specimen(factory)
+
+    A factory is a function that returns a function.
+    See @link(Higher order functions).
+
+@specimen(false @reserved@)
+
+    The @link(false) value is one of the two @link(immutable) @link(boolean) values.
+    The @link(false) value is one of the @link(falsy) values.
+
+    The @link(false) value can be produced by a @link(relational operator).
+
+    @article(@t(false) @link(literal))
+
+    The @t(false) @link(literal) is a convenient way to access the @link(false) value.
+
+    @program{var found = false;}
+
+    @article "false positive"
+
+    Blah.
+
+@specimen(falsy)
+
+    Every value is either @link(truthy) or @link(falsy).
+    These are the @link(falsy) values:
+
+    @list{
+    @link(empty string)
+    @link(false)
+    @link(NaN)
+    @link(null)
+    @link(undefined)
+    @link(zero)
+    }
+
+    All other values, including empty objects and empty arrays, are @link(truthy).
+
+    A @link(falsy) value can have consequences:
+
+    @list {
+    in the condition part of an @link(if statement), the @link(else) branch is taken
+    in the condition part of a @link(loop statement), @link(break) out of the loop
+    in the first operand of the @link(&& infix operator), the result is the @link(falsy) value of the first operand
+    in the first operand of the @link(|| infix operator), the result is the value of the second operand
+    in the first operand of the @link(? ternary operator), the result is the value of the third operand
+    in a @link(bitwise operator), a @link(falsy) operand is treated the same as @link(zero)
+    }
+
+@specimen(fill)
+
+    @article(@t(fill) @link(array prototype function))
+
+    Blah.
+
+@specimen(filter)
+
+    @article(@t(filter) @link(array prototype function))
+
+    Blah.
+
+@specimen(finally @reserved@)
+
+    See @link(try statement).
+
+@specimen(find)
+
+    @article(@t(find) @link(array prototype function))
+
+    Blah.
+
+@specimen(findIndex)
+
+    @article(@t(findIndex) @link(array prototype function))
+
+    Blah.
+
+@specimen "Float32Array"
+
+    @article "@t(Float32Array) @link(primordial function)"
+
+        @list {
+            @t<new Float32Array(>length@t<);>
+            @t<new Float32Array(>typedArray@t<);>
+            @t<new Float32Array(>object@t<);>
+            @t<new Float32Array(>buffer@t<,> byteOffset@t<,> length@t<);>
+        }
+
+    @article "@t(Float32Array) @link(function)"
+
+        @list {
+            @link(from float32array function)
+            @link(of float32array function)
+        }
+
+    @article "@t(Float32Array) @link(number)"
+
+        @list {
+            @link(BYTES_PER_ELEMENT float32array number)
+            @link(length float32array number)
+        }
+
+    @article "@t(Float32Array) @link(prototype)"
+
+        @list {
+            @link(name float32array prototype arraybuffer)
+            @link(name float32array prototype function)
+            @link(name float32array prototype number)
+        }
+
+    @article "@link(Float32Array prototype) @link(arraybuffer)"
+
+        @list {
+            @link(buffer float32array prototype arraybuffer)
+        }
+
+    @article "@link(Float32Array prototype) @link(function)"
+
+        @list {
+            @link(copyWithin float32array prototype function)
+            @link(entries float32array prototype function)
+            @link(every float32array prototype function)
+            @link(fill float32array prototype function)
+            @link(filter float32array prototype function)
+            @link(find float32array prototype function)
+            @link(findIndex float32array prototype function)
+            @link(forEach float32array prototype function)
+            @link(indexOf float32array prototype function)
+            @link(join float32array prototype function)
+            @link(lastIndexOf float32array prototype function)
+            @link(map float32array prototype function)
+            @link(reduce float32array prototype function)
+            @link(reduceRight float32array prototype function)
+            @link(reverse float32array prototype function)
+            @link(set float32array prototype function)
+            @link(slice float32array prototype function)
+            @link(some float32array prototype function)
+            @link(subarray float32array prototype function)
+            @link(toLocaleString float32array prototype function)
+            @link(toString float32array prototype function)
+            @link(values float32array prototype function)
+        }
+
+    @article "@link(Float32Array prototype) @link(number)"
+
+        @list {
+            @link(byteLength float32array prototype number)
+            @link(byteOffset float32array prototype number)
+            @link(length float32array prototype number)
+        }
+
+    @article "@link(Float32Array) @link(number)"
+
+        @list {
+            @link(BYTES_PER_ELEMENT float32array number)
+            @link(length float32array number)
+        }
+
+    @article "@t(Float32Array) @link(string)"
+
+        @list {
+            @link(name float32array string)
+        }
+
+@specimen "Float64Array"
+
+    @article "@t(Float64Array) @link(primordial function)"
+
+        @list {
+            @t<new Float64Array(>length@t<);>
+            @t<new Float64Array(>typedArray@t<);>
+            @t<new Float64Array(>object@t<);>
+            @t<new Float64Array(>buffer@t<,> byteOffset@t<,> length@t<);>
+        }
+
+    @article "@t(Float64Array) @link(function)"
+
+        @list {
+            @link(from Float64Array function)
+            @link(of Float64Array function)
+        }
+
+    @article "@t(Float64Array) @link(number)"
+
+        @list {
+            @link(BYTES_PER_ELEMENT Float64Array number)
+            @link(length Float64Array number)
+        }
+
+    @article "@t(Float64Array) @link(prototype)"
+
+        @list {
+            @link(name Float64Array prototype arraybuffer)
+            @link(name Float64Array prototype function)
+            @link(name Float64Array prototype number)
+        }
+
+    @article "@link(Float64Array prototype) @link(arraybuffer)"
+
+        @list {
+            @link(buffer Float64Array prototype arraybuffer)
+        }
+
+    @article "@link(Float64Array prototype) @link(function)"
+
+        @list {
+            @link(copyWithin Float64Array prototype function)
+            @link(entries Float64Array prototype function)
+            @link(every Float64Array prototype function)
+            @link(fill Float64Array prototype function)
+            @link(filter Float64Array prototype function)
+            @link(find Float64Array prototype function)
+            @link(findIndex Float64Array prototype function)
+            @link(forEach Float64Array prototype function)
+            @link(indexOf Float64Array prototype function)
+            @link(join Float64Array prototype function)
+            @link(lastIndexOf Float64Array prototype function)
+            @link(map Float64Array prototype function)
+            @link(reduce Float64Array prototype function)
+            @link(reduceRight Float64Array prototype function)
+            @link(reverse Float64Array prototype function)
+            @link(set Float64Array prototype function)
+            @link(slice Float64Array prototype function)
+            @link(some Float64Array prototype function)
+            @link(subarray Float64Array prototype function)
+            @link(values Float64Array prototype function)
+            @link(toLocaleString Float64Array prototype function)
+            @link(toString Float64Array prototype function)
+        }
+
+    @article "@link(Float64Array prototype) @link(number)"
+
+        @list {
+            @link(byteLength Float64Array prototype number)
+            @link(byteOffset Float64Array prototype number)
+            @link(length Float64Array prototype number)
+        }
+
+    @article "@t(Float64Array) @link(number)"
+
+        @list {
+            @link(BYTES_PER_ELEMENT Float64Array number)
+            @link(length Float64Array number)
+        }
+
+    @article "@t(Float64Array) @link(string)"
+
+        @list {
+            @link(name Float64Array string)
+        }
+
+@specimen(floor)
+
+    @article(@t(floor) @link(Math function))
+
+    Blah.
+
+@specimen(for @reserved@)
+
+    @article(@t(for) @t(in) @link(statement))
+
+    Blah.
+
+    @article(@t(for) @link(statement))
+
+    Blah.
+
+@specimen(forEach)
+
+    @article(@t(forEach) @link(array prototype function))
+
+    Blah.
+
+    Example:
+
+@specimen(from)
+
+    @article(@t(from) @link(array function))
+
+    Blah.
+
+@specimen(fromCharCode)
+
+    @article"@t(fromCharCode) @link(String function)"
+
+    (Blah.)
+
+@specimen(fromCodePoint)
+
+    @article"@t(fromCodePoint) @link(String function)"
+
+    (Blah.)
+
+@specimen(free variable)
+
+    Blah.
+
+@specimen(freeze)
+
+    @article(@t(freeze) @link(Object function))
+
+    Blah.
+
+@specimen(fromCharCode)
+
+    @article(@t(fromCharCode) @link(String function))
+
+    Blah.
+
+@specimen(function @reserved@)
+
+    Blah.
+
+    @article(@t(function) @t(*))
+
+    (There is a special form of function that returns an object instead of a function.
+    Blah.)
+
+    @article(function body)
+
+    Blah.
+
+    @article(function @link(invocation))
+
+    Blah.
+
+    @article(@t(function) literal)
+
+    Blah.
+
+    @article(@t(Function) @link(primordial function))
+
+    Blah.
+
+    @article(@t(Function) @link(prototype function))
+
+    Blah.
+
+    @article(@t(Function) @link(prototype object))
+
+    Blah.
+
+    @article(@t(function) @link(statement))
+
+    Blah.

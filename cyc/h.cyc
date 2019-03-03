@@ -1,0 +1,48 @@
+@chapter "H"
+
+@specimen "hasOwnProperty"
+
+    @article "@t(hasOwnProperty) @link<object prototype function>"
+
+    Blah.
+
+@specimen "hexadecimal @aka(base 16)"
+
+    The hexadecimal digits are @t(0), @t(1), @t(2), @t(3), @t(4), @t(5), @t(6), 
+    @t(7), @t(8), @t(9), @t(A), @t(B), @t(C), @t(D), @t(E), and @t(F). 
+    The lower case letters @t(a), @t(b), @t(c), @t(d), @t(e), and @t(f) can also
+     be used.
+
+    Unlike the decimal system which uses base 10, the hexadecimal system uses 
+    base 16, where each hexadecimal digit represents exactly 4 bits. In olden times, 
+    programming was closer to the machine so a format that was trivially convertable 
+    to binary was highly desirable. Today, hexadecimal is mainly used to encode a 
+    code value in a @link[Unicode escape sequence] and to encode colors in @link(CSS).
+
+    Also see @link(number literal), @link(parseInt primordial function), and 
+    @link(toString Number prototype function).
+
+@specimen "higher order function"
+
+    Blah.
+
+@specimen "hoisting"
+
+    Blah.
+
+@specimen "host object"
+
+    A host object is an object that is not a ECMAScript object, but that can be 
+    interacted with by ECMAScript programs. It might be provided by the host 
+    operating system. The ECMAScript standard does not require that there be any 
+    host objects, but implementations are allowed to provide them. Host objects, 
+    because they are not JavaScript objects, might act funny. You know, funny. 
+    Also see @link(native object).
+
+@specimen "HTML @aka(Hypertext Markup Language)"
+
+    Blah.
+
+@specimen "hyphen"
+
+    See @link(-).

@@ -1,0 +1,273 @@
+@chapter "T"
+
+@specimen "tab @aka(tabulation)"
+
+    Blah.
+
+@specimen "tail recursion"
+
+@specimen "tan"
+
+    @article(@t(tan) @link(Math function) @aka(tangent))
+
+    The Math.tan(radians) function, also known as tangent, takes an angle in radians and returns a number.
+
+    This is an approximate implemention of Math.tan:
+
+    @program <
+    Math.tan = function tan(radians) {
+        return Math.sin(radians) / Math.cos(radians);
+    };
+    >
+
+    See @link(Math function).
+
+@specimen "ternary operator"
+
+    A ternary operator is an operator that takes three operands.
+    JavaScript has only one ternary operator, the @link(? ternary operator).
+
+@specimen "test"
+
+    @article(@t(test) @link(RegExp prototype function))
+
+    Blah.
+
+@specimen "this @reserved@"
+
+    @article(@t(this) @link(parameter))
+
+    Using @t(this) is like pair programming with Abbott & Costello.
+
+    Blah.
+
+@specimen "throw @reserved@"
+
+    @article(@t(throw) @link(statement))
+
+    Blah.
+
+@specimen "toDateString"
+
+    @article(@t(toDateString) @link(date prototype function))
+
+    Blah.
+
+@specimen "toExponential"
+
+    @article(@t(toExponential) @link(number prototype function))
+
+    Blah.
+
+@specimen "toFixed"
+
+    @article(@t(toFixed) @link(number prototype function))
+
+    Blah.
+
+@specimen "toGMTString"
+
+    @article(@t(toGMTString) @link(date prototype function))
+
+    Blah.
+
+@specimen "toISOString"
+
+    @article(@t(toISOString) @link(date prototype function))
+
+    Blah.
+
+@specimen "token"
+
+    A compilation unit is made up of tokens. The tokens of this language are
+
+    @list {
+    @link(comment)
+    @link(name)
+    @link(number literal)
+    @link(operator)
+    @link(punctuator)
+    @link(regexp literal)
+    @link(string literal)
+    @link(whitespace)
+    }
+
+@specimen "toLocaleDateString"
+
+    @article(@t(toLocaleDateString) @link(date prototype function))
+
+    Blah.
+
+@specimen "toLocaleFormat"
+
+    @article(@t(toLocaleFormat) @link(number prototype function))
+
+    Blah.
+
+@specimen "toLocaleLowerCase"
+
+    @article(@t(toLocaleLowerCase) @link(string prototype function))
+
+    Blah.
+
+@specimen "toLocaleString"
+
+    @article(@t(toLocaleString) @link(array prototype function))
+
+    Blah.
+
+    @article(@t(toLocaleString) @link(number prototype function))
+
+    Blah.
+
+    @article(@t(toLocaleString) @link(object prototype function))
+
+    Blah.
+
+@specimen "toLocaleTimeString"
+
+    @article(@t(toLocaleTimeString) @link(date prototype function))
+
+    Blah.
+
+@specimen "toLocaleUpperCase"
+
+    @article(@t(toLocaleUpperCase) @link(string prototype function))
+
+    Blah.
+
+@specimen "toLowerCase"
+
+    @article(@t(toLowerCase) @link(string prototype function))
+
+    Blah.
+
+@specimen "toPrecision"
+
+    @article(@t(toPrecision) @link(number prototype function))
+
+    Blah.
+
+@specimen "toString"
+
+    @article(@t(toString) @link(Array prototype function))
+
+    Blah.
+
+    @article(@t(toString) @link(Boolean prototype function))
+
+    Blah.
+
+    @article(@t(toString) @link(Number prototype function))
+
+    Blah.
+
+    @article(@t(toString) @link(Object prototype function))
+
+    Blah.
+
+    @article(@t(toString) @link(String prototype function))
+
+    Blah.
+
+@specimen "toTimeString"
+
+    @article(@t(toTimeString) @link(Date prototype function))
+
+    Blah.
+
+@specimen "toUpperCase"
+
+    @article(@t(toUpperCase) @link(string prototype function))
+
+    Blah.
+
+@specimen "trim"
+
+    @article(@t(trim) @link(string prototype function))
+
+    Blah.
+
+@specimen "true @reserved@"
+
+    Blah.
+
+    @article(@t(true) @link(literal))
+
+    Blah.
+
+@specimen "truthy"
+
+    Blah.
+
+@specimen (trunc)
+
+    @article(@t(trunc) @link(Math function) @aka(truncate))
+
+    There is no @t(trunc) function. See @link(integer).
+
+@specimen "try @reserved@"
+
+    @article(@t(try) @link(statement))
+
+    Blah.
+
+    In the example for callback, a potential problem with the setStatus function is that if any of the callback functions throw an exception, the remaining callback functions will not be executed. This can be guarded against by wrapping the invocation of each of the callbacks in a try statement. This will allow setStatus to carry on. In this case, the catch clause is empty because we don't care what the exception was. In all cases we recover by ignoring the exception and allowing forEach to proceed to the next iteration.
+
+    @program <
+            setStatus: function (newStatus) {
+                status = newStatus;
+                subscribers.forEach(function (callback) {
+                    try {
+                        callback(status);
+                    } catch (e) {}
+                });
+            }
+    >
+
+    There are some errors that cannot be caught by a @link(try statement), such as exceeding implementation dependent limits on recursion depth, memory consumption, or execution time.
+
+    The catch scope problem.
+
+@specimen(turn)
+
+    Program execution happens in turns. First, each compilation unit is given one turn in which it executes to completion. In some environments, that is the end of the program. But in sessionful environments like web browsers, turns will then be given to events, including UI events generated by the user, by the network stack, by the file system, and by interprocess communication, and timer events. An event handler function or deferred function, when given its turn, will run to completion. Once it has completed (usually by returning) then the program goes idle until another event occurs. The next event must wait until the previous turn ends.
+
+    The turn model avoids a large class of concurrency hazards, particularly deadlock and race conditions. The turn model tends to make programs easier to make and more reliable than the thread model.
+
+    The greatest hazard in the turn model is that if a turn takes too long, then the system becomes unresponsive. This can be avoided by distributing long-running functions to other processes. Processes can communicate with each other (typically using a JSON message delivered as an event or callback) but are unable to directly access the variables or data structures of other processes, thus avoiding the hazards of the thread model. The process model is not yet universally adopted in browsers, but is quickly gaining popularity.
+
+@specimen "type"
+
+    These are the types in this language:
+
+    @list {
+    @link(array)
+    @link(boolean)
+    @link(date)
+    @link(function)
+    @link(null)
+    @link(number)
+    @link(object)
+    @link(regexp)
+    @link(string)
+    @link(undefined)
+    }
+
+    An implementation or environment may add additional types.
+
+@specimen "TypeError"
+
+    @article(@t(TypeError) @link(primordial function))
+
+    Blah.
+
+@specimen "typed array"
+
+    {Blah.}
+
+@specimen "typeof @reserved@"
+
+    @article(@t(typeof) @link(prefix operator))
+
+    Blah.

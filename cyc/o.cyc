@@ -1,0 +1,559 @@
+@chapter "O"
+
+@specimen "object"
+
+An object (or @link(native object)) is an unordered container of properties.
+Each @link(property) has a key, which is a @link(string).
+Keys are unique within an object. A @link(property) can have any value of any
+type. Properties are normally accessed with the @link(. suffix operator) and @link([ ] suffix operator).
+
+The object is the fundamental data structure. The object is the base type for
+@link(array), @link(date), @link(function), and @link(regexp).
+Objects are used as containers for clustering collections of data and
+functions into convenient units. When a function is stored in an object, it is
+called a @link(method). Methods can provide functionality and protect the
+integrity of their objects. Objects are used as records or collections of data,
+and can be nested to form more complicated data structures.
+
+A reference to an object may be stored in a variable, stored in an object as a
+property, passed as as an argument to a function, and returned as a return value
+from a function. None of these operations make a copy of an object.
+Objects are always passed by reference. The @link(=== infix operator) will
+produce @link(true) when both of its operands are references to the same object.
+
+@program <
+var a = {booga: true};
+var b = {booga: true};
+alert(a === b);    // false
+b = a;
+alert(a === b);    // true
+a.booga = false;
+alert(b.booga);    // false
+>
+
+An object can be made with the @link(create Object function).
+
+The @link(typeof prefix operator) returns @t('object') when its operand is an
+object, but the @link(typeof prefix operator) also returns @t('object')
+when its operand is an @link(array) or @link(null).
+
+Objects are extensible by default, meaning that new properties can be added at
+any time. New properties can be added with an @link(assignment operator).
+
+@program "a.wooga = true;    // a now has a wooga property"
+
+Extensibility can be turned off for an object by the @link(preventExtensions Object function).
+
+Objects can be used as associative arrays or hash collections, with
+two limitations. First, the keys of an object must be strings.
+If any other value is used as a key, it is converted into a string first.
+The second limitation is more serious. In addition to an object's own properties,
+an object may have inherited properties. This can cause confusion for some applications.
+
+@program <
+function has_a(object, key) {
+    return key in object;
+}
+
+var word = {};
+word[1.0] = true;
+alert(has_a(word, '1.0'));            // false
+alert(has_a(word, '1'));              // true
+
+word.cat = true;
+alert(has_a(word, 'cat'));            // true
+alert(has_a(word, 'dog'));            // false
+alert(has_a(word, 'constructor'));    // true (inherted)
+>
+
+It is regrettably necessary to program defensively in the face of this by
+looking for specific values or types, or by using the
+@link(hasOwnProperty Object prototype function). For example,
+
+@begin(program)
+function has_a(object, key) {
+
+// Look for a particular value instead of simply having the property.
+
+    return object[key] === true;
+}
+@end(program)
+
+Another option is to use @link(create Object function) instead of an @link(object literal) to create an object that does not inherit.
+
+@begin(program)
+var word = Object.create();
+@end(program)
+
+@section "Creation"
+
+An object can be created by
+
+@list {
+    @link(create Object function)
+    @link(new prefix operator)
+    @link(object literal)
+}
+
+There is no explicit object reclamation. All objects are subject to automatic garbage collection. The memory that an object occupies may be reused when the object has been forgotten by the program (when there are no live references to the object).
+Property
+
+An object is a container of zero or more properties. A property associates a key string with a value. Having a reference to an object and a key string, it is possible to get the value of a property, or to set the value of a property. A property has attributes, which can be manipulated with a property descriptor. The attributes determine whether the key is enumerable, or if the property's value can be changed, or if the property can be reconfigured.
+
+A property can be a data property, associating a key with a value, or an accessor property, associating a key value with a get function and a set function.
+
+An object can inherit some or all of its properties from another object. A property that is directly a part of an object is called an own property. A property that is inherited is called an inherited property.
+
+@begin(program)
+// Make an elder variable, and initialize it with an object literal,
+// creating an object with an mm data property.
+
+var elder = {
+    mm: 0
+};
+
+// Add to elder an inch accessor property.
+
+Object.defineProperty(elder, 'inch', {
+    get: function () {
+        return this.mm / 25.4;
+    },
+    set: function (value) {
+        this.mm = value * 25.4;
+    }
+});
+
+// Make a younger variable, and assign to it a new object that
+// inherits from the elder object.
+
+var younger = Object.create(elder);
+
+// Add to younger a unit data property.
+
+younger.unit = 'mm';
+
+// Add to younger a meter accessor property.
+
+Object.defineProperty(elder, 'meter', {
+    get: function () {
+        return this.mm / 1000;
+    },
+    set: function (value) {
+        this.mm = value * 1000;
+    }
+});
+
+// younger.mm       inherited, data
+// younger.inch     inherited, accessor
+// younger.unit     own, data
+// younger.meter    own, accessor
+
+// elder.mm         own, data
+// elder.inch       own, accessor
+// elder.unit       undefined
+// elder.meter      undefined
+@end(program)
+
+An array containing the keys of all of an object's own enumerable properties can be obtained with the keys Object function. All of an object's enumerable properties can be obtained with the for in statement.
+Property descriptor
+
+A property descriptor is an object that describes a property and its attributes. A property descriptor object can be passed to the defineProperty Object function and the defineProperties Object function. A property descriptor object can be obtained from the getOwnPropertyDescriptor Object function.
+
+These are all of the properties that may be present in a property descriptor:
+
+value
+    The value of the property. This attribute is only used in data properties.
+writeable
+    If true, the value may be changed. If false, attempting to change the value throws an exception (ES5 strict) or fails silently (ES3). This attribute is only used in data properties. Once it is set to false, it can no longer be set to true.
+enumerable
+    If true, the key string will appear in the sequence produced by the for in statement. Once it is set to false, it can no longer be set to true.
+configurable
+    If true, the data property may be changed into an accessor property or the accessor property may be changed into a data property or the accessor property may have its get and set methods replaced or the property may be deleted with the delete prefix operator. Once it is set to false, it can no longer be set to true.
+get
+    If the get attribute is a function, the function is called when an attempt is made to get the value. The return value from the function is used instead. The function will receive no parameters, but this will be bound to the object. This attribute is only used in assessor properties.
+set
+    If the set attribute is a function, the function is called when an attempt is made to set the value of the property. The function will receive one parameter, the value that is intended to be stored in the property, and this will be bound to the object. The return value is ignored. This attribute is only used in assessor properties.
+
+A data property is a property that has neither a set attribute nor a get attribute. An accessor property is a property having either a get attribute, a set attribute, or both. An accessor property can be used to attach behavior to the retrieving or changing of a value.
+
+Example:
+
+@begin(program)
+function make_temperature(temp) {
+    return Object.defineProperties({kelvin: temp || 0}, {
+        celsius: {
+            get: function () {
+                return this.kelvin - 273.15;
+            },
+            set: function (temp) {
+                this.kelvin = temp + 273.15;
+            }
+        },
+        fahrenheit: {
+            get: function () {
+                return this.kelvin * 9/5 - 459.67;
+            },
+            set: function (temp) {
+                this.kelvin = (temp + 459.67) * 5/9;
+            }
+        }
+    });
+}
+@end(program)
+
+So make_temperature creates an object that has three properties, kelvin, celsius, and fahrenheit, but keeps only one value. Changing any property will cause apparent change to the others.
+
+@begin(program)
+var temp = make_temperature();
+alert(temp.kelvin);        // 0
+alert(temp.fahrenheit);    // -459.67
+temp.fahrenheit = 32;
+alert(temp.celsius);       // 0
+alert(temp.kelvin);        // 273.15
+@end(program)
+
+Accessor properties should be used cautiously. Confusing side-effects should be avoided.
+
+@section "Get"
+
+The get operation is done by the @link(. suffix operator) or @link([ ] suffix operator) when the operand is an object and when the expression is not an lvalue (the target of an assignment). This is how the get operation could be implemented:
+
+@begin(program)
+function get(object, key) {    // object[key]
+
+// Get the property descriptor associated with the key string. Use it to
+// determine the property's value. If the property is an accessor property
+// with a get function, call it and return the result, but return undefined
+// if there is no get function. If the property is a data property, return
+// its value.
+
+    var property_descriptor,
+        prototype = object;
+
+    do {
+        property_descriptor = Object.getOwnPropertyDescriptor(prototype, key);
+        if (property_descriptor) {
+            return (property_descriptor.get)
+                ? property_descriptor.get.call(object)
+                : (property_descriptor.set)
+                    ? undefined
+                    : property_descriptor.value;
+        }
+        prototype = Object.getPrototypeOf(prototype);
+    } while (prototype);
+
+// If the object did not contain an own property, and if the object does not
+// inherit the property, then return undefined.
+
+    return undefined;
+}
+@end(program)
+
+If the property is a data property, then the value is the value attribute. If the property is an accessor property and the get attribute is undefined, then the value is undefined. If the property is an accessor property and the get attribute is a function, then the function is called, binding this to the object, using the return value as the value. If there is no property associated with the key string, then undefined is the value.
+
+If the object does not have and own property with that key, and if the object delegates, then we go to the delegate object and go again.
+
+It is possible to set a property's value to undefined. This has been known to cause confusion because undefined is also the value of a missing property.
+
+If neither the object nor its delegate(s) can produce a value for the key, then the result is undefined.
+
+@section "Set"
+
+The set operation is done by the @link(. suffix operator) or
+@link([ ] suffix operator) when the operand is an object and when the
+expression is an @link(lvalue) (the target of an assignment).
+This is how the set operation could be implemented:
+
+@begin(program)
+function set(object, key, value) {    // object[key] = value;
+
+// Get the property descriptor associated with the key string.
+
+    var property_descriptor = Object.getOwnPropertyDescriptor(object, key),
+        prototype;
+    if (property_descriptor) {
+
+// If this is an accessor property, call its set function. If it doesn't
+// have a set function, throw an exception.
+
+        if (property_descriptor.set) {
+            property_descriptor.set.call(object, value);
+            return;
+        }
+        if (property_descriptor.get) {{
+            throw new TypeError();
+        }
+
+// If this is a data property, update its value. But if the property is not
+// writeable, throw an exception instead.
+
+        if (property_descriptor.writeable) {
+            property_descriptor.value = value;
+            Object.definePropertyDescriptor(object, key, property_descriptor);
+            return;
+        }
+        throw new TypeError();
+    }
+
+// The object does not currently have an own property with this key. Before we
+// can add a new own property, we must verify that the object does not inherit
+// an accessor property or a non-writeable data property.
+
+    for (prototype = Object.getPrototypeOf(object); prototype;
+            prototype = Object.getPrototypeOf(prototype)) {
+        property_descriptor = Object.getOwnPropertyDescriptor(prototype, key);
+        if (property_descriptor) {
+            if (property_descriptor.set) {
+                property_descriptor.set.call(object, value);
+                return;
+            }
+            if (property_descriptor.get || !property_descriptor.writeable) {
+                throw new TypeError();
+            }
+        }
+    }
+
+// Create a new own property with the value. Object.definePropertyDescriptor
+// will fail if the object is not extensible.
+
+    Object.definePropertyDescriptor({
+        value:        value,
+        writeable:    true,
+        enumerable:   true,
+        configurable: true
+    });
+}
+@end(program)
+
+The set operation creates or modifies the object's own properties. New properties can be added only if the object is still extensible.
+
+@section "Delete"
+
+A property can be removed from an object by the delete prefix operator but only if the property's configurable attribute is true.
+
+@article(@t(Object) @link(function))
+
+Blah.
+
+@list {
+@link(create Object function)
+@link(defineProperty Object function)
+@link(defineProperties Object function)
+@link(freeze Object function)
+@link(getOwnProperties Object function)
+@link(getOwnPropertyDescriptor Object function)
+@link(getPrototypeOf Object function)
+@link(isExtensible Object function)
+@link(isFrozen Object function)
+@link(isSealed Object function)
+@link(keys Object function)
+@link(preventExtensions Object function)
+@link(seal Object function)
+}
+
+@article(object @link(literal))
+
+An object literal is an expression that produces an object value. An object literal starts with { left curly brace and ends with } right curly brace. Between the braces are zero or more pairs, separated by , comma. Each expression contributes one property to the object. An empty object is created by {}. There are two kinds of pairs.
+
+A data property pair is a name or string literal followed by a : colon followed by an expression.
+
+An accessor property pair is composed of two parts. Either part can be omitted. If both parts are included, then they must be separated by a comma. The first part is the name get followed by a name or string literal or number literal followed by ( left parenthesis, then ) right parenthesis, followed by a function body. The second part is the name set followed by a name or string literal or number literal followed by( left parenthesis, then a parameter name, then ) right parenthesis, followed by a function body.
+
+@begin(program)
+function make_temperature(temp) {
+    return {
+        kelvin: temp || 0,
+        get celsius() {
+            return this.kelvin - 273.15;
+        },
+        set celsius(temp) {
+            this.kelvin = temp + 273.15;
+        },
+        get fahrenheit() {
+            return this.kelvin * 9/5 - 459.67;
+        },
+        set fahrenheit(temp) {
+            this.kelvin = (temp + 459.67) * 5/9;
+        }
+    };
+}
+@end(program)
+
+Every time an object literal is evaluated, it produces a new object, so
+
+@begin(program)
+{property: x} === {property: x}    // false
+@end(program)
+
+because even though the two objects are similar in structure and content, they are two different objects.
+
+Every object literal inherits from Object.prototype. Every property created by an object literal has its configurable, enumerable, and writeable attributes set to true.
+
+@begin(program)
+var deroman = (function () {
+
+// Use an object literal to create an object containing the values of the
+// Roman numerals.
+
+// We make the deroman function inside of an immediate function so that
+// the value object is constructed only once. It contains the mapping of
+// the Roman letters to numbers.
+
+    var value = {
+        I: 1,
+        V: 5,
+        X: 10,
+        L: 50,
+        C: 100,
+        D: 500,
+        M: 1000
+    };
+
+// The deroman function converts a string of Roman numerals to a number.
+
+    return function deroman(string) {
+        var i = 1, letter, next, result = 0;
+
+// For each numeral, get its numeric value. If a letter's value is greater
+// than or equal to the next letter's value, then add the letter's value to
+// the result. Otherwise, subtract the value from the result. That causes
+// I to be added in 'VI' but subtracted in 'IV'.
+
+        string = string.toUpperCase();
+        for (letter = value[string.charAt(0)]; typeof letter === 'number';
+                letter = next) {
+            next = value[string.charAt(i)];
+            if (typeof next !== 'number' || letter >= next) {
+                result += letter;
+            } else {
+                result -= letter;
+            }
+            i += 1;
+        }
+        return result;
+    };
+
+}());
+@end(program)
+
+@article(@t(Object) @link(primordial function))
+
+Blah.
+
+@article(@t(Object) @link(prototype function))
+
+The @link(object primordial function) has a @link(prototype) property object, Object.prototype, which is delegated to by most objects, including every object literal. Object.prototype contains these methods:
+
+@list {
+@link(hasOwnProperty Object prototype function)
+@link(isPrototypeOf Object prototype function)
+@link(propertyIsEnumerable Object prototype function)
+@link(toLocaleString Object prototype function)
+@link(toString Object prototype function)
+@link(valueOf Object prototype function)
+}
+
+It is possible to add additional methods to Object.prototype, subject to these recommendations: The enumerable attribute should be false. Otherwise, the additional method will appear in the keys produced by the for in statement, which could cause poorly written programs to fail. Also, Object.prototype is shared by all compilation units. Failure could occur if competing compilation units make incompatible changes to Object.prototype. Also, future editions of the language might have new methods in Object.prototype. Also, implementations are allowed to add properties to Object.prototype. Such additions should not cause failures now or in the future.
+
+@specimen "octal @aka(base 8)"
+
+See @link(number literal), @link(parseInt primordial function), and @link(toString Number prototype function).
+
+@specimen(of)
+
+@article(@t(of) @link(array function))
+
+Blah.
+
+@article(OOP)
+
+See @link(Object Oriented Programming)
+
+@specimen "operand"
+
+An operand is an expression that provides a value to an operator. Also see argument.
+
+@specimen "operator"
+
+There are five kinds of operators.
+
+@list {@link(infix operator)
+@link(prefix operator)
+@link(suffix operator)
+@link(ternary operator)
+@link(assignment operator)
+}
+
+An operator takes one, two, or three operands, where each operand is the value of an expression. Most operators are formed from special characters, but some such as typeof prefix operator and in infix operator use a name.
+
+@article "operator precedence"
+
+@begin(table)
+@!Tightness @|@! Operator @|@! Kind
+@_strong @| @t"++ -- () . []" @|suffix operator
+@_ @| @t(! + ++ - -- ~ delete new typeof void) @| prefix operator
+@_ @| @t(% * / ) @| infix operator
+@_ @| @t(+ -) @| infix operator
+@_ @| @t(<< >> >>>) @| infix operator
+@_ @| @t(< <= > >= instanceof in) @| infix operator
+@_ @| @t(!= !== == ===) @| infix operator
+@_ @| @t(&) @| infix operator
+@_ @| @t(^) @| infix operator
+@_ @| @t(|) @| infix operator
+@_ @| @t(&&) @| infix operator
+@_ @| @t(||) @| infix operator
+@_ @| @t(? :) @| ternary operator
+@_ @| @t(%= &= *= += -= /= <<= = >>= >>>= ^= |=) @| assignment infix operator
+@_weak @| @t(,) @| infix operator
+@end(table)
+
+Operator precedence makes it possible to omit the grouping parentheses from complex expressions. The suffix operators are the strongest. The , infix operator is the weakest. Given competition between two operators with difference precedence, the stronger operator wins.
+
+Given competition between two operators with equal precedence, The leftmost operator is stronger, except for prefix operators and assignment operators where the right operator is stronger.
+
+The following examples show pairs of statements that produce identical results. The first statement in each pair has no parentheses. The second statement shows how the first statement is interpreted using operator precedence.
+
+@begin(program)
+r = a * b + c * d;
+r = ((a * b) + (c * d));
+
+s = a * b / c * d;
+s = (((a * b) / c) * d);
+
+t = a / b / c;
+t = ((a / b) / c);
+
+u = ~ -a;
+u = (~ (-a));
+
+v = a.b[c](d);
+v = (((a.b)[c])(d));
+
+w = -a.b;
+w = (-(a.b));
+
+x = -a * b;
+x = ((-a) * b);
+
+y = a = b = c = d;
+y = (a = (b = (c = d)));
+
+z = a(b), c(d);
+(z = (a(b))), (c(d));
+@end(program)
+
+@specimen "or"
+
+Blah.
+
+See @link(|| infix operator) and @link(| infix operator).
+
+@specimen "Oracle Corporation"
+
+See @link(Eye of Sauron)
+
+@specimen "own property"
+
+An own property is a property of an object that is not inherited from another object. Properties that are directly assigned to an object are always own properties. The hasOwnProperty Object prototype function can be used to determine if an object has an own property with a given key.
+
+The @link(keys Object function) produces all of the enumerable keys of all of the own properties of the object.

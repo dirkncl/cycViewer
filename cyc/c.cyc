@@ -1,0 +1,409 @@
+@chapter "C"
+
+@specimen "call"
+
+    @article(@t(call) @link(function prototype function))
+
+    Blah.
+
+    @begin(program)
+    Function.prototype.call = function (thisObject) {
+        return this.apply(
+            thisObject,
+            Array.prototype.slice.apply(arguments, [1])
+        );
+    };
+    @end(program)
+
+@specimen "callback"
+
+    The term callback is given to a function that is passed to another function or
+    stored in an object with the intention that it be called at a later time.
+    Callbacks are commonly used in subscription patterns where functions are to be
+    called when some event has occurred. In browser applications, an event handler
+    function is a callback.
+
+    @begin(program)
+    var statusHolder = (function () {
+
+    // Produce an object containing three functions:
+    //
+    //    getStatus(): get the value of a private status variable.
+    //
+    //    addCallback(callback): subscribe a function that will be
+    //        called when the status changes.
+    //
+    //    setStatus(newStatus): Change the status and inform the
+    //        subscribers.
+
+        var status,              // The private status variable.
+            subscribers = [];    // The list of subscribing functions.
+        return {
+            getStatus: function () {
+                return status;
+            },
+            addCallback: function (callback) {
+                subscribers.push(callback);
+            },
+            setStatus: function (newStatus) {
+                status = newStatus;
+                subscribers.forEach(function (callback) {
+                    callback(status);
+                });
+            }
+        };
+    }());
+    @end(program)
+
+@specimen "camelCase"
+
+    Blah.
+
+@specimen "cascade"
+
+    An object's methods return the same object... Blah.
+
+    @article(Cascading Style Sheets)
+
+    Blah.
+
+@specimen "case @reserved@"
+
+    Also see @link(switch statement).
+
+    In many of the world's writing systems (including Latin, Greek, Cyrillic, and Armenian), letters come in two forms: lower case (or small or minuscule) and upper case (or big or capital or majuscule). For the purpose of spelling, the two cases are equivalent, but in usage the cases are distinct and Unicode gives then unqiue character codes, so while I and i are the same letter, they are different characters and have different codes.
+
+    @program {'I' === 'i'    // false}
+
+    This language is case sensitive. Case in names and strings case is significant, so 'cat' and 'Cat' are not the same string and getElementById and getElementByID are not the same name. Every @reserved@ is entirely lower case.
+
+    For each lower case letter there is a unique upper case letter, and for each upper case letter there is a unique lower case letter, with the following exceptions:
+
+    The German character ß @aka(scharfes S) @t(\u00df) does not have an upper case
+    form. Since ß @aka(scharfes S) is a ligature for ss, some systems use SS as the
+    upper case form of ß @aka(scharfes S).
+    Most languages pair I @aka(dotless) with i @aka(dotted) but the Turkish
+    language treats I @aka(dotless) and İ @aka(dotted) @t(\u0130) as distinct letters
+    paired with distinct lower case letters ı @aka(dotless) @t(\u0131) and i @aka(dotted).
+    So in order to correctly change the case of a letter, a program must know the language of the text.
+
+    @link(toLowerCase String prototype function) produces a string in which all of
+    the upper case letters are replaced with their lower case equivalents,
+    so @t<'VISA'.toLowercase()> produces @t('visa').
+    The @link(toLocaleLowerCase String prototype function) produces a string in
+    which all of the upper case letters are replaced with their lower case
+    equivalents using the local convention, so for programs in a Turkish
+    environment, @t<'VISA'.toLocaleLowerCase()> might produce @t<'vısa'>.
+
+    These functions are aware of case:
+
+    @list {
+    @link(compareLocale String prototype function)
+    @link(toLocaleLowerCase String prototype function)
+    @link(toLocaleUpperCase String prototype function)
+    @link(toLowerCase String prototype function)
+    @link(toUpperCase String prototype function)
+    }
+
+    In regexp pattern matching, the matching of letters is @link(case sensitive).
+    The @link(i regexp flag) makes the matching of letters @link(case insensitive).
+
+    @begin(program)
+    /v/.test('VISA')     // false
+    /v/i.test('VISA')    // true
+    @end(program)
+
+    @link(case) is used for a completely unrelated purpose in the @link(switch statement).
+
+    @article "case insensitive"
+
+    Blah.
+
+    @article "case sensitive"
+
+    Blah.
+
+@specimen "catch @reserved@"
+
+    See @link(try statement).
+
+@specimen "ceil"
+
+    @article(@t(ceil) @link(Math function) @aka(ceiling))
+
+    The Math.ceil(number) function converts a number into an integer. If the number argument is already an integer, it simply returns the number. Otherwise, it returns the lowest integer that is greater than the number. If the number is less than 0 but greater than -1, the result is -0. The function could be implemented like this:
+
+    @begin(program)
+    Math.ceil = function (number) {
+        return -Math.floor(-number);
+    };
+    @end(program)
+
+
+@specimen "character"
+
+    Blah.
+
+@specimen "charAt"
+
+    @article(@t(charAt) @link(String prototype function))
+
+    Blah.
+
+@specimen(charCodeAt)
+
+    @article(@t(charCodeAt) @link(String prototype function))
+
+    Blah.
+
+@specimen(circular definition)
+
+    See @link(definition circular).
+
+@specimen(class @reserved@)
+
+@specimen(closure)
+
+    Blah.
+
+@specimen(code point)
+
+    Blah.
+
+@specimen(code unit)
+
+    Blah.
+
+@specimen(codePointAt)
+
+    Blah.
+
+    @article "@t(codePointAt) @link(string prototype function)"
+
+    (Blah.)
+
+@specimen(Collator)
+
+    @article(@t(Collator) @link(Intl function))
+
+    Blah.
+
+@specimen(comment)
+
+    A comment is text in a compilation unit that is ignored by the compiler. A comment can be used to document a program, giving information about its construction and operation. There are two forms of comment, the // comment and the /* block comment.
+
+    It is important to document programs to help a reader (perhaps future you) understand how the program works. It is even more important to keep comments uptodate. Incorrect comments are worse than no comments.
+
+@specimen(compareLocale)
+
+    @article(@t(compareLocale) @link(String prototype function))
+
+    Blah.
+
+@specimen(compilation unit)
+
+    A program is delivered as one or more compilation units. In an HTML application, each @t(<script>) tag delivers one compilation unit. Scripts are compiled and executed immediately. The result of the execution could be to output a solution. More commonly, however, the result of execution is to create and modify objects in the global environment, setting up callback functions that will execute later in response to user actions and other events. For example, in a web browser, each compilation unit will be attaching event handlers to DOM nodes and installing global objects and functions that will provide services to the event handlers. The program does not stop when the compilation units have finished running. From the user’s perspective, that is when the program starts.
+
+    A compilation unit contains a sequence of zero or more statements. The statements are executed sequentially. After a statement has finished executing, the next statement is executed. After executing the last statement, the compilation unit's turn is finished, at which time another compilation unit might be exececuted, or an event might be fired.
+
+    A compilation unit executes in a global scope, so every variable created by the var statement or function statement will be global. There is a phenomenon called hoisting that can alter the sequential flow of the compilation unit. Hoisting affects the var statement and the function statement. Every global variable created by one compilation unit will be available to all subsequent compilation units.
+
+    In an HTML application, each on- event attribute delivers a deferred compilation unit. Each on- event attribute is compiled and executed when an event is dispatched. Use of on- event attributes is not recommended.
+
+@specimen(compiler)
+
+    A compiler is a program that translates a source program into an executable form. In this language, the compiler can be accessed by the eval global function and the Function global function.
+
+@specimen(concat)
+
+    @article(@t(concat) @link(array prototype function))
+
+    Blah.
+
+    @article(@t(concat) @link(string prototype function))
+
+    Blah.
+
+@specimen "concatenation"
+
+    Concatenation is an operation in which a new things is made by joining two or
+    more other things.
+
+    @list {
+        @link(+ infix operator)
+        @link(array prototype function)
+        @link(string prototype function)
+    }
+
+@specimen(conditional statement)
+
+    A conditional statement alters the flow of a program, which normally executes from top to bottom, by selecting one path from two or more possibilities, deciding based on the value of an expression or the occurence of an exception.
+
+    @list {
+    @link(if statement)
+    @link(switch statement)
+    @link(try statement)
+    }
+
+@specimen(const @reserved@)
+
+@specimen(constant)
+
+    A constant is a name with a fixed value. Each of these names can be used as an operand, but they may not be used as an lvalue.
+
+    @list {
+    @link(false)
+    @link(Infinity)
+    @link(NaN)
+    @link(null)
+    @link(true)
+    @link(undefined)
+    }
+
+@specimen "constructor"
+
+    Generally, a constructer is any function that returns an object. But constructors
+    is usually means a function that returns an object using @link(prototypal inheritance) using the @link(new prefix operator).
+
+    @article "constructor @link(invocation)"
+
+@specimen(continuation)
+
+    Blah.
+
+@specimen(continue @reserved@)
+
+    @article(@t(continue) @link(statement))
+
+    Blah.
+
+@specimen(constructor)
+
+    @article(constructor function)
+
+    Blah.
+
+    @article(@t(constructor) @link(function prototype function))
+
+    A constructor is a function that is used to create new objects.
+    A constructor should always be invoked with the new prefix operator. If a constructor is invoked without the new prefix operator, then the this parameter will not be bound to a new object. A constructor has a prototype Function prototype object that is used as the prototype of the new object. See invocation.
+
+@specimen(copy)
+
+    Blah.
+
+@specimen(copyWithin)
+
+    @article(@t(copyWithin) @link(array prototype function))
+
+    Blah.
+
+@specimen(correspondence)
+
+    The correspondence between the variables of a function and the parameters of an inner function.
+
+    @begin(program)
+    function frick(n) {
+        var result = 1;
+        while (n > 1) {
+            result *= n;
+            n -= 1;
+        }
+        return result;
+    }
+
+    function frack(n) {
+        return (function (result) {
+            while (n > 1) {
+                result *= n;
+                n -= 1;
+            }
+            return result;
+        }(1));
+    }
+    @end(program)
+
+    The functions frick and frack both compute the factorial function. They produce the same result, but frick declares a variable called result, and frack uses the result of an immediate function that has a parameter called result. This demonstrates the correspondence between variables and parameters.
+
+    Holds for expressions except for this and arguments. Renaming as that and them. Holds for statements except return, break, and continue, and var and function. Blah.
+
+@specimen(cos)
+
+    @article(@t(cos) @link(Math function) @aka(cosine))
+
+    The Math.cos(radians) function, also known as cosine, takes an angle in radians and returns a number in the range -1...1.
+
+    @begin(program)
+    function rotate(polygon, radians) {
+
+    // This function takes an array of points, and returns another array
+    // of points rotated around the origin.
+
+        var cos = Math.cos(radians),
+            sin = Math.sin(radians);
+
+        return polygon.map(function (point) {
+            return {
+                x: point.x * cos - point.y * sin,
+                y: point.x * sin + point.y * cos
+            };
+        });
+    }
+    @end(program)
+
+    This is an approximate implemention of Math.cos:
+
+    @begin(program)
+    Math.cos = (function () {
+        var half_pi = Math.PI / 2;
+        return function cos(radians) {
+            return Math.sin(radians + half_pi);
+        };
+    }());
+    @end(program)
+
+    See @link(Math function).
+
+@specimen(cr @aka(carriage return))
+
+    See @link(line terminator).
+
+@specimen(create)
+
+    @article(@t(create) @link(Object function))
+
+    Blah.
+
+@specimen(crlf @aka(carriage return linefeed))
+
+    See @link(line terminator).
+
+@specimen(CSS)
+
+    See @link(Cascading Style Sheets).
+
+@specimen(curly brace)
+
+    See @link({) and @link(}).
+
+@specimen(curry)
+
+    Blah.
+
+    @begin(program)
+    function curry(func) {
+        var args = Array.prototype.slice.apply(arguments, [1]);
+        return function () {
+            return func.apply(null, args.concat(Array.prototype.slice.apply(arguments)));
+        };
+    }
+
+    function add(a, b) {
+        return a + b;
+    }
+
+    var inc = curry(add, 1);
+
+    alert(inc(6));
+    @end(program)
+

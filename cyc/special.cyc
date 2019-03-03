@@ -1,0 +1,862 @@
+@chapter "Special Characters"
+
+@specimen "@t(!) @aka(exclamation point)"
+
+@article "@t(!) @link(prefix operator) @aka(not)"
+
+The @t(!) operator produces @link(false) if its operand is @link(truthy), and @link(true) if its operand is @link(falsy).
+
+@program {
+! true        // false
+! false       // true
+! 'false'     // false
+! 0           // true
+! 42          // false
+!! 42         // true
+}
+
+@article(@t(!=) @link(infix operator) @aka(coercing not equal))
+
+The @t(!=) operator determines if two operands are not equal. If the operands
+have different types it may attempt to coerce the types of the operands before
+comparing them. It produces the opposite of the @link(== infix operator).
+
+The @t(!=) operator produces the same result as this function:
+
+@program "
+function coercing_not_equal(left, right) {
+    return !(left == right);
+}
+"
+
+Avoid this operator. Always use the @link(!== infix operator) instead.
+
+@article(@t(!==) @link(infix operator) @aka(not equal))
+
+The @t(!==) operator determines if two operands are not equal. It produces the
+opposite of the @link(=== infix operator). The result can be @link(false) only
+if the operands are the same type.
+
+If the operands are objects, the result is @link(false) only if the operands are
+the same object. If the operands are similar objects, the result is @link(true).
+
+The @link(!== infix operator) produces the same result as this function:
+
+@program "
+function not_equal(left, right) {
+    return !(left === right);
+}
+"
+
+The expression @t(x !== x) will always result in @link(false) except when the
+value of @t(x) is @link(NaN). This bizarre behavior is intentional.
+
+@program "
+false != 'false'             // true
+1 !== '1'                    // true
+null !== undefined           // true
+{} !== {}                    // true
+1 !== 1.0                    // false
+'cat' !== 'c' + 'a' + 't'    // false
+NaN !== NaN                  // true
+"
+
+@specimen (@t(") @aka(double quotation mark))
+
+See @link(string literal).
+
+@specimen (@t($) @aka(dollar sign))
+
+@article(@t($) @link(identifier character))
+
+The @t($) character is treated as a letter in an identifier. It was added to the
+language specifically for the use of code generators and macro processors so
+that they could generate identifiers with confidence that they would not collide
+with programs produced by humans. Unfortunately, the developer community ignored
+the intention of @t($) and used it to create ugly, cryptic identifiers that
+collide with each other.
+
+@specimen (@t(%) @aka(percent sign))
+
+@article(@t(%) @link(infix operator) @aka(remainder))
+
+The @t(%) operator computes the @link(remainder) produced by the @link(division)
+of two operands, a @link(dividend) and a @link(divisor). If the operands are not
+numbers, @t(%) attempts to coerce them to numbers. If either operand cannot be
+coerced to a number or is @link(NaN), or if the dividend is an @link(Infinity),
+or if the @link(divisor) is a @link(zero), then the result is @link(NaN).
+Otherwise, if the @link(divisor) is an @link(Infinity), the result is the
+@link(dividend).
+
+The @t(%) operator produces the same result as this function:
+
+@program "
+@begin(program)
+function remainder(left, right) {
+    var dividend = +left,
+        divisor = +right,
+        quotient = dividend / divisor;
+    if (divisor === Infinity || divisor === -Infinity) {
+        return (isFinite(dividend))
+            ? dividend
+            : NaN;
+    } else {
+        return dividend - (
+            divisor *
+            (Math[
+                (quotient >= 0)
+                    ? 'floor'
+                    : 'ceil'
+            ](quotient))
+        );
+    }
+}
+@end(program)
+"
+
+The @link(sign) of the remainder will be the @link(sign) of the @link(dividend),
+not the @link(divisor). This differs from the @link(modulo) operator found in
+some other languages, where the result has the @link(sign) of the
+@link(divisor). The @link(modulo) function can be computed with this function,
+which adds the @link(divisor) to the @link(remainder) if the @link(remainder)
+has the wrong @link(sign):
+
+@begin(program)
+function modulo(left, right) {
+    var dividend = +left,
+        divisor = +right,
+        mod = dividend % divisor;
+    if (mod && (divisor > 0) === (mod < 0)) {
+        mod += divisor;
+    }
+    return mod;
+}
+@end(program)
+
+Examples:
+
+@begin(program)
+ 15 %  4            //  3
+-15 %  4            // -3
+-15 % -4            // -3
+ 15 % -4            //  3
+ 15 %  0            // NaN
+ 15 % -Infinity     // 15
+  0 %  Infinity     //  0
+  0 %  0            // NaN
+Infinity % 4        // NaN
+Infinity % Infinity // NaN
+@end(program)
+
+@article(@t(%=) @link(assignment infix operator) @aka(remainder))
+
+The @t(%=) operator replaces the left value with the remainder of the left value
+divided by the right value. So
+
+@program {
+left %= divisor;
+}
+
+is a streamlined equivalent of
+
+@program {
+left = left % divisor;
+}
+
+@specimen (@t(&) @aka(ampersand))
+
+@article(@t(&) @link(infix operator) @aka(bitwise and))
+
+The @t(&) infix operator performs the @link(bitwise and) operation. The
+@link(bitwise and) operation uses 32 bits from each operand. If two
+corresponding bits are 1, then the corresponding result bit is 1. Otherwise,
+the corresponding result bit is 0. The operands are converted from a number
+(64 bit floating point) to a 32-bit integer. It produces the same result as this
+function:
+
+@begin(program)
+function bitwise_and(left, right) {
+    var result = 0, bit, i, left_int, right_int,
+        two_32 = 4294967296,    // Math.pow(2, 32)
+        two_31 = 2147483648;    // Math.pow(2, 31)
+
+// Make 32-bit unsigned integers from the operands. The % is a remainder
+// operator, not a modulo operator, so some sign correction may be necessary.
+
+    left_int = Math[(left >= 0)
+        ? 'floor'
+        : 'ceil'](left) % two_32;
+    if (left_int < 0) {
+        left_int += two_32;
+    }
+    right_int = Math[(right >= 0)
+        ? 'floor'
+        : 'ceil'](right) % two_32;
+    if (right_int < 0) {
+        right_int += two_32;
+    }
+
+// For each of the 32 bits,
+//      Double the current result
+//      Set the new bit to 1
+//      If the most significant bits are set, then subtract them out
+//      Otherwise clear the new bit
+//      Add the new bit to the result
+//      Double the ints, rotating the next most significant bit into position
+
+    for (i = 0; i < 32; i += 1) {
+        result += result;
+        bit = 1;
+        if (left_int >= two_31) {
+            left_int -= two_31;
+        } else {
+            bit = 0;
+        }
+        if (right_int >= two_31) {
+            right_int -= two_31;
+        } else {
+            bit = 0;
+        }
+        result += bit;
+        left_int += left_int;
+        right_int += right_int;
+    }
+
+// If the most significant bit of the result is set, then produce a negative.
+
+    if (result >= two_31) {
+        result -= two_32;
+    }
+    return result;
+}
+@end(program)
+
+@article(@t(&&) @link(infix operator) @aka(and))
+
+The @t(&&) infix operator performs a logical AND operation between two operands, 
+evaluated as a @link(boolean). The @t(&&) operator produces @link(true)if both operands are @link(truthy), 
+and @link(false) if either operand is @link(falsy). If the first operand is @link(falsy), the second operand is skipped and the @t(&&) operator evaluates to @link(false).  
+
+Examples:
+
+@begin(program)
+true  &&  true           // true
+true  &&  false          // false
+false &&  true           // false
+false &&  false          // false
+true  &&  'hello'        // "hello"
+   1  &&  3              // 3
+@end(program)
+
+@article(@t(&=) @link(assignment infix operator) @aka(bitwise and))
+
+Blah.
+
+@specimen (@t(') @aka(single quotation mark))
+
+See @link(string literal).
+
+@specimen "@t[(] @aka(left parenthesis)"
+
+Parentheses have many uses. In operand position, they provide grouping for
+overriding operator precedence or to make the meaning of complicated expressions
+clearer. In suffix position, they cause the invocation of functions. In function
+definitions and catch blocks they define parameters and exception variables.
+In statement position, they can disambiguate function literal from function
+statement. In a statement they denote a conditional expression or a special
+variable.
+
+@article(@t[( )] grouping)
+
+In an @link(expression), parentheses can be used to override the precedence of operators,
+or to break up complicated expressions to make them easier to read.
+
+@program {
+3 + 4 * 5      // 23
+3 + (4 * 5)    // 23
+(3 + 4) * 5    // 35
+}
+
+Parentheses can also be used to improve the readability of an @link(immediate function).
+
+@article (@t[( )] @link(parameter list))
+
+See @link(function).
+
+@article(@t[( )] @link(statement punctuator))
+
+Parentheses are used in statements. See
+
+@list {
+@link(do statement)
+@link(if statement)
+@link(for in statement)
+@link(for statement)
+@link(function statement)
+@link(switch statement)
+@link(try statement)
+@link(while statement)
+@link(with statement)
+}
+
+@article(@t[( )] @link(suffix operator) @aka(invoke))
+
+Blah.
+
+@specimen "@t[)] @aka(right parenthesis)"
+
+See @link "(".
+
+@specimen (@t(*) @aka(asterisk))
+
+@article(@t(*) @link(infix operator) @aka(multiply))
+
+The @t(*) operator multiplies its operands together. If the operands are not
+numbers, it attempts to coerce them to numbers. If either operand cannot be
+coerced to a number or is @link(NaN), then the result will be @link(NaN).
+
+@program {3 * 4    // 7}
+
+@article(@t(*/) @aka (Close comment))
+
+See @link(/*).
+
+@article(@t(*=) @link(assignment infix operator) @aka(multiply))
+
+Blah.
+
+@specimen (@t(+) @aka(plus sign))
+
+@article(@t(+) @link(infix operator) @aka(add or concatenate))
+
+The + operator can perform either addition or @link(concatenation) depending of the types of its
+operands. If either operand is a string, then it converts both operands to
+strings and concatenates then, producing a new string with all of the characters
+from both operands. Otherwise, it converts both operands to numbers and then
+attempts to add them. It produces the same result as this function:
+
+@begin(program)
+function add_or_concatenate(left, right) {
+    if (left && typeof left === 'object') {
+        left = left.valueOf();
+    }
+    if (right && typeof right === 'object') {
+        right = right.valueOf();
+    }
+    if (typeof left === 'string' || typeof right === 'string') {
+        return String(left).concat(String(right));
+    }
+    return +left + (+right);    // return the sum of left + right
+}
+@end(program)
+
+The + operator is the only arithmetic operator with this type confusion.
+Addition is commutative. Concatenation is not. It is really weird having an
+operator that is commutative and noncommutative at the same time.
+
+Examples:
+
+@begin(program)
+1 + 0                  // 1
+1 + 1                  // 2
+1 + (-1)               // 0
+1 + ''                 // '1'
+1 + undefined          // NaN
+1 + null               // 1
+1 + false              // 1
+1 + true               // 2
+1 + NaN                // NaN
+1 + Infinity           // Infinity
+true + true            // 2
+true + false           // 1
+true + '!'             // 'true!'
+Infinity + (-1)        // Infinity
+Infinity + Infinity    // Infinity
+'' + ''                // ''
+'1' + "1"              // '11'
+'1' + 0                // '10'
+'1' + ''               // '1'
+'1' + undefined        // '1undefined'
+'1' + null             // '1null'
+'1' + NaN              // '1NaN'
+'1' + Infinity         // '1Infinity'
+'1' + true             // '1true'
+'$' + 3 + 4            // '$34'
+'$' + (3 + 4)          // '$7'
+@end(program)
+
+@article(@t(+) @link(prefix operator) @aka(to number))
+
+Blah.
+
+@article(@t(++) @link(assignment prefix operator) @aka(pre-increment))
+
+Blah.
+
+@article(@t(++) @link(assignment suffix operator) @aka(post-increment))
+
+Blah.
+
+@article(@t(+=) @link(assignment infix operator) @aka(add or concatenate))
+
+Blah.
+
+@specimen (@t(,) @aka(comma))
+
+@article(@t(,) @link(infix operator) @aka(comma))
+
+The @t(,) @link(infix operator) takes two operands, evalutes them both,
+and returns the value of only the second operand. This operator may not be used
+in places where a @link(,) can appear, such as in an @link(argument list),
+in a @link(var statement), or in an @link(object literal) or @link(array literal)
+unless the operand it forms is wrapped in @link[( ) grouping].
+This @link(operator) invites misuse of the @link(for statement)
+when initializing or incrementing multiple induction variables.
+The @link(, infix operator) should not be used.
+
+@article(@t(,) @aka(separator))
+
+The comma is used to separate operands in the @link(object literal), the @link(array literal),
+the @link(argument list). The comma is used to separate identifiers in the the
+@link(parameter list) and the @link(var statement).
+
+@specimen (@t(-) @aka(minus sign))
+
+@article(@t(-) @link(infix operator) @aka(subtract))
+
+Blah.
+
+@article(@t(-) @link(prefix operator) @aka(negate))
+
+Blah.
+
+@article(@t(--) @link(assignment prefix operator) @aka(pre-decrement))
+
+Blah.
+
+@article(@t(--) @link(assignment suffix operator) @aka(post-decrement))
+
+Blah.
+
+@article(@t(-=) @link(assignment infix operator) @aka(subtract))
+
+Blah.
+
+@specimen (@t(.) @aka(decimal point))
+
+Blah.
+
+@article(@t(.) @link(suffix operator) @aka(select))
+
+Blah.
+
+@article(@t(...) @link(prefix operator) @aka(ellipsis))
+
+Blah. Dot dot dot.
+
+@section "rest"
+
+(Blah. @link(parameter list))
+
+@section "spread"
+
+(Blah. @link(argument list) @link(array literal))
+
+@specimen (@t(/) @aka(slash))
+
+The @t(/) slash character is also known as the solidus and as the virgule. It is
+used as the division operator, and it is used to form a @link(comment) or
+@link(regexp literal). The overloading of this character is a source of trouble.
+Also be careful to not confuse it with @link(\).
+
+@article(@t(/) @link(infix operator) @aka(divide))
+
+Blah.
+
+@article(@t(/) @link(regexp delimiter))
+
+Blah.
+
+@article(@t(/*) @aka(begin comment))
+
+Blah.
+
+@article(@t(//) @aka(comment))
+
+Blah.
+
+@article(@t(/=) @link(assignment infix operator) @aka(divide))
+
+Blah.
+
+@specimen (@t(:) @aka(colon))
+
+Blah.
+
+See:
+@list {
+@link(? ternary operator)
+@link(object literal)
+@link(statement label)
+@link(switch statement)
+}
+
+@specimen (@t(;) @aka(semicolon))
+
+The @link(;) is used to terminate a @link(statement). It is required on these statements:
+
+@list {
+@link(break statement)
+@link(continue statement)
+@link(debugger statement)
+@link(do statement)
+@link(empty statement)
+@link(expression statement)
+@link(return statement)
+@link(throw statement)
+@link(var statement)
+}
+
+In some cases a mechanism called @link(automatic semicolon insertion) allows for
+leaving off the terminating semicolon in some cases. Unfortunately, semicolon insertion has
+some inherent problems and should not be relied upon.
+
+Semicolon is also used to separate the control clauses in a @link(for statement).
+
+@specimen (@t(<) @aka(left angle bracket))
+
+@article(@t(<) @link(infix operator) @aka(less than))
+
+Blah.
+
+@article(@t(<<) @link(infix operator) @aka(bitwise shift left))
+
+Blah.
+
+@article(@t(<<=) @link(assignment infix operator) @aka(bitwise shift left))
+
+Blah.
+
+@article(@t(<=) @link(infix operator) @aka(less than or equal))
+
+@specimen (@t(=) @aka(equal sign))
+
+@article(@t(=) @link(assignment infix operator))
+
+Blah.
+
+@article(@t(==) @link(infix operator) @aka(coercing equal))
+
+The @t(==) operator determines if two operands are equal. If the operands have different types it may attempt to coerce the types of the operands before comparing them. It produces the opposite of the != infix operator.
+
+The == operator produces the same result as this function:
+
+@begin(program)
+function coercing_equal(left, right) {
+    if (left === right) {
+        return @link(true);
+    }
+    if (left === null) {
+        return right === undefined;
+    }
+    if (right === null) {
+        return left === undefined;
+    }
+    if (typeof left === 'number' && typeof right === 'string') {
+        return left === +right;
+    }
+    if (typeof left === 'string' && typeof right === 'number') {
+        return +left === right;
+    }
+    if (typeof left === 'boolean') {
+        return coercing_equal(+left, right);
+    }
+    if (typeof right === 'boolean') {
+        return coercing_equal(left, +right);
+    }
+    if
+        (typeof left === 'object' &&
+        (
+            left.constructor === Number ||
+            left.constructor === String ||
+            left.constructor === Boolean
+        ) &&
+        (typeof right === 'string' || typeof right === 'number')
+    ) {
+        return coercing_equal(left.valueOf(), right);
+    }
+    if (
+        (typeof left === 'string' || typeof left === 'number') &&
+        typeof right === 'object' &&
+        (
+            right.constructor === Number ||
+            right.constructor === String ||
+            right.constructor === Boolean
+        )
+    ) {
+        return coercing_equal(left, right.valueOf());
+    }
+    return @link(false);
+}
+@end(program)
+
+Avoid this operator. It can produce false positives.
+Always use the @link(=== infix operator) instead.
+
+Examples:
+
+@begin(program)
+'' == 0                  // true
+0 == ''                  // true
+'' == '0'                // false
+0 == '0'                 // true
+false == 'false'         // false
+false == 0               // true
+false == undefined       // false
+false == null            // false
+null == undefined        // true
+' \t\r\n ' == 0          // true
+'cat' === "cat"          // true
+'cat' === 'CAT'          // false
+Infinity == Infinity     // true
+-Infinity == Infinity    // false
+Infinity == NaN          // false
+NaN == NaN               // false
+@end(program)
+
+@article(@t(===) @link(infix operator) @aka(equal))
+
+The === operator compares two values, producing @link(true) if they are equal and @link(false) if they are not. Two strings are considered equal if they have the same length and contain exactly the same code points in the same sequence. To references to the same object or array are considered equal. Two similar objects or two similar arrays are not considered equal.
+
+The expression @t(x === x) will always result in @link(true) except when the value of x is @link(NaN).
+Surprisingly, there exist mathematicians that think this was a good idea.
+It presents an obvious programming hazard.
+For example, suppose you need a function that tests that a function returns the correct value.
+Special handling is required for the case where the expected value is @link(NaN).
+Simply using @t(===) to compare the expected value and the result will do the wrong
+thing when the expected value is @link(NaN), so much more complicated
+comparisons are required using the @link(typeof prefix operator) and the @link(isNaN primordial function).
+
+Two numbers that are only approximately equal may produce a @link(false) result.
+
+Examples:
+
+@begin(program)
+'' === 0                  // false
+0 === ''                  // false
+0 === '0'                 // false
+false === 'false'         // false
+false === 0               // false
+false === undefined       // false
+false === null            // false
+null === undefined        // false
+' \t\r\n ' === 0          // false
+Infinity === Infinity     // true
+-Infinity === Infinity    // false
+Infinity === NaN          // false
+NaN === NaN               // false
+0 === 0.00                // true
+0 === -0                  // true
+{} === {}                 // false
+[] === []                 // false
+0.1 + 0.2 === 0.3         // false
+@end(program)
+
+@specimen (@t(>) @aka(right angle bracket))
+
+@article(@t(>) @link(infix operator) @aka(greater than))
+
+Blah.
+
+@article(@t(>=) @link(infix operator) @aka(greater than or equal))
+
+Blah.
+
+@article(@t(>>) @link(infix operator) @aka(bitwise signed shift right))
+
+Blah.
+
+@article(@t(>>=) @link(assignment infix operator) @aka(bitwise signed shift right))
+
+Blah.
+
+@article(@t(>>>) @link(infix operator) @aka(bitwise unsigned shift right))
+
+Blah.
+
+@article(@t(>>>=) @link(assignment infix operator) @aka(bitwise unsigned shift right))
+
+Blah.
+
+@specimen (@t(?) @aka(question mark))
+
+@article(@t(?) @link(ternary operator))
+
+The ? operator takes three operands which are separated by the @link(?) and a @link(:).
+
+@program{@i(condition)
+    ? @i(then)
+    : @i(else)}
+
+It is a short-circuiting operator: only one of the branches will be evaluated.
+If the @i(condition) operand is @link(truthy) then the @i(then) operand will be
+evaluated and its value will be the value of the expression. If the
+@i(condition) operand is falsy then the @i(else) operand will be evaluated and
+its value will be the value of the expression.
+
+@program "
+function signum(number) {
+
+// Return 0 if the number is zero,
+//        1 if the number is positive,
+//       -1 if the number is negative.
+
+    return (number === 0)
+        ? 0
+        : (number > 0)
+            ? 1
+            : -1;
+}
+"
+
+@specimen (@t([) @aka(left bracket))
+
+@article(@t([ ]) @link(array literal))
+
+See @link(array literal).
+
+@article(@t([ ]) @link(suffix operator) @aka(subscript))
+
+Blah.
+
+@specimen (@t(\) @aka(backslash))
+
+@article(@t(\) @link(identifier escapement))
+
+Blah.
+
+@article(@t(\) @link(string escapement))
+
+Blah.
+
+@specimen (@t(]) @aka(right bracket))
+
+See @link([).
+
+@specimen (@t(^) @aka(caret))
+
+@article(@t(^) @link(infix operator) @aka(bitwise exclusive or))
+
+Blah.
+
+@article(@t(^=) @link(assignment infix operator) @aka(bitwise exclusive or))
+
+Blah.
+
+@specimen (@t(_) @aka(underbar))
+
+In a @link(name), the @link(_) character is treated as a letter. The @link(_) is
+used to improve the readability of names, especially when the name contains
+several words, such as
+
+@program(calculate_the_total)
+
+since a name cannot contain a @link(space) or @link(hyphen). Another convention is to use @link(camelCase):
+
+@program(calculateTheTotal)
+
+Some implementations use leading or trailing @link(_) for internal or dangerous
+properties, so it is best to avoid such names.
+
+@specimen (@t({) @aka(left curly brace))
+
+@article(@t({ }) @link(block statement))
+
+See block.
+
+@article(@t({ }) @link(function body))
+
+See function.
+
+@article(@t({ }) @link(object literal))
+
+See object literal.
+
+@specimen (@t(|) @aka(vertical bar))
+
+@article(@t(|) @link(infix operator) @aka(bitwise or))
+
+The | operator performs the bitwise or operation. The or operation uses 32 bits from each operand. If two corresponding bits are 0, then the corresponding result bit is 0. Otherwise, the corresponding result bit is 1. The operands are converted from a number (64 bit floating point) to a 32-bit integer.
+
+@begin(program)
+function bitwise_or(left, right) {
+    var result = 0, bit, i, left_int, right_int,
+        two_32 = Math.pow(2, 32),    // 4294967296
+        two_31 = Math.pow(2, 31);    // 2147483648
+
+// Make 32-bit unsigned integers from the operands. The % is a remainder
+// operator, not a modulo operator, so some sign correction may be necessary.
+
+    left_int = Math[(left >= 0)
+        ? 'floor'
+        : 'ceil'](left) % two_32;
+    if (left_int < 0) {
+        left_int += two_32;
+    }
+    right_int = Math[(right >= 0)
+        ? 'floor'
+        : 'ceil'](right) % two_32;
+    if (right_int < 0) {
+        right_int += two_32;
+    }
+
+// For each of the 32 bits,
+//      Double the current result
+//      Set the new bit to 0
+//      If the most significant bits are set, then subtract out the bits out
+//          and set the new bit
+//      Add the new bit to the result
+//      Double the ints, rotating the next most significant bit into position
+
+    for (i = 0; i < 32; i += 1) {
+        result += result;
+        bit = 0;
+        if (left_int >= two_31) {
+            left_int -= two_31;
+            bit = 1;
+        }
+        if (right_int >= two_31) {
+            right_int -= two_31;
+            bit = 1;
+        }
+        result += bit;
+        left_int += left_int;
+        right_int += right_int;
+    }
+
+// If the most significant bit of the result is set, then produce a negative.
+
+    if (result >= two_31) {
+        result -= two_32;
+    }
+    return result;
+}
+@end(program)
+
+@article(@t(|=) @link(assignment infix operator) @aka(bitwise or))
+
+Blah.
+
+@article(@t(||) @link(infix operator) @aka(or))
+
+Blah.
+
+@specimen (@t(}) @aka(right curly brace))
+
+See @link({).
+
+@specimen (@t(~) @aka(tilde))
+
+@article(@t(~) @link(prefix operator) @aka(bitwise not))
+
+

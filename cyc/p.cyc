@@ -1,0 +1,834 @@
+@chapter(P)
+
+@specimen "package @reserved@"
+
+@specimen "parameter"
+
+    A parameter is a variable of a function that is initialized with a value from the arguments. Parameters are declared in a parameter list, which is a comma separated sequence of zero or more names. The entire parameter list is wrapped in a pair of parentheses.
+
+    @program [
+    function (first, second, third) {
+        ...
+    }
+    ]
+
+    does the same thing as
+
+    @begin(program)
+    function () {
+        var first = arguments[0],
+            second = arguments[1],
+            third = arguments[2];
+        ...
+    }
+    @end(program)
+
+    Blah.
+
+    @article "parameter list"
+
+    Blah.
+
+@specimen "parenthesis"
+
+    Also known as parens.
+
+    See @link<(> and @link<)>.
+
+@specimen "parse"
+
+    @article(@t(parse) @link(JSON function))
+
+    Blah.
+
+@specimen "parseFloat"
+
+    @article(@t(parseFloat) @link(primordial function))
+
+    Blah.
+
+@specimen "parseInt"
+
+    @article(@t(parseInt) @link(primordial function))
+
+    Blah.
+
+@specimen "PI"
+
+    @article(@t(PI) @link(Math number) @aka(pi))
+
+    Math.PI contains an approximate value of π which is somewhere around 3.141592653589793.
+
+    @program [
+    function circumference(radius) {
+        return 2 * Math.PI * radius;
+    }
+    ]
+
+    Also see @link(radians).
+
+@specimen "poker"
+
+    @begin(program)
+var score_poker_hand = (function () {
+
+// This program creates and uses two enumeration objects:
+// rank_value and score_prefix.
+
+// The score_poker_hand function takes a hand (an array of cards). The hand
+// can contain between 5 and 9 cards, within which it will find the best five
+// card poker hand. A hand is an array of objects containing rank and suit
+// properties. The order of the cards is not significant. The hand is not
+// modified.
+
+// It returns a string which is the hand's score. The score of a better hand
+// will always be greater than the score of a lesser hand.
+
+// We are wrapping the score_poker_hand function in an immediate function to
+// hide its static data structures (rank_value, score_prefix) and functions
+// (hex, count_cards, count_ranks, straight, of_a_kind, kicker).
+
+// The traditional ranks do not sort correctly because 'Q' > 'K', so we replace
+// them with numbers in order to assure proper sequencing.  This also allows us
+// to accept '10' or 'T' or 'Ten' or 'ten' as synonyms. Card ranks will be
+// replaced according to the rank_value enumeration object. Later we will
+// represent the ranks in base 16 so that they can be represented as single
+// characters, so 'Ace' becomes 14 or 'e', and 'Ten' becomes 10 or 'a'.
+
+    var rank_value = {
+        '2':     2,   'Five':  5,   'eight': 8,    'J':     11,   'K':    13,
+        'Two':   2,   'five':  5,   '9':     9,    'j':     11,   'k':    13,
+        'two':   2,   '6':     6,   'Nine':  9,    'Jack':  11,   'King': 13,
+        '3':     3,   'Six':   6,   'nine':  9,    'jack':  11,   'king': 13,
+        'Three': 3,   'six':   6,   '10':    10,   '12':    12,   '14':   14,
+        'three': 3,   '7':     7,   'T':     10,   'Q':     12,   '1':    14,
+        '4':     4,   'Seven': 7,   't':     10,   'q':     12,   'A':    14,
+        'Four':  4,   'seven': 7,   'Ten':   10,   'Queen': 12,   'a':    14,
+        'four':  4,   '8':     8,   'ten':   10,   'queen': 12,   'Ace':  14,
+        '5':     5,   'Eight': 8,   '11':    11,   '13':    13,   'ace':  14
+    };
+
+// The first character of the score indicates what kind of hand it is. The
+// score_prefix is an enumeration object that maps the names of the poker
+// hands to single letter codes. The single letters sort correctly, so
+//           score_prefix.flush > score_prefix.straight
+
+    var score_prefix = {
+        straight_flush:  'S',    // + high-card
+        four_of_a_kind:  'K',    // + 4-rank + kicker
+        full_house:      'H',    // + 3-rank + 2-rank
+        flush:           'F',    // + 5 kickers
+        straight:        'A',    // + high-card
+        three_of_a_kind: '3',    // + 3-rank + 2 kickers
+        two_pair:        '2',    // + 2-rank + 2-rank + kicker
+        one_pair:        '1',    // + 2-rank + 3 kickers
+        no_pair:         '0'     // + 5 kickers
+    };
+
+// The final score will contain a score_prefix and additional characters
+// to help break ties. Examples:
+
+// The worst poker hand from 5 cards is
+//     no_pair + 7 5 4 3 2                    = '075432'
+
+// The worst poker hand from 7 cards is
+//     no_pair + 9 8 7 5 4                    = '098754'
+
+// The best pair is
+//     one_pair + A A K Q J                   = '1edcb'
+
+// The best two pair is
+//     two_pair + A A K K Q                   = '2edc'
+
+// The best three of a kind is
+//     three_of_a_kind + A A A K Q            = '3edc'
+
+// The worst straight is
+//     straight + 5 4 3 2 A                   = 'A5'
+
+// The best flush that is not a straight flush is
+//      flush + A K Q J 9                     = 'Fedcb9'
+
+// The best full house is
+//      full_house + A A A K K                = 'Hed'
+
+// The best four of a kind is
+//      four_of_a_kind + A A A A K            = 'Ked'
+
+// The best poker hand (Royal flush) is
+//      straight_flush + A K Q J 10           = 'Se'
+
+
+    function hex(number) {
+
+// Return the number as a base 16 string. We convert the codes for ten, jack,
+// queen, king, and ace to 'a', 'b', 'c', 'd', and 'e'.
+
+        return number.toString(16);
+    }
+
+    function count_cards(hand, select) {
+
+// The count_cards function produces an object that contains the counts of the
+// elements of an array. If there is no select parameter, then the truthy
+// elements are counted. If the select parameter is a function, then the
+// elements are each passed to the select function and the results are counted.
+// Otherwise, if select is a string and the elements are objects, use the
+// select string as a property name and count the properties.
+
+// The result is an object where the keys are elements and the values are the
+// counts for each element.
+
+        var element, i, result = {};
+        for (i = 0; i < hand.length; i += 1) {
+            element = hand[i];
+            if (typeof select === 'function') {
+                element = select(element);
+            } else if (typeof select === 'string') {
+                if (!element || typeof element !== 'object') {
+                    throw new Error('count_cards expected an object');
+                }
+                element = element[select];
+            }
+            if (element) {
+
+// If the current count for the element is not a number (most likely undefined,
+// possibly an inherited method) then assign 1 to it. Otherwise, increment it.
+
+                if (typeof result[element] !== 'number') {
+                    result[element] = 1;
+                } else {
+                    result[element] += 1;
+                }
+            }
+        }
+        return result;
+    }
+
+    function count_ranks(hand) {
+        return count_cards(hand, function (element) {
+            return rank_value[element.rank];
+        });
+    }
+
+    function straight(count) {
+
+// Given a rank count, determine if it has a straight. Using the rank_value
+// enumeraton object, starting with Ace and work down, look for 5 cards in a
+// row. If they are found, return the value of the high card. The lowest
+// straight has 6 high.
+
+        var high, j, found;
+        for (high = rank_value.ace; high >= rank_value.six; high -= 1) {
+            if (count[high]) {
+                found = true;
+                for (j = 1; j < 5; j += 1) {
+                    if (!count[(high - j)]) {
+                        found = false;
+                        break;
+                    }
+                }
+                if (found) {
+                    return high;
+                }
+            }
+        }
+
+// If holding an Ace, look for a wheel (5-4-3-2-A).
+
+        if (count[rank_value.ace]) {
+            for (j = rank_value.five; j >= rank_value.two; j -= 1) {
+                if (!count[j]) {
+                    return false;
+                }
+            }
+            return rank_value.Five;
+        }
+        return false;
+    }
+
+    function of_a_kind(count, number) {
+
+// Given a rank count, find the highest rank that meets or exceeds the number.
+// If successful, subtract the number and return the value. For example, if
+// the count contains 4 aces, then of_a_kind(count, 4) would return 14 (the ace
+// value) and reduce the ace count to zero. It looks first at the aces, then
+// kings, and so on, looking finally at the twos.
+
+        var value;
+        for (value = rank_value.ace; value >= rank_value.two; value -= 1) {
+            if (count[value] >= number) {
+                count[value] -= number;
+                return value;
+            }
+        }
+        return false;
+    }
+
+    function kicker(count, number) {
+
+// Produce a string containing the hex values of the count's highest ranking
+// cards. The number parameter determines how many kickers to take.
+
+        var result = '',
+            value;
+        for (value = rank_value.ace; value >= rank_value.two; value -= 1) {
+            while (count[value]) {
+                result += hex(value);
+                count[value] -= 1;
+                number -= 1;
+                if (number <= 0) {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    return function score_poker_hand(hand) {
+
+// This is the actual score_poker_hand function. It takes a hand of 5 to 9
+// cards. If the hand is shorter than 5, then some hands will be impossible
+// to produce. For example, with two cards, the only possible scores are
+// one_pair and no_pair. If the hand is bigger than 9 cards, then it might
+// produce an incorrect score in the case where the hand contains two or more
+// flushes. Most games use 5 or 7 cards. The hand is not modified. A hand is
+// an array of card objects. A card object has two properties, a rank and a
+// suit. So
+//      score_poker_hand([
+//          {"rank": "four", "suit": "D"},
+//          {"rank": "5",    "suit": "D"},
+//          {"rank": "Ace",  "suit": "D"},
+//          {"rank": "2",    "suit": "D"},
+//          {"rank": "Q",    "suit": "D"}
+//      ])    // 'Fec542'  (flush + AQ542)
+
+        var count, flush, flush_count, high, pair, suit, suit_count;
+
+// First look for a flush. Did we count 5 or more cards of the same suit?
+
+        suit_count = count_cards(hand, 'suit');
+        for (suit in suit_count) {
+            if (typeof suit_count[suit] === 'number' && suit_count[suit] >= 5) {
+                flush = suit;
+                break;
+            }
+        }
+
+// We see a flush. Is it a straight flush? To find out, make a flush hand
+// that includes only the cards that are suited and test it for straightness.
+
+        if (flush) {
+            flush_count = count_ranks(hand.filter(function (element) {
+                return element.suit === flush;
+            }));
+            high = straight(flush_count);
+            if (high) {
+                return score_prefix.straight_flush + hex(high);
+            }
+        }
+
+// If it is not a straight flush, then make a new rank count that will be used
+// for all of the following tests.
+
+        count = count_ranks(hand);
+
+// Four of a kind?
+
+        high = of_a_kind(count, 4);
+        if (high) {
+            return score_prefix.four_of_a_kind + hex(high) + kicker(count, 1);
+        }
+
+// Full house? First look for a 3 of a kind. If we find one, look for a
+// two of a kind. If we find one, then we have a full house. If we don't
+// find the pair, then we have to undo the matching of the 3 of a kind
+// so that it doesn't interfere with the matching of a straight.
+
+        high = of_a_kind(count, 3);
+        if (high) {
+            pair = of_a_kind(count, 2);
+            if (pair) {
+                return score_prefix.full_house + hex(high) + hex(pair);
+            }
+            count[high] += 3;  // undo the matching of the 3 of a kind
+        }
+
+// Flush?
+
+        if (flush) {
+            return score_prefix.flush + kicker(flush_count, 5);
+        }
+
+// Straight?
+
+        high = straight(count);
+        if (high) {
+            return score_prefix.straight + hex(high);
+        }
+
+// Three of a kind?
+
+        high = of_a_kind(count, 3);
+        if (high) {
+            return score_prefix.three_of_a_kind + hex(high) + kicker(count, 2);
+        }
+
+// One pair? Two pair?
+
+        high = of_a_kind(count, 2);
+        if (high) {
+            pair = of_a_kind(count, 2);
+            if (pair) {
+                return score_prefix.two_pair + hex(high) + hex(pair) +
+                        kicker(count, 1);
+            } else {
+                return score_prefix.one_pair + hex(high) + kicker(count, 3);
+            }
+        }
+
+// If all tests failed, then we have a no pair.
+
+        return score_prefix.no_pair + kicker(count, 5);
+    };
+}());
+    @end(program)
+
+@specimen "poo"
+
+    @link(OOP) spelled backwards.
+
+@specimen "pop"
+
+    @article(@t(pop) @link(Array prototype function))
+
+    Blah.
+
+@specimen "POSITIVE_INFINITY"
+
+    @article(@t(POSITIVE_INFINITY) @link(Number number))
+
+    Number.POSITIVE_INFINITY is the same as Infinity, and is much more to type.
+
+@specimen "pow"
+
+    @article(@t(pow) @link(Math function) @aka(raise to a power))
+
+    The Math.pow(x, y) function raises a number to a power. In mathematical notation, it is usually written as a superscript: x y. The result is x multiplied by itself as many times as indicated by y, so that Math.pow(2, 4) is the same as 2 * 2 * 2 * 2, having a result of 16. y is not required to be an integer, and it is not required to be positive. If x is 0, then the result is 0. If y is 0, then result is 1. If both x and y are 0, the result is 1. Some programming languages provide an exponentiation operator such as ** or ^. This language does not, you must use the Math.pow function instead. It is used rarely enough that this does not present a hardship.
+
+    Math.pow(x, 1 / 2) is mostly the same as Math.sqrt(x). Math.pow(Math.E, x) is mostly the same as Math.exp(x);
+
+    It could be implemented like this:
+
+    @begin(program)
+    Math.pow = function (x, y) {
+        var abs_x, y_is_integer, y_is_odd_integer;
+        x = +x;
+        y = +y;
+
+    // y is zero...
+
+        if (y === 0) {
+            return 1;
+        }
+
+    // x or y are NaN...
+
+        if (isNaN(x) || isNaN(y)) {
+            return NaN;
+        }
+
+        abs_x = (x < 0)
+            ? -x
+            : x;
+        y_is_integer = Math.floor(y) === y;
+        y_is_odd_integer = y_is_integer && Math.floor(y / 2) * 2 !== y;
+
+    // y is Infinity...
+
+        if (y === Infinity) {
+            return (abs_x > 1)
+                ? Infinity
+                : (abs_x === 1)
+                    ? NaN
+                    : 0;
+        }
+        if (y === -Infinity) {
+            return (abs_x > 1)
+                ? 0
+                : (abs_x === 1)
+                    ? NaN
+                    : Infinity;
+        }
+
+    // x is Infinity...
+
+        if (x === Infinity) {
+            return (y > 0)
+                ? Infinity
+                : 0;
+        }
+        if (x === -Infinity) {
+            return (y > 0)
+                ? (y_is_odd_integer)
+                    ? -Infinity
+                    : Infinity
+                : (y_is_odd_integer)
+                    ? -0
+                    : 0;
+        }
+
+    // x is zero...
+
+        if (x === 0) {
+            if (1 / x > 0) {
+                return (y > 0)
+                    ? 0
+                    : Infinity;
+
+    // x is -0...
+
+            } else {
+                return (y > 0)
+                    ? (y_is_odd_integer)
+                        ? -0
+                        : 0
+                    : (y_is_odd_integer)
+                        ? -Infinity
+                        : Infinity;
+            }
+        }
+
+        if (x < 0 && !y_is_integer) {
+            return NaN;
+        }
+
+    // eventually the computation occurs.
+
+        return Math.exp(Math.log(x) * y);
+    };
+    @end(program)
+
+    Also see @link(exp Math function) and @link(sqrt Math function).
+
+    Example:
+
+    @begin(program)
+    function monthly_payment(principal, interest_rate, nr_years) {
+        var monthly_interest = (interest_rate / 100) / 12,
+            nr_monthly_payments = nr_years * 12;
+
+        return principal * monthly_interest /
+            (1 - Math.pow(1 + monthly_interest, -nr_monthly_payments));
+    }
+    @end(program)
+
+@specimen "precedence"
+
+    See @link(operator precedence).
+
+@specimen "prefix operator"
+
+    A prefix operator is a @link(unary operator) that is placed before its operand.
+    A prefix operators are higher in precedence than any @link(binary operator), but
+    lower in precedence than an @link(suffix operator).
+
+    @list {
+    @link(! prefix operator)
+    @link(+ prefix operator)
+    @link(- prefix operator)
+    @link(~ prefix operator)
+    @link(delete prefix operator)
+    @link(new prefix operator)
+    @link(typeof prefix operator)
+    @link(void prefix operator)
+    }
+
+    Also see assignment prefix operator.
+
+@specimen "preventExtensions"
+
+    @article(@t(preventExtensions) @link(Object function))
+
+    Blah.
+
+@specimen "primordial"
+
+    @article "primordial function"
+
+    These functions are available in the primordial context.
+    An implementation is allowed to add additional primordial functions.
+
+    @list {
+    @link(Array primordial function)
+    @link(ArrayBuffer primordial function)
+    @link(Boolean primordial function)
+    @link(DataView primordial function)
+    @link(Date primordial function)
+    @link(decodeURI primordial function)
+    @link(decodeURIComponent primordial function)
+    @link(encodeURI primordial function)
+    @link(encodeURIComponent primordial function)
+    @link(Error primordial function)
+    @link(eval primordial function)
+    @link(EvalError primordial function)
+    @link(Float32Array primordial function)
+    @link(Float64Array primordial function)
+    @link(Function primordial function)
+    @link(Generator primordial function)
+    @link(Int16Array primordial function)
+    @link(Int32Array primordial function)
+    @link(Int8Array primordial function)
+    @link(isFinite primordial function)
+    @link(isNaN primordial function)
+    @link(Map primordial function)
+    @link(Number primordial function)
+    @link(Object primordial function)
+    @link(parseFloat primordial function)
+    @link(parseInt primordial function)
+    @link(Promise primordial function)
+    @link(Proxy primordial function)
+    @link(RangeError primordial function)
+    @link(ReferenceError primordial function)
+    @link(Reflect primordial function)
+    @link(RegExp primordial function)
+    @link(Set primordial function)
+    @link(String primordial function)
+    @link(SyntaxError primordial function)
+    @link(TypeError primordial function)
+    @link(URIError primordial function)
+    @link(UInt16Array primordial function)
+    @link(UInt32Array primordial function)
+    @link(UInt8Array primordial function)
+    @link(UInt8ClampedArray primordial function)
+    @link(WeapMap primordial function)
+    @link(WeapSet primordial function)
+    }
+
+    @article "primordial object"
+
+    The primordial context contains these objects:
+
+    @list {
+    @link(Intl primordial object)
+    @link(JSON primordial object)
+    @link(Math primordial object)
+    }
+
+    Blah.
+
+    @article "primordial @link(variable)"
+
+    @list {
+    @link(Infinity literal)
+    @link(NaN literal)
+    @link(undefined literal)
+    }
+
+@specimen "private @reserved@"
+
+@specimen "program"
+
+    A program is a complex set of instructions that control the operation of a
+    computer. In this language, a program is delivered to the execution site in a textual form (or as source code or as script) which is then compiled and immediately executed. See compilation unit.
+
+@specimen "promise"
+
+    A promise is an object that represents a value that may be unknown at the present time but which might become known in the future. A promise allows us to act on the future value now, remembering our intentions until the promise is ultimately kept or broken. The resolution of a promise might depend in a result that will be determined on the other side of the network or in a different process.
+
+    Also see @link(callback).
+
+        @article "@t(Promise) @link(Primordial function)"
+
+        <Blah.>
+
+        @article (@t(Promise) @link(function))
+
+            @list {
+                @link(all promise function)
+                @link(race promise function)
+                @link(reject promise function)
+                @link(resolve promise function)
+            }
+
+        @article (@t(Promise) @link(prototype) @link(function))
+
+            @list {
+                @link(catch promise prototype function)
+                @link(then promise prototype function)
+            }
+
+@specimen "property"
+
+    A property is a component of an @link(object) that is associated with a
+    @link(key string). There are two kinds of property:
+    @list {
+    @link(data property)
+    @link(accessor property)
+    }
+
+    A @link(data property) holds a value that can be @link(get) or @link(set).
+    An @link(accessor property) instead holds one or two functions that will be
+    called when an attempt is made to @link(get) or @link(set) the property.
+    A property can be inherited, or it can be the object’s @link(own property).
+
+    See @link(object). Also see @link(. suffix operator) and
+    @link([ ] suffix operator).
+
+@specimen "propertyIsEnumerable"
+
+    @article(@t(propertyIsEnumerable) @link(Object prototype function))
+
+    Blah.
+
+@specimen "protected @reserved@"
+
+@specimen "prototypal inheritance"
+
+    Blah.
+
+    @begin(program)
+    function new_constructor(prototype, initializer) {
+        return function () {
+            var that = Object.create(prototype);
+            initializer.apply(that, arguments);
+            return that;
+        };
+    }
+    @end(program)
+
+@specimen "prototype"
+
+    Every object can inherit properties from a prototype object. When fetching a
+    named property of an object using the @link(. suffix operator) or the
+    @link([ ] suffix operator), if the object does not own a property with that name,
+    then its prototype is examined. If the prototype object owns a property with
+    that name, then the value of that property is fetched.
+
+    Every function contains a @t(prototype) @link(property) that property is usually an object. That object
+
+    @article(prototype function)
+
+    Blah.
+
+    @article(prototype object)
+
+    Blah.
+
+    @article(prototype number)
+
+    Blah.
+
+    @article(@t(prototype) @link(Function prototype object))
+
+    Blah.
+
+@specimen "proxy"
+
+        @article "@t(Proxy) @link(primoridal object)"
+
+         <Blah.
+
+        >
+
+        @article (@t(Proxy) @link(function))
+
+            @list {
+                @link(revocable proxy function)
+            }
+
+        @article (@t(Proxy) @link (prototype) @link(function))
+
+            @list {
+                @link(apply proxy prototype function)
+                @link(construct proxy prototype function)
+                @link(defineproperty proxy prototype function)
+                @link(deleteproperty proxy prototype function)
+                @link(enumerate proxy prototype function)
+                @link(get proxy prototype function)
+                @link(getownproperty proxy prototype function)
+                @link(getPrototypeOf proxy prototype function)
+                @link(has proxy prototype function)
+                @link(isExtensible proxy prototype function)
+                @link(ownkeys proxy prototype function)
+                @link(preventextensions proxy prototype function)
+                @link(set proxy prototype function)
+                @link(setPrototypeOf proxy prototype function)
+            }
+
+
+@specimen "ps @aka[paragraph separator]"
+
+    Blah.
+
+@specimen "pseudoclassical"
+
+    Blah.
+
+@specimen "public @reserved@"
+
+@specimen "public domain"
+
+    Blah.
+
+@specimen "punctuator"
+
+    A punctuator is a symbol composed of one or more special characters that is used as a separator or operator.
+
+    @list {
+    @link(! prefix operator)
+    @link(!= infix operator)
+    @link(!== infix operator)
+    @link(% infix operator)
+    @link(%= assignment infix operator)
+    @link(& infix operator)
+    @link(&& infix operator)
+    @link(&= assignment infix operator)
+    @link<(>
+    @link<)>
+    @link(* infix operator)
+    @link(*= assignment infix operator)
+    @link(+ infix operator)
+    @link(++)
+    @link(+= assignment infix operator)
+    @link(,)
+    @link(- infix operator)
+    @link(--)
+    @link(-= assignment infix operator)
+    @link(.)
+    @link(/ infix operator)
+    @link(/= assignment infix operator)
+    @link(:)
+    @link(;)
+    @link(< infix operator)
+    @link(<= infix operator)
+    @link(<< infix operator)
+    @link(<<= assignment infix operator)
+    @link(= assignment infix operator)
+    @link(== infix operator)
+    @link(=== infix operator)
+    @link(> infix operator)
+    @link(>= infix operator)
+    @link(>> infix operator)
+    @link(>>= assignment infix operator)
+    @link(>>> infix operator)
+    @link(>>>= assignment infix operator)
+    @link(?)
+    @link([)
+    @link(])
+    @link(^)
+    @link(^= assignment infix operator)
+    @link({)
+    @link(| infix operator)
+    @link(|= assignment infix operator)
+    @link(|| infix operator)
+    @link(})
+    @link(~)
+    }
+
+@specimen "push"
+
+    @article(@t(push) @link(Array prototype function))
+
+    Blah.
+

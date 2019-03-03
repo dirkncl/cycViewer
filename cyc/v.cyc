@@ -1,0 +1,60 @@
+@chapter "V"
+
+@specimen "values"
+
+    @article(@t(values) @link(array prototype function))
+
+    Blah.
+
+@specimen "valueOf"
+
+    @article (@t(valueOf) @link(Boolean prototype function))
+
+    Blah.
+
+    @article (@t(valueOf) @link(Date prototype function))
+
+    Blah.
+
+    @article (@t(valueOf) @link(Number prototype function))
+
+    Blah.
+
+    @article (@t(valueOf) @link(Object prototype function))
+
+    Blah.
+
+    @article (@t(valueOf) @link(String prototype function))
+
+    Blah.
+
+@specimen "var @reserved@"
+
+    @article "@t(var) @link(statement)"
+
+    Blah.
+
+@specimen "variable"
+
+    A variable is a named value within a function or within the global context.
+    A variable has a name. The initial value of a variable is @link(undefined).
+    The value of a variable can be replaced by using an @link(assignment operator).
+    A variable is declared with the @link(var statement) or the
+    @link(function statement).
+
+@specimen "variadic"
+
+    A variadic function is a function that takes a variable number of arguments.
+    See @link(arguments parameter) and the @link(... prefix operator).
+
+@specimen "void @reserved@"
+
+    @article (@t "void" @link "prefix operator")
+
+    The @t(void) operator takes the value of its operand and gives as its result the
+    @link(undefined) value. In other languages, @t(void) is a type and not a useless
+    operator, so the likelihood of inducing confusion with the use of @t(void) is
+    very high. You don't need that.
+
+    @t(void) was added to the language for the benefit of in-line scripts in web
+    pages, which is itself a very bad practice.

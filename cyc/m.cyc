@@ -1,0 +1,293 @@
+@chapter "M"
+
+
+@specimen "map"
+
+    @article(@t(map) @link(Array prototype function))
+
+    Blah.
+
+    @program "
+    function expand_shorthand(hand) {
+        return hand.map(function (value) {
+            return {
+                rank: value.slice(0, -1),
+                suit: value.slice(-1)
+            };
+        });
+    });
+
+    var hand = expand_shorthand(['AH', 'KH', 'QH', 'JH', '10H']);
+    // hand is [
+    //     {suit: 'H', rank: 'A'},
+    //     {suit: 'H', rank: 'K'},
+    //     {suit: 'H', rank: 'Q'},
+    //     {suit: 'H', rank: 'J'},
+    //     {suit: 'H', rank: '10'}
+    // ]
+    "
+
+        @article "@t(Map) @link(primordial function)"
+
+            @list {
+                @link(name Int8ClampedArray string)
+            }
+
+        @article "@t(Map) @link(prototype)"
+
+        @article "@t(Map) @link(prototype function)"
+
+            @list {
+                @link(clear map prototoype function)
+                @link(delete map prototoype function)
+                @link(entries map prototoype function)
+                @link(forEach map prototoype function)
+                @link(get map prototoype function)
+                @link(has map prototoype function)
+                @link(keys map prototoype function)
+                @link(set map prototoype function)
+                @link(values map prototoype function)
+            }
+
+@specimen "match"
+
+    @article(@t(match) @link(String prototype function))
+
+    Blah.
+
+@specimen "Math"
+
+    @article(@t(Math) @link(function))
+
+    The standard does not require implementations to compute the most accurate
+    result from these functions. Implementors are allowed to trade off accuracy
+    for speed or other considerations. Blah.
+
+    @list {
+    @link(abs Math function)
+    @link(acos Math function)
+    @link(asin Math function)
+    @link(atan Math function)
+    @link(atan2 Math function)
+    @link(ceil Math function)
+    @link(cos Math function)
+    @link(exp Math function)
+    @link(floor Math function)
+    @link(log Math function)
+    @link(max Math function)
+    @link(min Math function)
+    @link(pow Math function)
+    @link(random Math function)
+    @link(round Math function)
+    @link(sin Math function)
+    @link(sqrt Math function)
+    @link(tan Math function)
+    }
+
+    Most of the functions can take one parameter.
+    These are the results of those functions for some particular arguments:
+
+    @table {
+    @!function@|@!NaN@|@!-0@|@!0@|@!-Infinity@|@!Infinity
+    @_abs@|NaN@|0@|0@|Infinity@|Infinity
+    @_acos@|NaN@|Math.PI / 2@|Math.PI / 2@|NaN@|NaN
+    @_asin@|NaN@|-0@|0@|NaN@|NaN
+    @_atan@|NaN@|-0@|0@|-Math.PI / 2@|Math.PI / 2
+    @_ceil@|NaN@|-0@|0@|-Infinity@|Infinity
+    @_cos@|NaN@|1@|1@|NaN@|NaN
+    @_exp@|NaN@|1@|1@|0@|Infinity
+    @_floor@|NaN@|-0@|0@|-Infinity@|Infinity
+    @_log@|NaN@|-Infinity@|-Infinity@|NaN@|Infinity
+    @_max@|NaN@|-0@|0@|-Infinity@|Infinity
+    @_min@|NaN@|-0@|0@|-Infinity@|Infinity
+    @_round@|NaN@|-0@|0@|-Infinity@|Infinity
+    @_sin@|NaN@|-0@|0@|NaN@|NaN
+    @_sqrt@|NaN@|-0@|0@|NaN@|Infinity
+    @_tan@|NaN@|-0@|0@|NaN@|NaN
+    }
+
+    Math.max(...) and Math.min(...) can take many arguments. The table shows the case where there is one argument.
+
+    Math.atan2(y, x) and Math.pow(x, y) each take two arguments. Math.random() takes no arguments.
+
+    @article(@t(Math) @link(primordial object))
+
+    Blah.
+
+    @article(@t(Math) @link(number))
+
+    The Math primordial object is the container for these numeric properties:
+
+    @table {
+    @!property@|@!description@|@!numeric value
+    @_@link(E)@|approximate value of e(Eulers number)@|2.718281828459045
+    @_@link(LN10)@|natural logarithm of 10@|2.302585092994046
+    @_@link(LN2)@|natural logarithm of 2@|0.6931471805599453
+    @_@link(LOG10E)@|base 10 logarithm of e@|0.4342944819032518
+    @_@link(LOG2E)@|base 2 logarithm of e@|1.4426950408889634
+    @_@link(PI)@|approximate value of π @|3.141592653589793
+    @_@link(SQRT1_2)@|Square root of 1/2(.5)@|0.7071067811865476
+    @_@link(SQRT2)@|Square root of 2@|1.4142135623730951
+    }
+
+@specimen "max"
+
+    @article(@t(max) @link(Math function) @aka(maximum))
+
+    The Math.max(...) function returns the largest number from its arguments. It can take a variable number of arguments. If there are no arguments, it returns -Infinity. If there is one argument, it returns the numeric value of that argument. Otherwise, it compares each of the arguments and returns the greatest. If any of the arguments is @link(NaN) or converts to @link(NaN), then the result is @link(NaN). Unlike the > infix operator, Math.max(...) sees -0 as being less than 0 (see @link(zero)).
+
+    It could be implemented like this:
+
+    @begin(program)
+    Math.max = function () {
+        var i, length = arguments.length, result = -Infinity, value;
+        for (i = 0; i < length; i += 1) {
+            value = +arguments[i];
+            if (isNaN(value)) {
+                return NaN;
+            }
+            if (value > result ||
+                    (value === 0 && result === 0 && 1 / value > 0)) {
+                result = value;
+            }
+        }
+        return result;
+    };
+
+    Math.max(25, 52)           // 52
+    Math.max(-1, 0.1, -0.1)    // 0.1
+    Math.max('2', '10')        // 10
+
+    Math.max(...[40, 8, Math.PI, 1000, 1])    // 1000
+    @end(program)
+
+@specimen "MAX_VALUE"
+
+    @article(@t(MAX_VALUE) @link(Number number))
+
+    Number.MAX_VALUE contains the largest positive representable number. It is approximately equal to 1.7976931348623157e+308. A result which is larger than MAX_VALUE is represented as Infinity. Surprisingly, Number.MAX_VALUE + x where x is a non-negative number in most cases does not produce Infinity. If x is less than approximately 9.979201547673598e+291 then the result of the addition is MAX_VALUE and not Infinity. As a result, even given infinite time, this loop will never break:
+
+    @begin(program)
+    var x;
+    for (x = Number.MAX_VALUE; x !== Infinity; x += 9.979201547673598e+291) {
+        x += 1;
+    }
+    @end(program)
+
+@specimen "member"
+
+    Also known as @link(property). See @link(object).
+
+@specimen "memoization"
+
+    Blah.
+
+    @begin(program)
+    function memoizer(memo, formula) {
+        var recur = function (n) {
+            var result = memo[n];
+            if (typeof result !== 'number') {
+                result = formula(recur, n);
+                memo[n] = result;
+            }
+            return result;
+        };
+        return recur;
+    };
+
+    var factorial = memoizer([1, 1], function (recur, n) {
+        return n * recur(n - 1);
+    });
+
+    var fibonacci = memoizer([0, 1], function (recur, n) {
+        return recur(n - 1) + recur(n - 2);
+    });
+    @end(program)
+
+@specimen "method"
+
+    A method is @link(property) whose value is a @link(function).
+    A method can get access to the object with the @link(this parameter). See @link(invocation).
+
+    All values except @link(null) and @link(undefined) can have methods.
+
+    @article(method chaining)
+
+    When a function returns @link(this).
+
+    See @link(cascade).
+
+    @article "method @link(invocation)"
+
+    Blah.
+
+@specimen "min"
+
+    @article(@t(min) @link(Math function) @aka(minimum))
+
+    The Math.min(...) function returns the smallest number from its arguments. It can take a variable number of arguments. If there are no arguments, it returns Infinity. If there is one arguments, it returns the numeric value of that argument. Otherwise, it compares each of the arguments and returns the lowest. If any of the arguments is @link(NaN) or converts to @link(NaN), then the result is @link(NaN). Unlike the < infix operator, Math.min(...) sees -0 as being less than 0 (see @link(zero)). It could be implemented like this:
+
+    @begin(program)
+    Math.min = function () {
+        var i, length = arguments.length, result = Infinity, value;
+        for (i = 0; i < length; i += 1) {
+            value = +arguments[i];
+            if (isNaN(value)) {
+                return NaN;
+            }
+            if (value < result ||
+                    (value === 0 && result === 0 && 1 / value < 0)) {
+                result = value;
+            }
+        }
+        return result;
+    };
+
+    Math.min(25, 52)           // 25
+    Math.min(-1, 0.1, -0.1)    // -1
+    Math.min('2', '10')        // 2
+
+    Math.min(...[40, 8, Math.PI, 1000, 1])    // 1
+    @end(program)
+
+@specimen "minification"
+
+    Blah.
+
+@specimen "minus sign"
+
+    See @link(-).
+
+@specimen "MIN_VALUE"
+
+    @article(@t(MIN_VALUE) @link(Number number))
+
+    Number.MIN_VALUE is the smallest positive number that can be represented. It is approximately equal to 5e-324. Dividing this value by 2 produces 0.
+
+@specimen "modulo"
+
+    Blah.
+
+    See @link(% infix operator).
+
+@specimen "monad"
+
+    Blah.
+
+@specimen "monkey patching"
+
+    Blah.
+
+@specimen "multiline"
+
+    @article(@t(multiline) @link(regexp boolean))
+
+    Blah.
+
+@specimen "multiply"
+
+    See @link(* infix operator).
+
+@specimen "mutabile"
+
+    Blah.

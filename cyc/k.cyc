@@ -1,0 +1,14 @@
+@chapter "K"
+
+@specimen "key"
+    See @link <object>.
+
+@specimen "key string"
+
+    Blah. See @link <object>.
+
+@specimen "keys"
+
+    @article "@t(keys) @link <object function>"
+
+    Blah.

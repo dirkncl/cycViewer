@@ -1,0 +1,87 @@
+@chapter "W"
+
+@specimen "wat"
+
+    Blah ha ha.
+
+    @program <
+    Array(16).join("wat" - 1) + "Batman!"
+    >
+
+@specimen "WeakMap"
+
+    @article "@t(WeakMap) @link(primordial function)"
+
+        Blah.
+
+    @article "@t(WeakMap) @link(prototype)"
+
+    @article "@t(WeakMap) @link(prototype function)"
+
+        @list {
+            @link(delete WeakMap prototoype function)
+            @link(get WeakMap prototoype function)
+            @link(has WeakMap prototoype function)
+            @link(set WeakMap prototoype function)
+        }
+
+@specimen "WeakSet"
+
+    @article "@t(WeakSet) @link(primordial function)"
+
+        @list {
+            @link(name Int8ClampedArray string)
+        }
+
+    @article "@t(WeakSet) @link(prototype)"
+
+    @article "@t(WeakSet) @link(prototype function)"
+
+        @list {
+            @link(add WeakSet prototoype function)
+            @link(delete WeakSet prototoype function)
+            @link(get WeakSet prototoype function)
+            @link(has WeakSet prototoype function)
+        }
+
+@specimen "while @reserved@"
+
+    See @link(do statement).
+
+    @article(@t(while) @link(statement))
+
+    Blah.
+
+@specimen "whitespace"
+
+    Whitespace characters are used in a compilation unit to separate name tokens and to improve the readability of the text. They are called whitespace characters because they do not make any marks. They leave the paper white, creating space around the characters that make marks.
+
+    The whitespace characters include
+
+    @begin(table)
+    @!Unicode escape sequence@|@!alt@|@!name@|@!@link(line terminator)
+    @_@t(\u0009)@|@t(\t)@|@link(tab)@|
+    @_@t(\u000A)@|@t(\n)@|@link(lf)@|yes
+    @_@t(\u000B)@|@t(\v)@|@link(vt)@|
+    @_@t(\u000C)@|@t(\f)@|@link(ff)@|
+    @_@t(\u000D)@|@t(\r)@|@link(cr)@|yes
+    @_@t(\u0020)@|      @|@link(sp)@|
+    @_@t(\u00A0)@|      @|@link(nbsp)@|
+    @_@t(\u2028)@|      @|@link(ls)@|yes
+    @_@t(\u2029)@|      @|@link(ps)@|yes
+    @_@t(\uFFFE)@|      @|@link(bom)@|
+    @end(table)
+
+    Four of the whitespace characters are also @link(line terminator) characters.
+    A @link(line terminator) character identifies the end of a line of program text.
+    This is important in @link(semicolon insertion),
+    and in the formation of a @link(comment) or @link(string literal).
+
+    In addition to the characters above, characters in the @link(Unicode)
+    general category of Zs @aka(separator, space) are also treated as whitespace.
+
+@specimen "with @reserved@"
+
+    @article(@t(with) @link(statement))
+
+    The with statement was a feature of @link(ES3) that was eliminated from @link(ES5).

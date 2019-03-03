@@ -1,0 +1,316 @@
+@chapter "N"
+
+@specimen "name"
+
+    A name is a token that typically resembles a word or a sequence of words.
+    The first character of a name must be one of these:
+
+    @list {
+        @begin(together)
+            a letter, including the @link(Unicode) general categories
+            Ll @aka(letter, lowercase), Lm @aka(letter, modifier),
+            Lo @aka(letter, other), Lt @aka(letter, titlecase),
+            Lu @aka(letter, uppercase), and Nl @aka(number, letter)
+        @end(together)
+        the character @link(_)
+        the character @link($)
+    }
+
+    The first character is followed by zero or more additional characters, each of which must be one of these:
+
+    @list {    @begin(together)
+            a letter, including the @link(Unicode) general categories
+            Ll @aka(letter, lowercase), Lm @aka(letter, modifier),
+            Lo @aka(letter, other), Lt @aka(letter, titlecase),
+            Lu @aka(letter, uppercase), and Nl @aka(number, letter)
+        @end(together)
+        the character @link(_)
+        the character @link($)
+        a digit, including the Unicode general category Nd @aka(number, decimal)
+        a mark, including the Unicode general categories Mc @aka(mark, spacing combining) and Mn @aka(mark, nonspacing)
+        the character zwnj @aka(zero width non-joiner) @t('\u200c')
+        the character zwj @aka(zero width joiner) @t('\u200d')
+    }
+
+    A name token can be used as
+
+    @list {
+        a @link(label)
+        the name of a @link(variable)
+        the name of a @link(function)
+        the name of a @link(parameter)
+        the name of a @link(property) in an @link(object literal)
+        the name of a @link(property) with the @link(. suffix operator)
+        an @link(operator), such as @link(sizeof prefix operator) or @link(in infix operator)
+        the name of a @link(statement), such as @link(if statement) or @link(switch statement)
+        a word within a @link(statement), such as @link(else) or @link(case)
+    }
+
+    If a name token is a @reserved@ then it cannot be used as
+
+    @list {
+        a label
+        the name of a @link(variable)
+        the name of a @link(function)
+        the name of a @link(parameter)
+    }
+
+    Any character in a name can be replaced with a Unicode escape sequence without
+    changing the meaning, so @t(cat) and @t(\u0063\u0061\u0074) are the same name.
+
+    @program <
+    var \u0063\u0061\u0074 = {\u0063\u0061\u0074: '\u0063\u0061\u0074'};
+    alert(cat.cat === 'cat');       // true
+    alert(cat['cat'] === 'cat');    // true
+    >
+
+    This was intended to make it easier to work with names representing foreign
+    words, but it has little practical use. It is used mainly by evil doers as a
+    way of evading security filters. It is generally safest to stick with the
+    @link(ASCII) set.
+
+    Names are case sensitive, so @t(cat) and @t(Cat) and @t(CAT) are three different
+    names. It is recommended that all names start with a lowercase character, with
+    the exception that a @link(constructor) function should start with an Uppercase
+    Letter, and a @link(global) variable should be all UPPER_CASE.
+
+    A name cannot contain a @link(whitespace) character, but sometimes a name should
+    incorporate two or more words. There are two conventions for doing this. One is
+    to use @link(_) in place of the @link(whitespace).
+
+    @program "truth_or_consequences"
+
+    The other is to use @link(camelCase), where the first letter of each word is capitalized.
+
+    @program "truthOrConsequences"
+
+@specimen "NaN @aka(not a number)"
+
+    There is a special number value called @link(NaN), which stands for Not a Number,
+    despite the fact that
+
+    @program (typeof NaN            // 'number')
+
+    @link(NaN) is a falsy value. @link(NaN) is produced by
+
+    @program {
+    0 / 0                 // NaN
+    Infinity - Infinity   // NaN
+    Infinity * 0          // NaN
+    Infinity / Infinity   // NaN
+    Infinity % 1          // NaN
+    1 % 0                 // NaN
+    +"oops"               // NaN
+    Number("oops")        // NaN
+    parseFloat("oops")    // NaN
+    parseInt("oops")      // NaN
+    1 + NaN               // NaN
+    1 + undefined         // NaN
+    0 * NaN               // NaN
+    }
+
+    Generally, any arithmetic operation with @link(NaN) or @link(undefined) as an input
+    will have @link(NaN) as an output. If a sequence of computations produces @link(NaN), then
+    there must have been at least one bad input or at least one bad operation.
+    No clues are provided as to what went wrong. In bitwise operations,
+    @link(NaN) is treated as 0.
+
+    There are many techniques for detecting @link(NaN), but none of them are pleasant. The most likely test,
+
+    @program <x === NaN    // false, even when x is NaN!>
+
+    fails because @t(NaN === NaN) produces @link(false). It is possible to use
+
+    @program <x !== x      // true only if x is NaN>
+
+    to test for @link(NaN) because only @link(NaN) is not equal to itself, but it looks
+    mathematically ridiculous, and one hopes for a better future in which logic
+    and good engineering are highly valued when this must fail. Another approach
+    is to use the @link(isNaN primordial function). Unfortunately, it can produce a
+    @link(false positive) if an operand is a type other than number, so if it is
+    possible that the operand is a string, then it should be guarded with the @link(typeof prefix operator).
+
+    @program [
+    var x = 'not a number';
+    isNaN(x)                              // true
+    typeof x === 'number' && isNaN(x)     // false
+    ]
+
+    @t(String(x) === 'NaN') has only one @link(false positive), the case where x is the string 'NaN'. So,
+
+    @program <String(x) === 'NaN' && x !== 'NaN'>
+
+    There are many of ways to test for @link(NaN), and they are all absurd.
+
+    @article(@t(NaN) @link(literal))
+
+    The literal symbol for @link(NaN) is @link(NaN). @link(NaN) is not actually a literal.
+    It is a @link(primordial variable) that holds a @link(NaN) value.
+
+    Blah.
+
+    @article(@t(NaN) @link(Number number))
+
+    Number.NaN contains the @link(NaN) value.
+
+@specimen "native object"
+
+    Any object that is created in the language is called a native object. Also see host object.
+
+@specimen "negation"
+
+    See @link(- prefix operator).
+
+@specimen "NEGATIVE_INFINITY"
+
+    @article(@t(NEGATIVE_INFINITY) @link(Number number))
+
+    Number.NEGATIVE_INFINITY contains the -Infinity value.
+
+@specimen "Netscape"
+
+    Blah.
+
+@specimen "new @reserved@"
+
+    @article(@t(new) @link(prefix operator))
+
+    The new operator is used with a function invocation. It treats the function as a constructor, where the constructor fashions a new object that inherits from the constructor's prototype property. If new were a function rather than an operator, it could be implemented like this:
+
+    @program <
+    function new(func, arguments) {
+
+    // Create a new object that inherits from the constructor's prototype.
+    // func is a constructor function.
+    // arguments is an array of arguments that
+    //     are used to invoke the constructor.
+
+        var that = Object.create(func.prototype),
+
+    // Invoke the constructor, binding –this- to the new object.
+
+            other = func.apply(that, arguments);
+
+    // If its return value is not an object, substitute the new object.
+
+        return (typeof other === 'object' && other) || that;
+    }
+    >
+
+@specimen "normalize"
+
+    @article(@t(normalize) @link(String prototype function))
+
+    (Blah.)
+
+@specimen "now"
+
+    @article(@t(now) @link(Date function))
+
+    Blah.
+
+@specimen "null @reserved@"
+
+    Blah.
+
+    @article(@t(null) @link(literal))
+
+    Blah.
+
+@specimen "number"
+
+    There is a single type for representing number values. It is based on the 64 bit
+    format (double-precision) of the IEEE 754 Standard for Binary Floating-Point Arithmetic.
+
+    The language’s numbers are only an approximation of real numbers, so the
+    associativity of addition or multiplication should not be assumed, nor should
+    the distributivity of multiplication and addition. For example:
+
+    @program <
+    var a = 0.01,
+        b = 0.02,
+        c = 0.03;
+    alert((a + b) + c === a + (b + c));    // false
+
+    a = 2;
+    b = epsilon;
+    c = epsilon;
+    alert((a + b) + c === a + (b + c));    // false
+    >
+
+    Arithmetic operations on approximate values can accumulate noise, and the order of operations can have an impact on the quality of the results. A particular problem is that binary floating point cannot exactly represent decimal fractions, which is a shame because virtually all financial transactions on this planet are conducted using the decimal system.
+
+    Fortunately, integers (whole numbers) can be accurately represented as long as the values do not exceed 9007199254740992 (around 9 quadrillion). Sometimes better results can be obtained by scaling real values into integers before computation. For example, dollar values can be converted to whole cents by multiplying by 100. Whole cents can be handled accurately as integers. See integer.
+
+    A number value acts as an immutable object. A number value has methods that it inherits from Number.protoype (see Number prototype function).
+
+    Using the typeof prefix operator with a number value always produces the string 'number', even when the number is one of the non finite values @link(NaN), Infinity, and -Infinity.
+
+    @article(@t(Number) @link(primordial function))
+
+    The primordial function Number can produce number values.
+
+    Blah.
+
+    @article(number @link(literal))
+
+    A number literal is used to include a number value in a program. There are two forms of number literal: decimal and hexadecimal.
+
+    A decimal number literal is a token containing up to three optional parts.
+
+    @list {
+        the whole part, which is either 0, or a digit 1 thru 9 followed by zero or more digits 0 thru 9
+        the fraction part, which is . decimal point followed by zero or more digits 0 thru 9
+        the exponent part, which is E or e, optional followed by + plus or - minus, followed by one or digits 0 thru 9
+    }
+
+    All parts are optional., but it is recommended that the whole part always be included. If the exponent part is included, then at least one of the other parts must preceed it. If the whole part is omitted, then the fraction part must be included and must contain at least one digit. The exponent part multiplies the value of the preceding parts by Math.pow(10, exponent). These all represent the same number:
+
+    @program "0.1024e4  1.024e+3  10.24E2  102.4E+1  1024.e0  1024.00  1024  10240e-1"
+
+    A hexadecimal number literal is a token containing two required parts.
+
+    @list {
+        0x or 0X
+        one or more hexadecimal digits
+    }
+
+    The hexadecimal digits in a hexadecimal number literal are evaluated in base 16, so 0x0400 is the same number as 1024. A hexadecimal number literal produces an integer value.
+
+    A number literal does not include a sign, but a number literal can be preceded with the @link(- prefix operator) to produce a negative value.
+
+    A number literal cannot be immediately followed by a name. At least one @link(whitespace) character must separate them.
+
+    @article(@t(Number) @link(prototype function))
+
+    Blah.
+
+    @list {
+    @link(toExponential Number prototype function)
+    @link(toFixed Number prototype function)
+    @link(toLocaleString Number prototype function)
+    @link(toPrecision Number prototype function)
+    @link(toString Number prototype function)
+    @link(valueOf Number prototype function)
+    }
+
+    @article(@t(Number) number)
+
+    The @link(Number primordial function) is also the container of a set of constants.
+
+    @list {
+    @link(MAX_VALUE Number number)
+    @link(MIN_VALUE Number number)
+    @link(NaN Number number)
+    @link(NEGATIVE_INFINITY Number number)
+    @link(POSITIVE_INFINITY Number number)
+    }
+
+    Only Number.MAX_VALUE and Number.MIN_VALUE are useful. The other three are redundant.
+
+@specimen(NumberFormat)
+
+    @article(@t(NumberFormat) @link(Intl function))
+
+    Blah.
+

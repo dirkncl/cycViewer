@@ -1,0 +1,30 @@
+@chapter "Z"
+
+@specimen "zero"
+
+    There are two representation of the number zero: @t(0) and @t(-0).
+    There are almost no observable differences between them.
+
+    @program {
+    0 === -0            // true
+    0 > -0              // false
+    1 + -0              // 1
+    String(-0)          // "0"
+    }
+
+    Unfortunately, there is an observable difference.
+
+    @program "
+    1 / 0               // Infinity
+    1 / -0              // -Infinity
+    1 / 0 === 1 / -0    // false
+    "
+
+    Also, the @link<max Math function> and @link<min Math function> distinguish
+    between @t(0) and @t(-0). Because that difference is observable, we can
+    determine that the @link(* infix operator) can produce @t(-0).
+
+    @program "
+     1 * -0             // -0
+    -1 *  0             // -0
+    "

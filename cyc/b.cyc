@@ -1,0 +1,275 @@
+@chapter "B"
+
+@specimen "banana"
+
+    The problem with object-oriented languages is they’ve got all this implicit
+    environment that they carry around with them. You wanted a banana but what you
+    got was a gorilla holding the banana and the entire jungle. [Joe Armstrong]
+
+@specimen "binary operator"
+
+    Blah.
+
+@specimen "bind"
+
+    @article(@t(bind) @link(Function prototype function))
+
+    Blah.
+
+@specimen "bit"
+
+    Blah.
+
+@specimen "bitbucket"
+
+    When a @link(bit) falls out because of a @link(shift operator), it lands in the
+    bitbucket.
+
+@specimen "bitwise"
+
+    @article(bitwise operator)
+
+    A bitwise operator treats a number as a 32 bit 2's complement signed integer. The bitwise operators are
+
+    @list{
+    @link(& infix operator)
+    @link(&= assignment infix operator)
+    @link(<< infix operator)
+    @link(<<= assignment infix operator)
+    @link(>> infix operator)
+    @link(>>= assignment infix operator)
+    @link(>>> infix operator)
+    @link(>>>= assignment infix operator)
+    @link(^ infix operator)
+    @link(^= assignment infix operator)
+    @link(| infix operator)
+    @link(|= assignment infix operator)
+    @link(~ prefix operator)
+    }
+
+    These operators allow access to some of the primitive operations of CPUs.
+    They all treat NaN, null, and undefined as 0. Also see integer.
+
+    Example:
+
+    @begin(program)
+    var raw_base64 = (function (alphabet) {
+
+    // The raw_base64 object contains two methods, encode and decode, that convert
+    // strings to base64 and back, as specified in Multipurpose Internet Mail
+    // Extensions (MIME) Section 6.8. URL: http://www.ietf.org/rfc/rfc2045.txt.
+    // The standard also requires padding with = and the breaking and joining of
+    // lines no longer than 76 characters. We are not concerned with that. All
+    // we are doing here is encoding groups of 3 8-bit characters as 4 7-bit
+    // characters.
+
+    // The original motivation for doing this was to avoid data interchange
+    // problems caused by poor architectural choices in some mid 20th century
+    // operating systems. These workarounds became standards that are still in
+    // force, decades after solution of the root problem. Once something gets into
+    // a standard, it can take generations to get rid of it.
+
+    // We will encode using an alphabet of 64 characters: 26 upper case letters,
+    // 26 lower case letters, 10 digits, and two special characters. For efficent
+    // decoding, we will invert the alphabet ('ABC...9+/') into an object, producing
+    //  {
+    //      A: 0,
+    //      B: 1,
+    //      C: 2,
+    //          ...
+    //      '9': 61,
+    //      '+': 62,
+    //      '/': 63
+    //  }
+
+        var alphabet =
+                'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+            tebahpla = {};
+        alphabet.split('').forEach(function (value, index) {
+            tebahpla[value] = index;
+        });
+
+    // Return the object containing the encode and decode methods.
+
+        return {
+            encode: function (unencoded) {
+                var i,
+                    length = unencoded.length,
+                    result = [],
+                    in0,
+                    in1,
+                    in2;
+
+                for (i = 0; i < length; i += 3) {
+
+    // Get the next three character codes.
+
+                    in0 = unencoded.charCodeAt(i);
+                    in1 = unencoded.charCodeAt(i + 1);
+                    in2 = unencoded.charCodeAt(i + 2);
+
+    // Redistribute 3 sets of 8 bits into 4 sets of 6 bits.
+
+    //  in:     abcdefgh ijklmnop qrstuvwx
+    //  out:    00abcdef 00ghijkl 00mnopqr 00stuvwx
+
+    // This involves shifting bits into a new positions, using & (and) to mask off
+    // some bits, and using | (or) to combine.
+
+    // Translate the 6-bit values into symbols of the alphabet and push them into
+    // the results.
+
+                    result.push(alphabet[in0 >> 2]);
+                    result.push(alphabet[((in0 & 3) << 4) | (in1 >> 4)]);
+
+    // We only output the third character if in1 was present.
+
+                    if (!isNaN(in1)) {
+                        result.push(alphabet[((in1 & 15) << 2) | (in2 >> 6)]);
+
+    // And we only output the fourth character if in2 was present.
+
+                        if (!isNaN(in2)) {
+                            result.push(alphabet[in2 & 63]);
+                        }
+                    }
+                }
+
+    // Return the result string.
+
+                return result.join('');
+            },
+
+            decode: function (encoded) {
+                var i,
+                    length = encoded.length - 1,
+                    result = [],
+                    in0,
+                    in1,
+                    in2,
+                    in3;
+                for (i = 0; i < length; i += 4) {
+
+    // Get the next four character codes.
+
+                    in0 = tebahpla[encoded.charAt(i)];
+                    in1 = tebahpla[encoded.charAt(i + 1)];
+                    in2 = tebahpla[encoded.charAt(i + 2)];
+                    in3 = tebahpla[encoded.charAt(i + 3)];
+
+    // Redistribute 4 sets of 6 bits into 3 sets of 8 bits.
+
+    //  in:     00abcdef 00ghijkl 00mnopqr 00stuvwx
+    //  out:    abcdefgh ijklmnop qrstuvwx
+
+    // Combine bits from in0 and in1 to produce the first character code.
+    // Convert the code into a character, and push it onto the result.
+
+                    result.push(String.fromCharCode((in0 << 2) | (in1 >> 4)));
+
+    // We only output the second character if in2 was present.
+
+                    if (in2 !== undefined) {
+                        result.push(String.fromCharCode(((in1 & 15) << 4) | (in2 >> 2)));
+
+    // And we only output the third character if in3 was present.
+
+                        if (in3 !== undefined) {
+                            result.push(String.fromCharCode(((in2 & 3) << 6) | in3));
+                        }
+                    }
+                }
+
+    // Return the result string.
+
+                return result.join('');
+            }
+        };
+    }());
+    @end(program)
+
+    @article "bitwise and"
+
+    Blah.
+
+    @article "bitwise or"
+
+    Blah.
+
+@specimen "block statement"
+
+    A block is a compound statement that can occur anywhere that a statement can occur.
+    It begins with a @link({) and ends with a @link(}), and between the two curly braces there are zero or more statements. Blocks are commonly used as parts of other statements, such as if statement and while statement.
+
+    A brace does not create a new scope. Only a function has scope. In many other languages, a block does create a scope, so that a variable that is declared inside of a block is not visible outside of the block. That does not happen in the language, which is why it is unwise to declare a variable in a block.
+
+@specimen "body"
+
+    See @link(function body).
+
+@specimen "boolean"
+
+    The boolean type contains exactly two values: true and false. The typeof prefix operator returns 'boolean' when its operand is a boolean. A boolean value is produced by a relational operator.
+    The boolean type is named after the mathematician George Boole.
+
+    @article(@t(Boolean) @link(primordial function))
+
+    The Boolean(value) primordial function, when called as function, evaluates its parameter. If the value was truthy, it returns true. If the value was falsy, it returns false.
+
+    @article(boolean literal)
+
+    There are two boolean literals, representing the two boolean values: @link(true) and @link(false).
+
+    @article(@t(Boolean) @link(prototype function))
+
+@specimen "boolish"
+
+    Every value in JavaScript is boolish in that it is either @link(truthy) or @link(falsy).
+    The @link(boolean) type contains only the @link(true) and @link(false) values,
+    but the boolish type includes all values.
+
+@specimen(bound variable)
+
+    Blah.
+
+@specimen "brace"
+
+    See @link({) and @link(}).
+
+@specimen "bracket"
+
+    See @link([) and @link(]).
+
+@specimen "break @reserved@"
+
+    @article(@t(break) @link(statement))
+
+    Blah.
+
+@specimen "buffer"
+
+    Blah.
+
+    @article "@t(buffer) @link(dataview prototype arraybuffer)"
+
+    (Blah.)
+
+@specimen "byte @aka(octet)"
+
+    Eight bits. Blah.
+
+@specimen "byteLength"
+
+    @article(@t(byteLength) @link(ArrayBuffer prototype number))
+
+    Blah.
+
+    @article "@t(byteLength) @link(dataview prototype number)"
+
+    (Blah.)
+
+@specimen "byteOffset"
+
+    @article "@t(byteOffset) @link(dataview prototype number)"
+
+    Blah.

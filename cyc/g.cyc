@@ -1,0 +1,183 @@
+@chapter "G"
+
+
+@specimen "get"
+
+    See @link(object) and @link(object literal).
+
+@specimen "getDate"
+
+    @article(@t(getDate) @link(date prototype function))
+
+    Blah.
+
+@specimen "getFloat32"
+
+    @article(@t(getFloat32) @link(dataview prototype function))
+
+    <Blah.>
+
+@specimen "getFloat64"
+
+    @article(@t(getFloat64) @link(dataview prototype function))
+
+    <Blah.>
+
+@specimen "getFullYear"
+
+    @article(@t(getFullYear) @link(date prototype function))
+
+    Blah.
+
+@specimen "getHours"
+
+    @article(@t(getHours) @link(date prototype function))
+
+    Blah.
+
+@specimen "getInt16"
+
+    @article(@t(getInt16) @link(dataview prototype function))
+
+    <Blah.>
+
+@specimen "getInt32"
+
+    @article(@t(getInt32) @link(dataview prototype function))
+
+    <Blah.>
+
+@specimen "getInt8"
+
+    @article(@t(getInt8) @link(dataview prototype function))
+
+    <Blah.>
+
+@specimen "getMilliseconds"
+
+    @article(@t(getMilliseconds) @link(date prototype function))
+
+    Blah.
+
+@specimen "getMinutes"
+
+    @article(@t(getMinutes) @link(date prototype function))
+
+    Blah.
+
+@specimen "getMonth"
+
+    @article(@t(getMonth) @link(date prototype function))
+
+    Blah.
+
+@specimen "getOwnProperties"
+
+    @article(@t(getOwnProperties) @link(Object function))
+
+    Blah.
+
+@specimen "getOwnPropertyDescriptor"
+
+    @article(@t(getOwnPropertyDescriptor) @link(Object function))
+
+    Blah.
+
+@specimen "getPrototypeOf"
+
+    @article(@t(getPrototypeOf) @link(Object function))
+
+    Blah.
+
+@specimen "getSeconds"
+
+    @article(@t(getSeconds) @link(date prototype function))
+
+    Blah.
+
+@specimen "getTime"
+
+    @article(@t(getTime) @link(date prototype function))
+
+    Blah.
+
+@specimen "getUInt16"
+
+    @article(@t(getUInt16) @link(dataview prototype function))
+
+    <Blah.>
+
+@specimen "getUInt32"
+
+    @article(@t(getUInt32) @link(dataview prototype function))
+
+    <Blah.>
+
+@specimen "getUInt8"
+
+    @article(@t(getUInt8) @link(dataview prototype function))
+
+    <Blah.>
+
+@specimen "getUTCDate"
+
+    @article(@t(getUTCDate) @link(date prototype function))
+
+    Blah.
+
+@specimen "getUTCFullYear"
+
+    @article(@t(getUTCFullYear) @link(date prototype function))
+
+    Blah.
+
+@specimen "getUTCHours"
+
+    @article(@t(getUTCHours) @link(date prototype function))
+
+    Blah.
+
+@specimen "getUTCMilliseconds"
+
+    @article(@t(getUTCMilliseconds) @link(date prototype function))
+
+    Blah.
+
+@specimen "getUTCMinutes"
+
+    @article(@t(getUTCMinutes) @link(date prototype function))
+
+    Blah.
+
+@specimen "getUTCMonth"
+
+    @article(@t(getUTCMonth) @link(date prototype function))
+
+    Blah.
+
+@specimen "getYear"
+
+    @article(@t(getYear) @link(date prototype function))
+
+    Blah.
+
+@specimen "global"
+
+
+    A program runs in a context, which is sometimes called the global context or the global object. The global context is like other objects in that it is a container of key/value pairs. The keys are the names of global variables, and the values are the values of those variables. The global context is initialized with global functions, the global objects JSON and Math, and the global variables Infinity, NaN, and undefined before the first compilation unit gets its turn.
+
+    Some environments, such as web browsers, can have many global objects, one for each frame or window. The browser adds its own variables to the global context, including document, navigator, and window.
+
+    Global variables can be created in a compilation unit with the var statement or the function statement. Within a function body, if a
+
+@specimen "Good Parts"
+
+    Blah.
+
+@specimen "grammar"
+
+    Blah.
+
+@specimen "grouping parentheses"
+
+    See @link[( ) grouping].

@@ -1,0 +1,336 @@
+@chapter "E"
+
+@specimen "E"
+
+    The letter e or E can indicate the exponent part of a number literal.
+
+    @article "@t(E) @link(Math number) @aka(e)"
+
+    Math.E contains an approximate value of e which is somewhere around
+    2.718281828459045. It is called Euler's number, and is the base of the
+    natural logarithm.
+
+    It can be computed with an immediate function:
+
+    @begin(program)
+    Math.E = (function () {
+        var e = 2,
+            f = 1,
+            i;
+        for (i = 2; i < 18; i += 1) {
+            f /= i;
+            e += f;
+        }
+        return e;
+    }());
+    @end(program)
+
+    Also see @link(exp Math function) and @link(log Math function).
+
+@specimen "E4X"
+
+    The ECMAScript for XML (E4X) Specification [ECMA-357 Second Edition /
+    December 2005 is a standard that extends ECMAScript with XML literals and
+    XPath-like operators. It is not a part of ES3 or ES5. It is not implemented
+    in most systems. The E4X extentions should be avoided because of their lack
+    of general availability and acceptance.
+
+@specimen "Ecma International"
+
+    Ecma International (fna European Computer Manufacturers Association) is the
+    standards body that is responsible for the ECMAScript Programming Language
+    Standard. It was founded in 1961 and is based in Geneva. See
+    @url(http://www.ecma-international.org/).
+
+@specimen "ECMAScript"
+
+    Blah.
+
+@specimen "ecursion"
+
+    Blah.
+
+@specimen "else @reserved@"
+
+    See @link(if statement).
+
+@specimen "empty statement"
+
+    The empty statement is a statement consisting of nothing but a @link(;).
+    It does not do anything. Its principle use is to mask syntax errors.
+    The empty statement should be avoided.
+
+@specimen "empty string"
+
+    Blah.
+
+@specimen "encodeURI"
+
+    @article(@t(encodeURI) @link(primordial function))
+
+    Blah.
+
+@specimen "encodeURIComponent"
+
+    @article(@t(encodeURIComponent) @link(primordial function))
+
+    Blah.
+
+@specimen "endsWith"
+
+    @article(@t(endsWith) @link(String prototype function))
+
+    (Blah.)
+
+@specimen "entity"
+
+    An entity in HTML is a character sequence that represents a single character.
+    It is HTML's alternative to escapement as used in a string literal.
+    An entity begins with @link(&) and ends with @link(;),
+    and between them there may be a cryptic word or a number.
+    JavaScript tolerates HTML entities in strings, but has no knowledge of them.
+
+    @program {'&amp;'.length    // 5}
+
+@specimen(entries)
+
+    @article(@t(entries) @link(array prototype function))
+
+    Blah.
+
+@specimen "enum @reserved@"
+
+@specimen "enumeration"
+
+    See @link(keys object function) and @link(for in statement).
+
+    @article "enumeration function"
+
+    Blah.
+
+    @article "enumeration object"
+
+    An enumeration object is an object that is used to map names or mnemonics to
+    codes in the form of numbers or other values. Programs often make use of codes
+    or constant values, but it is generally bad to scatter them thoughout a program
+    because that can make the program difficult to read and modify. So instead we
+    can collect the codes and constants into an object, giving descriptive keys to
+    each one. The descriptive keys help make the program self documenting, and
+    gives us a single place to change in the program should they need to be changed.
+
+    In some languages, there is an enum statement or operator that provides such
+    mapping. In this language, simply use an object.
+
+@specimen "epsilon"
+
+    Epsilon is the smallest positive number that can be added to 1 giving a result
+    that is larger than 1. Positive numbers that are smaller than epsilon will
+    underflow when added to 1. The value for epsilon is approximately
+    2.220446049250313e-16. It can be computed with this immediate function:
+
+    @begin(program)
+    var epsilon = (function () {
+        var next, result;
+        for (next = 1; 1 + next !== 1; next = next / 2) {
+            result = next;
+        }
+        return result;
+    }());
+    @end(program)
+
+    Epsilon is a measure of the limits of the accuracy of number.
+
+    @begin(program)
+    1 + epsilon    // 1.0000000000000002 (approximately)
+    2 + epsilon    // 2 (exactly)
+    @end(program)
+
+@specimen "error"
+
+    @article(@t(Error) @link(primordial function))
+
+    Blah.
+
+@specimen "ES2015 @aka(ES6)"
+
+    ECMAScript Programming Language Standard, Sixth Edition [2015].
+
+@specimen "ES2016 @aka(ES7)"
+
+    ECMAScript Programming Language Standard, Seventh Edition [2016].
+
+@specimen "ES2017 @aka(ES8)"
+
+    ECMAScript Programming Language Standard, Eighth Edition [2017].
+
+@specimen "ES2018 @aka(ES9)"
+
+    ECMAScript Programming Language Standard, Ninth Edition [2018].
+
+@specimen "ES1"
+
+    ECMAScript Programming Language Standard, First Edition [1997].
+
+@specimen "ES2" 
+
+    ECMAScript Programming Language Standard, Second Edition [1998].
+
+@specimen "ES3"
+
+    ECMAScript Programming Language Standard, Third Edition [1999].
+
+@specimen "ES4"
+
+    There is no @link(es4). The specification was abandoned. 
+
+@specimen "ES5"
+
+    ECMAScript Programming Language Standard, Fifth Edition [2009].
+
+@specimen "ES6 @aka(ECMAScript 2015)"
+
+    An earlier and common name for ECMAScript Programming Language Standard, Sixth Edition [2015]. To avoid confusion and to have yearly releases it was officially renamed to @link(ES2015).
+
+@specimen "escapement"
+
+    Blah.
+
+@specimen "eteration"
+
+    Blah.
+
+@specimen "eval"
+
+    @article(@t(eval) @link(primordial function))
+
+    Blah.
+
+@specimen "EvalError"
+
+    @article(@t(EvalError) @link(primordial function))
+
+    Blah.
+
+@specimen "event loop"
+
+    Blah.
+
+@specimen "every"
+
+    @article(@t(every) @link(array prototype function))
+
+    Blah.
+
+@specimen "evil"
+
+    Evil is bad. Don't do evil things or use things for evil purposes.
+
+@specimen "exception"
+
+    Blah. See @link(try statement).
+
+@specimen "exec"
+
+    @article(@t(exec) @link(RegExp prototype function))
+
+    Blah.
+
+@specimen "exp"
+
+    @article(@t(exp) @link(Math function) @aka(exponential))
+
+    The Math.exp(number) function returns @link[E Math number] raised to the number power. This is an approximate implementation:
+
+    @begin(program)
+    Math.exp = function exp(number) {
+        number = +number;
+        var fac = 1,
+            i,
+            result = 1 + number,
+            xx = number;
+        for (i = 2; i < 20; i += 1) {
+            xx *= number;
+            fac *= i;
+            result += xx / fac;
+        }
+        return result;
+    };
+    @end(program)
+
+    Also see @link(E Math number).
+
+@specimen "exponentiation"
+
+    See @link(pow Math function).
+
+@specimen "expression"
+
+    An expression is a sequence of tokens that delivers a value. An expression can be one of:
+
+    @list {
+    @link(constant)
+    @link(literal)
+    @link(function)
+    @link(variable)
+    @link(parameter)
+    @link[( ) grouping]
+    @link(prefix operator)
+    @link(suffix operator)
+    @link(infix operator)
+    @link(ternary operator)
+    @link(assignment operator)
+    }
+
+    A compound expression can be formed by combining one or more expressions with an operator.
+    Expressions can be nested inside of other expressions.
+    The whole expression produces a single value.
+    The order in which the operators are evaluated depends on @link<( ) grouping>
+    and @link(operator precedence).
+
+    When an expression provides a value to an @link(operator), it is called an @link(operand).
+
+    When an expression provides a value to a @link(function invocation),
+    it is called an @link(argument).
+
+    When an expression occurs on the left side of an
+    @link(assignment infix operator), it is called an @link(lvalue).
+    When an expression occurs on the right side of an
+    @link(assignment infix operator), it is called a value, specifically it is the
+    value to be stored in the @link(lvalue).
+
+    An expression can produce a value that can control a statement:
+
+    @list {
+    @link(do statement)
+    @link(for statement)
+    @link(if statement)
+    @link(switch statement)
+    @link(while statement)
+    }
+
+    @article(expression @link(statement))
+
+    An @link(expression) can be used as a @link(statement).
+    Generally, the only expressions that make sense as statements are
+
+    @list {
+    @link(assignment)
+    @link(invocation)
+    }
+
+    The other forms of expressions are allowed, but most are useless, or even
+    dangerous in that errors can be masked.
+
+    An expression statement should end with a @link(;).
+
+    @begin(program)
+    alert('When my friends need some code who do they call?');
+    force = mass * velocity;
+    i += 1;    // add 1 and i and store the result in i
+    i + 1;     // add 1 and i and ignore the result
+    i;         // get the value of i and ignore it
+    @end(program)
+
+@specimen "export @reserved@"
+
+@specimen "extends @reserved@"

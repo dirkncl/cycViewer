@@ -1,0 +1,125 @@
+@i "Press ctrl-S to save this book"
+
+@i "Press ctrl-C to Closed this book"
+
+@i "To scroll using the mouse or drag the scrollbar"
+
+@book "The JavaScript Encyclopedia"
+
+
+This is a work in progress. The goal of this project is to produce a complete 
+encyclopedia for the current language and any future versions that might appear. 
+The encyclopedia will be developed in @link(Cyc), a simple language that was inspired 
+by Brian Reid's Scribe. Cyc is described in the preface.The source of 
+this book can be found at
+
+@url<https://github.com/douglascrockford/TheJavaScriptEncyclopedia>.
+
+In 2009, as we were wrapping up @link(ES5), I was thinking about how to
+organize the material. I designed a hypertext encyclopedia format specifically
+for programming languages. I think the format would have worked well, but I
+never finished the project.
+
+It is easy to forget that the web was originally intended to be a hypertext
+system. The JavaScript Encyclopedia would have used hypertext very effectively.
+Many of the articles would contain code that demonstrated or implemented a concept.
+
+I intended that The JavaScript Encyclopedia be finished when @link(ES5) was released.
+Not only did I miss the @link(ES5) deadline, but since then @link(ES6) has been published,
+which was itself four years late.
+So it is starting to become clear that I am not going to get this done on my own.
+I need help.
+
+The very perliminary material can be seen at
+@url(http://www.crockford.com/javascript/encyclopedia).
+
+@specimen "Cyc"
+
+The most important thing I learned in doing the prototype was that @link(HTML)
+is a horrible language for writing hypertext. It is clumsy, fussy, ugly, and
+error-prone. So I designed Cyc, a simple language with only one reserved
+character. By writing in Cyc, we can use Cyc processors that can produce
+
+@list {
+    a single HTML file
+    an HTML file for each chapter
+    an HTML file for each specimen
+    an HTML file for each article
+    a T@sub(E)X manuscript
+    a PostScript manuscript
+    or anything else
+}
+
+A source is a set of enviroments that can contain other environments and
+content. The environments are
+
+@list {
+@t(@@book)
+@t(@@chapter)
+@t(@@appendix)
+@t(@@specimen)
+@t(@@article)
+@t(@@section)
+@t(@@program)
+@t(@@table)
+@t(@@list)
+@t(@@together)
+@t(@@link)
+@t(@@url)
+@t(@@b)
+@t(@@i)
+@t(@@t)
+@t(@@reserved@@)
+@t(@@aka)
+}
+
+A book may contain one or more chapters. A chapter contains one or more
+specimens, which can each be a reserved word, name, concept, or special
+character.  A specimen may contain one or more articles. An article may contain
+sections.
+
+Paragraphs are indicated with a blank line.
+
+A program is a JavaScript program that is illustrating or implementing a concept.
+
+A table is a two dimensional grid structure. @t(@@|) and @t(@@_) are used to
+separate the cells and rows. @t(@@!) is used inside of a cell to indicate a header cell.
+
+A list gives each paragraph a bullet.
+
+A link refers to another feature of the hypertext. A url identifies a feature outside of the hypertext.
+
+Text can be marked as bold or italics or typewriter-like. Programmers like their programs to look like they were written with typewriters because they love antiques and steam.
+
+The special mark @reserved@ shows specimens that are reserved words.
+Descriptive marks can be placed after special characters and operators to give them names.
+
+There are 6 sets of bracketing characters. They are all available all of the time. It is likely that there is at least one pair that will not conflict with the content being bracketed.
+
+@begin(list)
+@t(" ")
+@t(' ')
+@t[( )]
+@t([ ])
+@t({ })
+@t(< >)
+@end(list)
+
+Example:
+
+@program <This sentence contains @@b(bold), @@i "italics", and @@t 'typewriter' stuff.>
+
+In addition, @t(@@begin) and @t(@@end) provide an alternate way of handling
+environments that can be easier for larger structures.
+
+@begin[program]
+@@begin[program]
+function foo() {
+    return '[';
+}
+@@end[program]
+@end[program]
+
+Contributions may be submitted at @url(https://github.com/douglascrockford/TheJavaScriptEncyclopedia).
+
+Eventually, this preface will be modified to pertain to the book and not the making of the book.

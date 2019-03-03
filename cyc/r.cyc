@@ -1,0 +1,493 @@
+@chapter "R"
+
+@specimen "radians"
+
+    Blah.
+
+    @begin(program)
+    function degrees(radians) {
+        return radians * 180 / Math.PI;
+    }
+    function radians(degrees) {
+        return radians * Math.PI / 180;
+    }
+    @end(program)
+
+@specimen "raise"
+
+    @article "raise @link(exception)"
+
+    See @link(throw statement).
+
+    @article "raise to a power"
+
+    See @link(pow Math function).
+
+@specimen "random"
+
+    @article(@t(random) @link(Math function))
+
+    The Math.random() function returns a number that is greater than or equal to 0 and less than 1. Each time Math.random()is called it is likely to produce a different result. Unfortunately, it is not guaranteed to have sufficient randomness for cryptographic or gambling applications.
+
+    Because Math.random() produces a number between 0 and 1, it is usually necessary to scale it a to desired range. For example, to simulate the rolling for a six sided die, use Math.floor(Math.random()* 6) + 1.
+
+    Flipping a coin is simpler:
+
+    @begin(program)
+    cointoss = Math.random() >= 0.5;    // true is heads, false is tails
+    @end(program)
+
+    An array representing a deck of 52 cards can be shuffled with 51 random numbers.
+
+    @begin(program)
+function shuffle(deck) {
+
+// Shuffle the contents of an array using the Fisher-Yates shuffle. Starting
+// at the end of the deck, swap each card with a card randomly selected from
+// the front part of the deck. This is modifies the deck.
+
+    deck.forEach(function (card, card_nr) {
+        let rand = Math.floor(
+            Math.random() * ((deck.length - card_nr) - 1)
+        ) + card_nr;
+        deck[card_nr] = deck[rand];
+        deck[rand] = card;
+    });
+}
+    @end(program)
+
+
+@specimen "RangeError"
+
+    @article(@t(RangeError) @link(primordial function))
+
+    Blah.
+
+@specimen "raw"
+
+    @article(@t(raw) @link(String function))
+
+    Blah.
+
+@specimen "recursion"
+
+    Blah.
+
+    @begin(program)
+    function solve(data, name) {
+
+    // The solve function takes a network object and the name of a node in that
+    // network, and finds the lowest cost path to a terminal node.
+
+    // There are two kinds of nodes. An ordinary node contains up and down
+    // properties which describe the local cost of the next transition. A terminal
+    // node contains a cost property, and not up or down properties.
+
+    // The solve function depends on two recursive functions, chase and follow,
+    // to do its work.
+
+        var results = [],   // An array of strings, the names on the cheapest path.
+            solution = {};  // The cheapest path from this node and the total cost
+                            // from this node.
+
+        function chase(name) {
+
+    // Given the name of a node in the data set, compute the least total cost from
+    // this node to a terminal node. Find the solutions to the up and down nodes,
+    // and make a solution that is the cheaper for this node. This function finds
+    // the up and down solutions by calling itself.
+
+            var down,
+                down_cost,
+                down_solution,
+                lemma = solution[name],
+                node,
+                up,
+                up_cost,
+                up_solution;
+
+    // If there is already a solution for this node,
+    // then there is nothing to be done.
+
+            if (!lemma) {
+                node = data[name];
+                up = node.up;
+                down = node.down;
+
+    // If the node has an up, find the up solution.
+
+                if (up) {
+                    up_solution = chase(up.next);
+                    up_cost = up.cost + up_solution.cost;
+
+    // And if the node also has a down, find the down solution.
+
+                    if (down) {
+                        down_solution = chase(down.next);
+                        down_cost = down.cost + down_solution.cost;
+
+    // Choose the less expensive solution.
+
+                        if (up.cost < down.cost) {
+                            lemma = {next: up.next, cost: up_cost};
+                        } else {
+                            lemma = {next: down.next, cost: down_cost};
+                        }
+
+    // If there wasn't a down, choose the up solution.
+
+                    } else {
+                        lemma = {next: up.next, cost: up_cost};
+                    }
+                } else {
+
+    // If there wasn't an up, choose the down solution.
+
+                    if (down) {
+                        down_solution = chase(down.next);
+                        down_cost = down.cost + down_solution.cost;
+                        lemma = {next: down.next, cost: down_cost};
+
+    // If this was a terminal node, then take the node.
+
+                    } else {
+                        lemma = node;
+                    }
+                }
+
+    // Record this node in the solution set.
+
+                solution[name] = lemma;
+            }
+
+    // Return the solution for this node.
+
+            return lemma;
+        }
+
+
+        function follow(name) {
+
+    // Make a list of the names that make the cheapest path.
+    // This function obtains the succeeding names by calling
+    // itself.
+
+            if (name) {
+                results.push(name);
+                follow(solution[name].next);
+            }
+        }
+
+    // Now we can call chase and follow and return the results.
+
+        chase(name);
+        follow(name);
+        return results;
+    }
+
+    var data = {
+        a: {
+            up:   {next: 'c', cost: 1},
+            down: {next: 'd', cost: 0}
+        },
+        c: {
+            up:   {next: 'e', cost: 5},
+            down: {next: 'f', cost: 4}
+        },
+        d: {
+            up:   {next: 'f', cost: 7},
+            down: {next: 'g', cost: 3}
+        },
+        e: {
+            up:   {next: 'h', cost: 2},
+            down: {next: 'i', cost: 1}
+        },
+        f: {
+            up:   {next: 'i', cost: 1},
+            down: {next: 'j', cost: 2}
+        },
+        g: {
+            up:   {next: 'j', cost: 5},
+            down: {next: 'k', cost: 4}
+        },
+        h: {
+            down: {next: 'l', cost: 3}
+        },
+        i: {
+            up:   {next: 'l', cost: 3},
+            down: {next: 'm', cost: 4}
+        },
+        j: {
+            up:   {next: 'm', cost: 2},
+            down: {next: 'n', cost: 2}
+        },
+        k: {
+            up:   {next: 'n', cost: 2}
+        },
+        l: {
+            down: {next: 'o', cost: 5}
+        },
+        m: {
+            up:   {next: 'o', cost: 2},
+            down: {next: 'p', cost: 8}
+        },
+        n: {
+            up:   {next: 'p', cost: 4}
+        },
+        o: {
+            down: {next: 'b', cost: 2}
+        },
+        p: {
+            up:   {next: 'b', cost: 1}
+        },
+        b: {cost: 0}
+    };
+
+    alert(solve(data, 'a'));
+    @end(program)
+
+@specimen "reduce"
+
+    @article(@t(reduce) @link(Array prototype function))
+
+    Blah.
+
+@specimen "reduceRight"
+
+    @article(@t(reduceRight) @link(Array prototype function))
+
+    Blah.
+
+@specimen "reference"
+
+    Blah.
+
+@specimen "ReferenceError"
+
+    @article(@t(ReferenceError) @link(primordial function))
+
+    Blah.
+
+@specimen "Reflect"
+
+    Also see @link(Proxy).
+
+        @article "@t(Reflect) @link(Primordial function)"
+
+        <Blah.>
+
+        @article (@t(Reflect) @link(function))
+
+            @list {
+                @link(apply Reflect function)
+                @link(construct Reflect function)
+                @link(deleteProperty Reflect function)
+                @link(enumerate Reflect function)
+                @link(get Reflect function)
+                @link(getOwnPropertyDescriptor Reflect function)
+                @link(getPrototypeOf Reflect function)
+                @link(has Reflect function)
+                @link(has Reflect function)
+                @link(has Reflect function)
+                @link(isExtensible Reflect function)
+                @link(ownKeys Reflect function)
+                @link(preventExtensions Reflect function)
+                @link(set Reflect function)
+                @link(setPrototypeOf Reflect function)
+            }
+
+@specimen "regexp"
+
+    Blah.
+
+    @article(regexp @link(boolean))
+
+    Blah.
+
+    @article(regexp delimiter)
+
+    Blah.
+
+    @article(regexp flag)
+
+    The regexp flags are
+
+    @list {
+        @link(g regexp flag)
+        @link(i regexp flag)
+        @link(m regexp flag)
+        @link(y regexp flag)
+    }
+
+    Blah.
+
+    @article(@t(RegExp) @link(function))
+
+    Blah.
+
+    @article(regexp @link(literal))
+
+    Blah. 7.8.5
+
+    @article(regexp @link(operator))
+
+    Blah.
+
+    @article(@t(RegExp) @link(primordial function))
+
+    Blah.
+
+    @article(@t(RegExp) @link(prototype function))
+
+    Blah.
+
+    @article(@t(RegExp) @link(prototype number))
+
+    Blah.
+
+@specimen "regular expression"
+
+    See @link(regexp).
+
+@specimen "relational operator"
+
+    The relational operators are
+
+    @list {
+    @link(!= infix operator)
+    @link(!== infix operator)
+    @link(< infix operator)
+    @link(<= infix operator)
+    @link(== infix operator)
+    @link(=== infix operator)
+    @link(> infix operator)
+    @link(>= infix operator)
+    @link(in infix operator)
+    @link(instanceof infix operator)
+    }
+
+    Every relational operator is an @link(infix operator). They all return either the true value or the false value depending on the relationship between the two operands. They resemble mathematical symbols but do not compose like mathematical symbols. The expression
+
+    @program "a < b < c"
+
+    looks like it might be true if a is less than b and if b is also less than c, but that is not what it means. The expression first compares a and b, producing either true or false. Then c will be compared to either true or false, not to b.
+
+@specimen "remainder"
+
+    See @link(% infix operator).
+
+@specimen "repeat"
+
+    @article "@t(repeat) @link(string prototype function)"
+
+    (Blah.)
+
+@specimen "replace"
+
+    @article(@t(replace) @link(String prototype function))
+
+    Blah.
+
+@specimen "requestor"
+
+    Blah.
+
+@specimen "reserved word"
+
+    A reserved word is an identifier that is reserved for the exclusive use of the
+    language itself. A reserved word may be used as a @link(statement),
+    @link(operator), or a future feature of tomorrow. The reserved words are
+
+    @list {@link(break)
+    @link(case)
+    @link(catch)
+    @link(const)
+    @link(continue)
+    @link(debugger)
+    @link(default)
+    @link(delete)
+    @link(do)
+    @link(else)
+    @link(enum)
+    @link(export)
+    @link(extends)
+    @link(finally)
+    @link(for)
+    @link(function)
+    @link(if)
+    @link(implements)
+    @link(import)
+    @link(in)
+    @link(instanceof)
+    @link(interface)
+    @link(let)
+    @link(new)
+    @link(package)
+    @link(private)
+    @link(protected)
+    @link(public)
+    @link(return)
+    @link(static)
+    @link(super)
+    @link(switch)
+    @link(this)
+    @link(throw)
+    @link(try)
+    @link(typeof)
+    @link(var)
+    @link(void)
+    @link(while)
+    @link(with)
+    @link(yield)
+    }
+
+    A reserved word may not be used as the name of a @link(function),
+    @link(variable), @link(parameter), or @link(statement label). Some of the
+    reserved words are not actually used in any edition of the language.
+
+    @program {
+    var break;        // syntax error
+    var breaky;       // ok
+    }
+
+    The constants @link(false literal), @link(null literal), and @link(true literal)
+    are not formally reserved words, but they have the same restrictions. The
+    constants @link(Infinity literal), @link(NaN literal), and
+    @link(undefined literal) do not have these restrictions, which is weird.
+
+    @program {
+    var null;         // syntax error
+    var undefined;    // ok but also very wrong
+    }
+
+@specimen "return @reserved@"
+
+    @article(@t(return) @link(statement))
+
+    Blah.
+
+@specimen "retursion"
+
+    Blah. A function returns itself.
+
+@specimen "reverse"
+
+    @article(@t(reverse) @link(Array prototype function))
+
+    Blah.
+
+@specimen "round"
+
+    @article(@t(round) @link(Math function))
+
+    The Math.round(number) function takes a number argument and returns the nearest integer. It could be implemented as
+
+    @begin(program)
+    Math.number = function (number) {
+        var value = +number;
+        return ((value < 0 && value >= -0.5) || (value === 0 && 1 / value < 0))
+            ? -0
+            : Math.floor(+value + 0.5);
+    };
+    @end(program)
+

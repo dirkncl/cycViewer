@@ -1,0 +1,185 @@
+@chapter "D"
+
+@specimen "data property"
+
+    Blah.
+
+@specimen "DataView"
+
+    @article "@t(DataView) @link(primordial function)"
+
+    Blah. Blah. Blah.
+
+    @article "@t(DataView) @link(prototype)"
+
+    Blah. Blah. Blah.
+
+    @list {
+    @link (DataView prototype arraybuffer)
+    @link (DataView prototype function)
+    @link (DataView prototype number)
+    }>
+
+
+    @article "@link(DataView prototype) @link(arraybuffer)"
+
+    @list {
+        @link (buffer DataView prototype arraybuffer)
+    }
+
+    @article "@link(DataView prototype) @link(function)"
+
+    @list {
+        @link (getFloat32 DataView prototype function)
+        @link (getFloat64 DataView prototype function)
+        @link (getInt16 DataView prototype function)
+        @link (getInt32 DataView prototype function)
+        @link (getInt8 DataView prototype function)
+        @link (getUInt16 DataView prototype function)
+        @link (getUInt32 DataView prototype function)
+        @link (getUInt8 DataView prototype function)
+        @link (setFloat32 DataView prototype function)
+        @link (setFloat64 DataView prototype function)
+        @link (setInt16 DataView prototype function)
+        @link (setInt32 DataView prototype function)
+        @link (setInt8 DataView prototype function)
+        @link (setUInt16 DataView prototype function)
+        @link (setUInt32 DataView prototype function)
+        @link (setUInt8 DataView prototype function)
+    }
+
+    @article "@link(DataView prototype) @link(number)"
+
+    @list {
+        @link (byteLength DataView prototype number)
+        @link (byteOffset DataView prototype number)
+    }
+
+@specimen "date"
+
+    @article "@t(Date) @link(primordial function)"
+
+    Blah. Blah. Blah.
+
+    @article "@t(Date) @link(prototype function)"
+
+    @list {
+    @link <getYear date prototype function>
+    }
+
+    Blah.
+
+@specimen(DateTimeFormat)
+
+    @article(@t(DateTimeFormat) @link(Intl function))
+
+    Blah.
+
+@specimen "debugger @reserved@"
+
+    @article "@t(debugger) @link(statement)"
+
+    Blah.
+
+@specimen "decimal @aka(base 10)"
+
+    The decimal digits are @t(0), @t(1), @t(2), @t(3), @t(4), @t(5), @t(6), @t(7),
+    @t(8), and @t(9).
+
+    Most of humanity represents its numbers in the decimal system.
+
+@specimen "decodeURI"
+
+    @article "@t(decodeURI) @link<primordial function>"
+
+    Blah.
+
+@specimen "decodeURIComponent"
+
+    @article "@t(decodeURIComponent) @link<primordial function>"
+
+    Blah.
+
+@specimen "default @reserved@"
+
+    See @link <switch statement>.
+
+    @article "defensive programming"
+
+    Blah.
+
+@specimen "defineProperties"
+
+    @article "@t(defineProperties) @link(Object function)"
+
+    Blah.
+
+@specimen "defineProperty"
+
+    @article "@t(defineProperty) @link(Object function)"
+
+    Blah.
+
+@specimen "definition circular"
+
+    See @link(circular definition).
+
+@specimen "degrees"
+
+    Blah. See @link(radians).
+
+@specimen "delete @reserved@"
+
+    @article "@t(delete) @link(prefix operator)"
+
+    Blah.
+
+@specimen "disruptive statement"
+
+    Usually, after a @link(statement) completes its execution, the next statement
+    executes. This is not the case with a disruptive statement. A disruptive
+    statement alters the flow of a program, so the next statement is not executed.
+    These are the disruptive statements:
+
+    @list {
+    @link "break statement"
+    @link "continue statement"
+    @link "return statement"
+    @link "throw statement"
+    }
+
+@specimen "divide"
+
+    See @link</ infix operator> and @link</= assignment infix operator>.
+
+    Also see @link(remainder).
+
+@specimen "dividend"
+
+    Blah.
+
+@specimen "divisor"
+
+    Blah.
+
+@specimen "division"
+
+    Blah.
+
+@specimen "do @reserved@"
+
+    @article "@t(do) @link(statement)"
+
+    Blah.
+
+@specimen "dunder"
+
+    A property name that begins and ends with two @link<_> characters.
+
+    Example:
+
+    @program{__pathetic__}
+
+@specimen "dunderhead"
+
+    A ponderously stupid person. See @link(dunder).

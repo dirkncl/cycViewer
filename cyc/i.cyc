@@ -1,0 +1,944 @@
+@chapter "I"
+
+@specimen "identifier"
+
+    See @link(name).
+
+    @article "identifier character"
+
+    See @link(name).
+
+@specimen "identifier escapement"
+
+@specimen(if @reserved@)
+
+    @article(@t(if) @link(statement))
+
+    Blah.
+
+@specimen "ignoreCase"
+
+    @article(@t(ignoreCase) @link(RegExp boolean))
+
+    Blah.
+
+@specimen "immediate @link(function)"
+
+    An immediate function is a function that will be invoked immediately. This is done to allow inner functions to have continuing access to variables created by the immediate function. The entire immediate function and its invocation should be wrapped in parentheses to show reader that the function is immediate. The wrapping in parens is syntactically required in the case where function would be the first token in the statement.
+
+    Example:
+
+    @begin(program)
+    var wordify = (function () {
+
+    // The wordify function converts an integer into English.
+    // It makes use of three array literals to provide most of the vocabulary.
+
+    // It is returned from an immediate function in order to hide the arrays
+    // units, tens, and illions.
+
+        var units = [
+                "", "one", "two", "three", "four", "five", "six", "seven",
+                "eight", "nine", "ten", "eleven", "twelve", "thirteen",
+                "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
+                "nineteen"
+            ],
+            tens = [
+                "", "ten", "twenty", "thirty", "forty", "fifty", "sixty",
+                "seventy", "eighty", "ninety"
+            ],
+            illions = [
+                "", "thousand", "million", "billion", "trillion", "quadrillion"
+            ];
+
+    // The result of the execution of the immediate function is the wordify
+    // function.
+
+        return function (n) {
+            var result = "", i, clump, hundred, ten, unit, word, illion;
+
+    // Force the input to be a non-negative integer.
+
+            n = Math.floor(Math.abs(n));
+
+    // If it is zero, we are done.
+
+            if (!n) {
+                return 'zero';
+            }
+
+    // For each illion, extract the bottom clump of 3 digits.
+
+            for (i = 0; i < illions.length; i += 1) {
+                clump = n % 1000;
+                if (clump) {
+
+    // If the clump isn't all zeros, then work out the hundred and the unit parts.
+
+                    hundred = Math.floor(clump / 100);
+                    unit = clump - (hundred * 100);
+                    illion = illions[i];
+
+    // The units array contains 20 rather than 100 entries. If an entry is
+    // undefined, then split the unit into two parts. For example, unit[21] is
+    // undefined, so we will combine tens[2] and unit[1] to make "twenty one".
+
+                    word = units[unit];
+                    if (typeof word !== "string") {
+                        ten = Math.floor(unit / 10);
+                        unit = unit % 10;
+                        word = units[unit];
+                        if (word) {
+                            word = " " + word;
+                        }
+                        word = tens[ten] + word;
+                    }
+
+    // If there is a hundred part, then add that to the word.
+
+                    if (hundred) {
+                        if (word) {
+                            word = " " + word;
+                        }
+                        word = units[hundred] + ' hundred' + word;
+                    }
+
+    // Add the current illion's contributions to the result.
+
+                    if (result) {
+                        result = " " + result;
+                    }
+                    if (illion) {
+                        word += " " + illion;
+                    }
+                    result = word + result;
+                }
+
+    // Discard the bottom three digits and go again if there are any left.
+
+                n = Math.floor(n / 1000);
+                if (n === 0) {
+                    break;
+                }
+            }
+            return result;
+        };
+
+    // The immediate function and its invocation were wrapped in parens to
+    // help the reader understand that the immediate function's result is
+    // being stored.
+
+    }());
+    @end(program)
+
+@specimen "immutable"
+
+    Blah.
+
+@specimen "implements @reserved@"
+
+@specimen "implied @link(global)"
+
+    A variable that is not explicitly declared is assumed to be global. This is a hazard. The use of global variables can compromise the reliability of a program. The implied declaration of global variables masks likely errors. It is wise to avoid global variables, and to defend against implied global variables. Always use the var statement to explicitly declare a variable.
+
+    @begin(program)
+    function tragic(array) {
+
+    // Calling this function may cause the caller to fail if the
+    // caller uses a variable named i.
+
+        sum = 0;                                   // sum is global
+        for (i = 0; i < array.length; i += 1) {    // i is  global
+            sum += array[i];
+        }
+        return sum;
+    }
+    @end(program)
+
+@specimen "import @reserved@"
+
+@specimen "in @reserved@"
+
+    Also see @link(for in statement).
+
+    @article(@t(in) @link(infix operator))
+
+    Blah.
+
+@specimen "includes"
+
+    @article(@t(includes) @link(array prototype function))
+
+    Blah.
+
+    @article(@t(includes) @link(String prototype function))
+
+    (Blah.)
+
+@specimen "indexOf"
+
+    @article(@t(indexOf) @link(Array prototype function))
+
+    Blah.
+
+    Example:
+
+    @begin(program)
+    function make_sealer() {
+
+    // make_sealer is a function that returns a pair of functions. One, the sealer,
+    // takes a value and returns a locked box. The other, the unsealer, takes a
+    // locked box and returns the original value. A sealer and unsealer work like
+    // a public key/private key pair, making it possible for two parties to pass
+    // a value through an untrusted third party. The third party cannot see the
+    // contents of the locked box, nor can it tamper with the contents. To unlock a
+    // locked box, you must hold the locked box and the unsealer that is the mate
+    // of the sealer that created the locked box.
+
+    // The boxes and values are kept in a pair of arrays. We use objects as keys
+    // because that makes a brute force key guessing attack impossible. Using strings
+    // as keys, the best we could hope to do is make a guessing attack extremely
+    // unlikely. It would be tempting to use an object to hold the pairs, where the
+    // boxes are the keys, but objects can only use strings as keys, and boxes must
+    // be objects. So instead we have two parallel arrays, and use the indexOf method
+    // to locate the keys and values.
+
+        var boxes = [],
+            values = [];
+
+        return {
+            sealer: function (value) {
+
+    // Seal the value, returning a locked box object. The box object will be empty.
+    // It can be given to the matching unsealer to redeem the value.
+
+    // If the value has already been boxed, return the old box.
+
+                var i = values.indexOf(value), box;
+                if (i >= 0) {
+                    return boxes[i];
+                }
+
+    // Make a new box. Append it to the boxes array, and append the value to
+    // the values array.
+
+                i = boxes.length;
+                box = {};
+                boxes[i] = box;
+                values[i] = value;
+                return box;
+            },
+            unsealer: function (box) {
+
+    // Search for the box. If it is found, return the corresponding value.
+    // If it is not found, return undefined.
+
+                return values[boxes.indexOf(box)];
+            }
+        };
+    }
+    @end(program)
+
+    @article(@t(indexOf) @link(string prototype function))
+
+    Blah.
+
+    The indexOf method could be implemented like this:
+
+    @begin(program)
+    String.prototype.indexOf = (function () {
+
+    // The indexOf method returns the position at which a search_string first
+    // occurs within a search string, or -1 if it cannot be found. An optional
+    // position parameter (default 0) determines where to start the search.
+    // The following implements a simplified version of the Boyer Moore algorithm.
+
+    // These are memoized variables. They will retain their values between
+    // invocations, speeding up results when doing multiple searches on the same
+    // search_string.
+
+        var delta,                  // The delta table that allows for skipping
+            lengt,                  // The length of the search string - 1
+            length,                 // The length of the search string
+            previous_search_string = '';
+
+    // And here is the indexOf function itself.
+
+        return function indexOf(search_string, position) {
+
+    // Normalize the inputs. Convert this and the search_string to strings just in
+    // case they are not already strings. Force position to an integer between 0
+    // and the length of this.
+
+            var h,                  // Past the last possible position
+                j,                  // The loop variable
+                s = String(this);   // this converted to a string
+
+            search_string = String(search_string);
+            position = Math.min(
+                Math.max(
+                    (position === undefined)
+                        ? 0
+                        : Math.floor(position),
+                    0
+                ),
+                s.length
+            );
+
+    // If the search_string is the empty string, then we are done.
+
+            if (search_string === '') {
+                return position;
+            }
+
+    // If the search_string is the same as the previous_search_string, then we
+    // can skip the step of building the delta table. The delta table tells us
+    // how many characters we can skip if there is a mismatch. Typically, the
+    // number of characters we can skip is equal to the length of the search_string,
+    // so the longer the search_string, the faster the search.
+
+            if (search_string !== previous_search_string) {
+                length = search_string.length;
+                lengt = length - 1;
+                previous_search_string = search_string;
+                delta = {};
+                for (j = 0; j <= lengt; j += 1) {
+                    delta[search_string.charAt(j)] = lengt - j;
+                }
+            }
+
+    // h is the position after the last possible match.
+    // The search continues while position is less than h.
+
+            h = s.length - length;
+            while (position < h) {
+
+    // In the worst case, we will compare the search_string with every position
+    // in this string. But first, compare the last character in the search_string.
+    // If that shows a total mismatch, then we don't need to look at any other
+    // characters within the position, so advance by the length of the
+    // search_string.
+
+                j = delta[s.charAt(position + lengt)];
+                if (j === undefined) {
+                    position += length;
+
+    // If we found any character but the last in the search_string, then we can
+    // advance a smaller amount.
+
+                } else if (j) {
+                    position += j;
+
+    // The last character matched, so try matching the remainder. If that fails,
+    // advance a single character. If it succeeds, then we return the position.
+
+                } else {
+                    for (;;) {
+                        if (s.charAt(position + j) !== search_string.charAt(j)) {
+                            position += 1;
+                            break;
+                        }
+                        j += 1;
+                        if (j >= lengt) {
+                            return position;
+                        }
+                    }
+                }
+            }
+
+    // If we reach the end without success, then return -1.
+
+            return -1;
+        };
+    }());
+    @end(program)
+
+@specimen "infinite loop"
+
+    An infinite loop is a loop that never terminates. This is a bad thing because the turn never ends, freezing the program. The simplest infinite loop is
+
+    @begin(program)
+    for (;;) {}    // This is not a bug. It is much worse.
+    @end(program)
+
+@specimen "infinity"
+
+    @article(@t(Infinity) @link(literal))
+
+    The infinity value is a number that represents all numbers that are larger than
+    @link(MAX_VALUE Number number). It is available as the @t(Infinity)
+    @link(primordial variable), and as @link(POSITIVE_INFINITY Number number).
+    Negative infinity is available as @t(-Infinity) and as
+    @link(NEGATIVE_INFINITY Number number).
+
+    Infinity + Infinity    // Infinity
+    Infinity - Infinity    // NaN
+    Infinity * Infinity    // Infinity
+    Infinity / Infinity    // NaN
+    isFinite(Infinity)     // false
+
+@specimen "infix @link(operator)"
+
+    An @link(infix operator) is an @link(operator) that takes two operands.
+    The @link(infix operator) is placed between its two operands.
+
+    @list {
+    @link(!= infix operator)
+    @link(!== infix operator)
+    @link(% infix operator)
+    @link(& infix operator)
+    @link(&& infix operator)
+    @link(* infix operator)
+    @link(+ infix operator)
+    @link(, infix operator)
+    @link(- infix operator)
+    @link(/ infix operator)
+    @link(< infix operator)
+    @link(<< infix operator)
+    @link(<= infix operator)
+    @link(== infix operator)
+    @link(=== infix operator)
+    @link(> infix operator)
+    @link(>= infix operator)
+    @link(>> infix operator)
+    @link(>>> infix operator)
+    @link(^ infix operator)
+    @link(| infix operator)
+    @link(|| infix operator)
+    @link(in infix operator)
+    @link(instanceof infix operator)
+    }
+
+    Also see @link(operator precedence) and @link(assignment infix operator).
+
+@specimen "inheritance"
+
+    Blah.
+
+    @article(inheritance chain)
+
+    The inheritance chain (or prototype chain) is the linkage through which an object can delegate or inherit properties from another object. When an object is created, it can be chained to another object. If an attempt is made to get the value of a property of the object, and if the object does not have an own property with that name, then the chain is followed to a second object. If that second object has the named own property, then that property's value is delivered as if it had come from the first object. However, if the second object does not have the named own property, then its chain is followed, and so on. The chain is not used to set a property to an object. Assignment is always to an own property of the first object.
+
+    The default inheritance chain for an object literal is Object.prototype. There are two ways to make objects with a different chain. The first is to use the create Object function. The second is to use the new prefix operator on a constructor function to produce an object that is chained to the prototype Function prototype object. Once an object is made, it cannot be chained to a different object. See the getPrototypeOf Object function.
+    inherited property
+
+    An inherited property of an object is a property that is not present in the object itself, but is instead inherited through the object's inheritance chain.
+
+@specimen "instanceof @reserved@"
+
+    @article(@t(instanceof) @link(infix operator))
+
+    Blah.
+
+@specimen "Int16Array"
+
+        @article "@t(Int16Array) @link(primordial function)"
+
+            @list {
+                @t<new Int16Array(>length@t<);>
+                @t<new Int16Array(>typedArray@t<);>
+                @t<new Int16Array(>object@t<);>
+                @t<new Int16Array(>buffer@t<,> byteOffset@t<,> length@t<);>
+            }
+
+        @article "@t(Int16Array) @link(function)"
+
+            @list {
+                @link(from Int16Array function)
+                @link(of Int16Array function)
+            }
+
+        @article "@t(Int16Array) @link(number)"
+
+            @list {
+                @link(BYTES_PER_ELEMENT Int16Array number)
+                @link(length Int16Array number)
+            }
+
+        @article "@t(Int16Array) @link(prototype)"
+
+            @list {
+                @link(name Int16Array prototype arraybuffer)
+                @link(name Int16Array prototype function)
+                @link(name Int16Array prototype number)
+            }
+
+        @article "@link(Int16Array prototype) @link(arraybuffer)"
+
+            @list {
+                @link(buffer Int16Array prototype arraybuffer)
+            }
+
+        @article "@link(Int16Array prototype) @link(function)"
+
+            @list {
+                @link(copyWithin Int16Array prototype function)
+                @link(entries Int16Array prototype function)
+                @link(every Int16Array prototype function)
+                @link(fill Int16Array prototype function)
+                @link(filter Int16Array prototype function)
+                @link(find Int16Array prototype function)
+                @link(findIndex Int16Array prototype function)
+                @link(forEach Int16Array prototype function)
+                @link(indexOf Int16Array prototype function)
+                @link(join Int16Array prototype function)
+                @link(lastIndexOf Int16Array prototype function)
+                @link(map Int16Array prototype function)
+                @link(reduce Int16Array prototype function)
+                @link(reduceRight Int16Array prototype function)
+                @link(reverse Int16Array prototype function)
+                @link(set Int16Array prototype function)
+                @link(slice Int16Array prototype function)
+                @link(some Int16Array prototype function)
+                @link(subarray Int16Array prototype function)
+                @link(values Int16Array prototype function)
+                @link(toLocaleString Int16Array prototype function)
+                @link(toString Int16Array prototype function)
+            }
+
+        @article "@link(Int16Array prototype) @link(number)"
+
+            @list {
+                @link(byteLength Int16Array prototype number)
+                @link(byteOffset Int16Array prototype number)
+                @link(length Int16Array prototype number)
+            }
+
+        @article "@t(Int16Array) @link(number)"
+
+            @list {
+                @link(BYTES_PER_ELEMENT Int16Array number)
+                @link(length Int16Array number)
+            }
+
+        @article "@t(Int16Array) @link(string)"
+
+            @list {
+                @link(name Int16Array string)
+            }
+
+@specimen "Int32Array"
+
+        @article "@t(Int32Array) @link(primordial function)"
+
+            @list {
+                @t<new Int32Array(>length@t<);>
+                @t<new Int32Array(>typedArray@t<);>
+                @t<new Int32Array(>object@t<);>
+                @t<new Int32Array(>buffer@t<,> byteOffset@t<,> length@t<);>
+            }
+
+        @article "@t(Int32Array) @link(function)"
+
+            @list {
+                @link(from Int32Array function)
+                @link(of Int32Array function)
+            }
+
+        @article "@t(Int32Array) @link(number)"
+
+            @list {
+                @link(BYTES_PER_ELEMENT Int32Array number)
+                @link(length Int32Array number)
+            }
+
+        @article "@t(Int32Array) @link(prototype)"
+
+            @list {
+                @link(name Int32Array prototype arraybuffer)
+                @link(name Int32Array prototype function)
+                @link(name Int32Array prototype number)
+            }
+
+        @article "@link(Int32Array prototype) @link(arraybuffer)"
+
+            @list {
+                @link(buffer Int32Array prototype arraybuffer)
+            }
+
+        @article "@link(Int32Array prototype) @link(function)"
+
+            @list {
+                @link(copyWithin Int32Array prototype function)
+                @link(entries Int32Array prototype function)
+                @link(every Int32Array prototype function)
+                @link(fill Int32Array prototype function)
+                @link(filter Int32Array prototype function)
+                @link(find Int32Array prototype function)
+                @link(findIndex Int32Array prototype function)
+                @link(forEach Int32Array prototype function)
+                @link(indexOf Int32Array prototype function)
+                @link(join Int32Array prototype function)
+                @link(lastIndexOf Int32Array prototype function)
+                @link(map Int32Array prototype function)
+                @link(reduce Int32Array prototype function)
+                @link(reduceRight Int32Array prototype function)
+                @link(reverse Int32Array prototype function)
+                @link(set Int32Array prototype function)
+                @link(slice Int32Array prototype function)
+                @link(some Int32Array prototype function)
+                @link(subarray Int32Array prototype function)
+                @link(values Int32Array prototype function)
+                @link(toLocaleString Int32Array prototype function)
+                @link(toString Int32Array prototype function)
+            }
+
+        @article "@link(Int32Array prototype) @link(number)"
+
+            @list {
+                @link(byteLength Int32Array prototype number)
+                @link(byteOffset Int32Array prototype number)
+                @link(length Int32Array prototype number)
+            }
+
+        @article "@t(Int32Array) @link(number)"
+
+            @list {
+                @link(BYTES_PER_ELEMENT Int32Array number)
+                @link(length Int32Array number)
+            }
+
+        @article "@t(Int32Array) @link(string)"
+
+            @list {
+                @link(name Int32Array string)
+            }
+
+@specimen "Int8Array"
+
+        @article "@t(Int8Array) @link(primordial function)"
+
+            @list {
+                @t<new Int8Array(>length@t<);>
+                @t<new Int8Array(>typedArray@t<);>
+                @t<new Int8Array(>object@t<);>
+                @t<new Int8Array(>buffer@t<,> byteOffset@t<,> length@t<);>
+            }
+
+        @article "@t(Int8Array) @link(function)"
+
+            @list {
+                @link(from Int8Array function)
+                @link(of Int8Array function)
+            }
+
+        @article "@t(Int8Array) @link(number)"
+
+            @list {
+                @link(BYTES_PER_ELEMENT Int8Array number)
+                @link(length Int8Array number)
+            }
+
+        @article "@t(Int8Array) @link(prototype)"
+
+            @list {
+                @link(name Int8Array prototype arraybuffer)
+                @link(name Int8Array prototype function)
+                @link(name Int8Array prototype number)
+            }
+
+        @article "@link(Int8Array prototype) @link(arraybuffer)"
+
+            @list {
+                @link(buffer Int8Array prototype arraybuffer)
+            }
+
+        @article "@link(Int8Array prototype) @link(function)"
+
+            @list {
+                @link(copyWithin Int8Array prototype function)
+                @link(entries Int8Array prototype function)
+                @link(every Int8Array prototype function)
+                @link(fill Int8Array prototype function)
+                @link(filter Int8Array prototype function)
+                @link(find Int8Array prototype function)
+                @link(findIndex Int8Array prototype function)
+                @link(forEach Int8Array prototype function)
+                @link(indexOf Int8Array prototype function)
+                @link(join Int8Array prototype function)
+                @link(lastIndexOf Int8Array prototype function)
+                @link(map Int8Array prototype function)
+                @link(reduce Int8Array prototype function)
+                @link(reduceRight Int8Array prototype function)
+                @link(reverse Int8Array prototype function)
+                @link(set Int8Array prototype function)
+                @link(slice Int8Array prototype function)
+                @link(some Int8Array prototype function)
+                @link(subarray Int8Array prototype function)
+                @link(values Int8Array prototype function)
+                @link(toLocaleString Int8Array prototype function)
+                @link(toString Int8Array prototype function)
+            }
+
+        @article "@link(Int8Array prototype) @link(number)"
+
+            @list {
+                @link(byteLength Int8Array prototype number)
+                @link(byteOffset Int8Array prototype number)
+                @link(length Int8Array prototype number)
+            }
+
+        @article "@t(Int8Array) @link(number)"
+
+            @list {
+                @link(BYTES_PER_ELEMENT Int8Array number)
+                @link(length Int8Array number)
+            }
+
+        @article "@t(Int8Array) @link(string)"
+
+            @list {
+                @link(name Int8Array string)
+            }
+
+@specimen "Int8ClampedArray"
+
+        @article "@t(Int8ClampedArray) @link(primordial function)"
+
+            @list {
+                @t<new Int8ClampedArray(>length@t<);>
+                @t<new Int8ClampedArray(>typedArray@t<);>
+                @t<new Int8ClampedArray(>object@t<);>
+                @t<new Int8ClampedArray(>buffer@t<,> byteOffset@t<,> length@t<);>
+            }
+
+        @article "@t(Int8ClampedArray) @link(function)"
+
+            @list {
+                @link(from Int8ClampedArray function)
+                @link(of Int8ClampedArray function)
+            }
+
+        @article "@t(Int8ClampedArray) @link(number)"
+
+            @list {
+                @link(BYTES_PER_ELEMENT Int8ClampedArray number)
+                @link(length Int8ClampedArray number)
+            }
+
+        @article "@t(Int8ClampedArray) @link(prototype)"
+
+            @list {
+                @link(name Int8ClampedArray prototype arraybuffer)
+                @link(name Int8ClampedArray prototype function)
+                @link(name Int8ClampedArray prototype number)
+            }
+
+        @article "@link(Int8ClampedArray prototype) @link(arraybuffer)"
+
+            @list {
+                @link(buffer Int8ClampedArray prototype arraybuffer)
+            }
+
+        @article "@link(Int8ClampedArray prototype) @link(function)"
+
+            @list {
+                @link(copyWithin Int8ClampedArray prototype function)
+                @link(entries Int8ClampedArray prototype function)
+                @link(every Int8ClampedArray prototype function)
+                @link(fill Int8ClampedArray prototype function)
+                @link(filter Int8ClampedArray prototype function)
+                @link(find Int8ClampedArray prototype function)
+                @link(findIndex Int8ClampedArray prototype function)
+                @link(forEach Int8ClampedArray prototype function)
+                @link(indexOf Int8ClampedArray prototype function)
+                @link(join Int8ClampedArray prototype function)
+                @link(lastIndexOf Int8ClampedArray prototype function)
+                @link(map Int8ClampedArray prototype function)
+                @link(reduce Int8ClampedArray prototype function)
+                @link(reduceRight Int8ClampedArray prototype function)
+                @link(reverse Int8ClampedArray prototype function)
+                @link(set Int8ClampedArray prototype function)
+                @link(slice Int8ClampedArray prototype function)
+                @link(some Int8ClampedArray prototype function)
+                @link(subarray Int8ClampedArray prototype function)
+                @link(values Int8ClampedArray prototype function)
+                @link(toLocaleString Int8ClampedArray prototype function)
+                @link(toString Int8ClampedArray prototype function)
+            }
+
+        @article "@link(Int8ClampedArray prototype) @link(number)"
+
+            @list {
+                @link(byteLength Int8ClampedArray prototype number)
+                @link(byteOffset Int8ClampedArray prototype number)
+                @link(length Int8ClampedArray prototype number)
+            }
+
+        @article "@t(Int8ClampedArray) @link(number)"
+
+            @list {
+                @link(BYTES_PER_ELEMENT Int8ClampedArray number)
+                @link(length Int8ClampedArray number)
+            }
+
+        @article "@t(Int8ClampedArray) @link(string)"
+
+            @list {
+                @link(name Int8ClampedArray string)
+            }
+
+@specimen "integer"
+
+    An integer is a number without a fractional part. Integers are sometimes known as whole numbers, counting numbers, and natural numbers. JavaScript has a single number type that includes all numeric values, including integers. JavaScript does not have a separate integer type.
+
+    Integer arithmetic in JavaScript is exact so long as the operands and results fall within the range -9007199254740992...9007199254740992. Integers outside of that domain may be represented inexactly. For example, the integer 9007199254740993 is represented as the same number as 9007199254740992.
+
+    @begin(program)
+    // Compute the largest safe integer.
+
+    var max_int = (function () {
+        var integer = 1;
+        while (integer + 1 !== integer) {
+            integer = integer * 2;
+        }
+        return integer;
+    }());
+    @end(program)
+
+    The @link(/ infix operator) can produce a non-integer result even if both of its operands are integers. For example, 1 / 2 produces 0.5, a non-integer result.
+
+    These functions can be used to convert non-integers to integers:
+
+    @list {
+        @link(ceil Math function)
+        @link(floor Math function)
+        @link(round Math function)
+    }
+
+    JavaScript is lacking a @link(trunc Math function) that rounds toward @link(zero). Such a function would round down for positive numbers and round up for negative numbers.
+
+    @program "
+    function trunc(number) {
+        return Math[
+            (number >= 0)
+                ? 'floor'
+                : 'ceil'
+        ](number);
+    }
+    "
+
+    A @link(bitwise operator) uses integer operands but over a much smaller range, -2147483648 to 2147483647.
+
+@specimen "interface @reserved@"
+
+@specimen "Intl"
+
+    @article "@t(Intl) @link(function)"
+
+    @article "@t(Intl) @link(primordial object)"
+
+    @list {
+    @link(Collator Intl function)
+    @link(DateTimeFormat Intl function)
+    @link(NumberFormat Intl function)
+    }
+
+@specimen "invocation"
+
+    There are four forms of function invocation:
+
+    @list {
+    @link(Function invocation)
+    @link(Method invocation)
+    @link(Constructor invocation)
+    @link(Apply invocation)
+    }
+
+    Each form has distinctive syntax. They vary in what gets bound to the implicit @link(this parameter). It is because of these patterns that
+
+    var funky = object.method;
+    funky();            // Function form
+
+    may have a different result than
+
+    object.method();    // Method form
+
+    @section "function"
+
+    The function form takes a function literal, a variable, or a parameter. The this parameter will be bound to undefined.
+
+    @program "
+    funky()
+
+    (function () {
+        return this;
+    }())                 // returns undefined
+    "
+
+    The method form takes an expression in which the outermost operator is @link(. suffix operator) or @link([ ] suffix operator). The this parameter will be bound of the value that precedes the suffix operator. The late binding of the this parameter makes it possible to have single function act as a method of many objects, either by inheritance or by assigning the function to many objects.
+
+    object.method()
+
+    object[variable]()
+
+    Only use the method form if you intend for the called function to have access to the object.
+    constructor
+
+    The constructor form uses the new prefix operator. The this parameter will be bound to a new object that inherits from the function's prototype property.
+
+    new Monster()    // this is bound to Object.create(Monster.prototype)
+
+    @section "apply"
+
+    The apply form invokes the function by invoking the function's apply or call method. The first parameter is the value that the this parameter will be bound to.
+
+    funky.apply(null)
+
+@specimen "isArray"
+
+    @article(@t(isArray) @link(Array function))
+
+    blah.
+
+@specimen "isExtensible"
+
+    @article(@t(isExtensible) @link(Object function))
+
+    Blah.
+
+@specimen "isFinite"
+
+    @article(@t(isFinite) @link(primordial function))
+
+    Blah.
+
+@specimen "isFrozen"
+
+    @article(@t(isFrozen) @link(object function))
+
+    Blah.
+
+@specimen "isNaN"
+
+    @article(@t(isNaN) @link(primordial function))
+
+    Blah.
+
+@specimen "isPrototypeOf"
+
+    @article(@t(isPrototypeOf) @link(object prototype function))
+
+    Blah.
+
+@specimen "isSealed"
+
+    @article(@t(isSealed) @link(object function))
+
+    Blah.
+
+@specimen "isView"
+
+    @article(@t(isView) @link(arraybuffer function))
+
+    Blah.
+
+@specimen "iteration"
+
+    Iteration (or repetition)
+
+@specimen "loop @link(statement)"
+
+    recursion
+
+    enumeration function

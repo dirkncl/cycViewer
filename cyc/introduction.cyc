@@ -1,0 +1,74 @@
+@chapter "Introduction"
+
+The language described in this book is @link "es6".
+The standard, which is designated as ECMA-262, may be found at
+@url<https://www.ecma-international.org/publications/standards/Ecma-262.htm>.
+
+Version history:
+
+@table {
+@!version@|@!released
+@_@link(ES1)@|1997
+@_@link(ES2)@|1998
+@_@link(ES3)@|1999
+@_@link(ES4)@|N/A
+@_@link(ES5)@|2009
+@_@link(ES6)@|2015
+@_@link(ES2016)@|2016
+@_@link(ES2017)@|2017
+@_@link(ES2018)@|2018
+}
+
+Because of trademark problems, the standard for the @link(JavaScript) language
+is called @link(ECMAScript). JavaScript is a trademark of @link(Oracle Corporation).
+
+@program <"use strict";>
+
+Most of the material in this encyclopedia is organized into 27 chapters
+(one for each letter and the @link "Special Characters"). Each chapter lists several
+specimens, where a specimen is an element of syntax or a concept. The specimens
+are ordered alphabetically. A specimen marked with @reserved@ indicates that
+the word is reserved and cannot be used as a parameter or variable name.
+The special characters chapter is sorted according to the @link(ASCII) sequence.
+
+@table{
+@!@link(Special Characters)@|@!@link(A)@|@!@link(B)@|@!@link(C)@|@!@link(D)@|@!@link(E)@|@!@link(F)@|@!@link(G)@|@!@link(H)@|@!@link(I)@|@!@link(J)@|@!@link(K)@|@!@link(L)@|@!@link(M)@|@!@link(N)@|@!@link(O)@|@!@link(P)@|@!@link(Q)@|@!@link(R)@|@!@link(S)@|@!@link(T)@|@!@link(U)@|@!@link(V)@|@!@link(W)@|@!@link(X)@|@!@link(Y)@|@!@link(Z)
+}
+
+Under each specimen there will be one or more articles that explain, expand,
+or are related to the specimen. An article may be composed of one or more sections.
+
+The title of an article may contain one or more classifiers, such as
+
+@list {
+@link(function)
+@link(infix operator)
+@link(literal)
+@link(object)
+@link(prefix operator)
+@link(primordial)
+@link(prototype)
+@link(regexp operator)
+@link(separator)
+@link(statement)
+@link(suffix operator)
+@link(ternary operator)
+}
+
+The article of a title may contain a comment. It is used in cases where the
+subject is an abbrievation or special character such as @link(;).
+
+Many articles will have examples. Expression examples will be written with a
+comment showing the result.
+
+@program <
+3 + 4      // 7
+3 + '4'    // "34"
+>
+
+Chapter 16 of the ECMAScript standard gives implementors of ECMAScript
+processors some license to extend the language with experimental or
+proprietary features. Such features might be incorporated into a future
+edition or might be abandoned. It is unwise to rely on such features because
+of the likelihood of diminished reliability. Such non-standard features will
+not be included in this encyclopedia.

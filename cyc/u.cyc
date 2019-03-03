@@ -1,0 +1,301 @@
+@chapter "U"
+
+@specimen "\u"
+    See @link <Unicode escape sequence>.
+
+@specimen "Uint16Array"
+
+    @article "@t(Uint16Array) @link(primordial function)"
+
+        @list {
+            @t<new Uint16Array(>length@t<);>
+            @t<new Uint16Array(>typedArray@t<);>
+            @t<new Uint16Array(>object@t<);>
+            @t<new Uint16Array(>buffer@t<,> byteOffset@t<,> length@t<);>
+        }
+
+    @article "@t(Uint16Array) @link(function)"
+
+        @list {
+            @link(from Uint16Array function)
+            @link(of Uint16Array function)
+        }
+
+    @article "@t(Uint16Array) @link(number)"
+
+        @list {
+            @link(BYTES_PER_ELEMENT Uint16Array number)
+            @link(length Uint16Array number)
+        }
+
+    @article "@t(Uint16Array) @link(prototype)"
+
+        @list {
+            @link(name Uint16Array prototype arraybuffer)
+            @link(name Uint16Array prototype function)
+            @link(name Uint16Array prototype number)
+        }
+
+    @article "@link(Uint16Array prototype) @link(arraybuffer)"
+
+        @list {
+            @link(buffer Uint16Array prototype arraybuffer)
+        }
+
+    @article "@link(Uint16Array prototype) @link(function)"
+
+        @list {
+            @link(copyWithin Uint16Array prototype function)
+            @link(entries Uint16Array prototype function)
+            @link(every Uint16Array prototype function)
+            @link(fill Uint16Array prototype function)
+            @link(filter Uint16Array prototype function)
+            @link(find Uint16Array prototype function)
+            @link(findIndex Uint16Array prototype function)
+            @link(forEach Uint16Array prototype function)
+            @link(indexOf Uint16Array prototype function)
+            @link(join Uint16Array prototype function)
+            @link(lastIndexOf Uint16Array prototype function)
+            @link(map Uint16Array prototype function)
+            @link(reduce Uint16Array prototype function)
+            @link(reduceRight Uint16Array prototype function)
+            @link(reverse Uint16Array prototype function)
+            @link(set Uint16Array prototype function)
+            @link(slice Uint16Array prototype function)
+            @link(some Uint16Array prototype function)
+            @link(subarray Uint16Array prototype function)
+            @link(values Uint16Array prototype function)
+            @link(toLocaleString Uint16Array prototype function)
+            @link(toString Uint16Array prototype function)
+        }
+
+    @article "@link(Uint16Array prototype) @link(number)"
+
+        @list {
+            @link(byteLength Uint16Array prototype number)
+            @link(byteOffset Uint16Array prototype number)
+            @link(length Uint16Array prototype number)
+        }
+
+    @article "@t(Uint16Array) @link(number)"
+
+        @list {
+            @link(BYTES_PER_ELEMENT Uint16Array number)
+            @link(length Uint16Array number)
+        }
+
+    @article "@t(Uint16Array) @link(string)"
+
+        @list {
+            @link(name Uint16Array string)
+        }
+
+@specimen "Uint32Array"
+
+    @article "@t(Uint32Array) @link(primordial function)"
+
+        @list {
+            @t<new Uint32Array(>length@t<);>
+            @t<new Uint32Array(>typedArray@t<);>
+            @t<new Uint32Array(>object@t<);>
+            @t<new Uint32Array(>buffer@t<,> byteOffset@t<,> length@t<);>
+        }
+
+    @article "@t(Uint32Array) @link(function)"
+
+        @list {
+            @link(from Uint32Array function)
+            @link(of Uint32Array function)
+        }
+
+    @article "@t(Uint32Array) @link(number)"
+
+        @list {
+            @link(BYTES_PER_ELEMENT Uint32Array number)
+            @link(length Uint32Array number)
+        }
+
+    @article "@t(Uint32Array) @link(prototype)"
+
+        @list {
+            @link(name Uint32Array prototype arraybuffer)
+            @link(name Uint32Array prototype function)
+            @link(name Uint32Array prototype number)
+        }
+
+    @article "@link(Uint32Array prototype) @link(arraybuffer)"
+
+        @list {
+            @link(buffer Uint32Array prototype arraybuffer)
+        }
+
+    @article "@link(Uint32Array prototype) @link(function)"
+
+        @list {
+            @link(copyWithin Uint32Array prototype function)
+            @link(entries Uint32Array prototype function)
+            @link(every Uint32Array prototype function)
+            @link(fill Uint32Array prototype function)
+            @link(filter Uint32Array prototype function)
+            @link(find Uint32Array prototype function)
+            @link(findIndex Uint32Array prototype function)
+            @link(forEach Uint32Array prototype function)
+            @link(indexOf Uint32Array prototype function)
+            @link(join Uint32Array prototype function)
+            @link(lastIndexOf Uint32Array prototype function)
+            @link(map Uint32Array prototype function)
+            @link(reduce Uint32Array prototype function)
+            @link(reduceRight Uint32Array prototype function)
+            @link(reverse Uint32Array prototype function)
+            @link(set Uint32Array prototype function)
+            @link(slice Uint32Array prototype function)
+            @link(some Uint32Array prototype function)
+            @link(subarray Uint32Array prototype function)
+            @link(values Uint32Array prototype function)
+            @link(toLocaleString Uint32Array prototype function)
+            @link(toString Uint32Array prototype function)
+        }
+
+    @article "@link(Uint32Array prototype) @link(number)"
+
+        @list {
+            @link(byteLength Uint32Array prototype number)
+            @link(byteOffset Uint32Array prototype number)
+            @link(length Uint32Array prototype number)
+        }
+
+    @article "@t(Uint32Array) @link(number)"
+
+        @list {
+            @link(BYTES_PER_ELEMENT Uint32Array number)
+            @link(length Uint32Array number)
+        }
+
+    @article "@t(Uint32Array) @link(string)"
+
+        @list {
+            @link(name Uint32Array string)
+        }
+
+@specimen "Uint8Array"
+
+    @article "@t(Uint8Array) @link(primordial function)"
+
+        @list {
+            @t<new Uint8Array(>length@t<);>
+            @t<new Uint8Array(>typedArray@t<);>
+            @t<new Uint8Array(>object@t<);>
+            @t<new Uint8Array(>buffer@t<,> byteOffset@t<,> length@t<);>
+        }
+
+    @article "@t(Uint8Array) @link(function)"
+
+        @list {
+            @link(from Uint8Array function)
+            @link(of Uint8Array function)
+        }
+
+    @article "@t(Uint8Array) @link(number)"
+
+        @list {
+            @link(BYTES_PER_ELEMENT Uint8Array number)
+            @link(length Uint8Array number)
+        }
+
+    @article "@t(Uint8Array) @link(prototype)"
+
+        @list {
+            @link(name Uint8Array prototype arraybuffer)
+            @link(name Uint8Array prototype function)
+            @link(name Uint8Array prototype number)
+        }
+
+    @article "@link(Uint8Array prototype) @link(arraybuffer)"
+
+        @list {
+            @link(buffer Uint8Array prototype arraybuffer)
+        }
+
+    @article "@link(Uint8Array prototype) @link(function)"
+
+        @list {
+            @link(copyWithin Uint8Array prototype function)
+            @link(entries Uint8Array prototype function)
+            @link(every Uint8Array prototype function)
+            @link(fill Uint8Array prototype function)
+            @link(filter Uint8Array prototype function)
+            @link(find Uint8Array prototype function)
+            @link(findIndex Uint8Array prototype function)
+            @link(forEach Uint8Array prototype function)
+            @link(indexOf Uint8Array prototype function)
+            @link(join Uint8Array prototype function)
+            @link(lastIndexOf Uint8Array prototype function)
+            @link(map Uint8Array prototype function)
+            @link(reduce Uint8Array prototype function)
+            @link(reduceRight Uint8Array prototype function)
+            @link(reverse Uint8Array prototype function)
+            @link(set Uint8Array prototype function)
+            @link(slice Uint8Array prototype function)
+            @link(some Uint8Array prototype function)
+            @link(subarray Uint8Array prototype function)
+            @link(values Uint8Array prototype function)
+            @link(toLocaleString Uint8Array prototype function)
+            @link(toString Uint8Array prototype function)
+        }
+
+    @article "@link(Uint8Array prototype) @link(number)"
+
+        @list {
+            @link(byteLength Uint8Array prototype number)
+            @link(byteOffset Uint8Array prototype number)
+            @link(length Uint8Array prototype number)
+        }
+
+    @article "@t(Uint8Array) @link(number)"
+
+        @list {
+            @link(BYTES_PER_ELEMENT Uint8Array number)
+            @link(length Uint8Array number)
+        }
+
+    @article "@t(Uint8Array) @link(string)"
+
+        @list {
+            @link(name Uint8Array string)
+        }
+
+@specimen "unary @link(operator)"
+
+    An operator that takes one operand. See @link(prefix operator) and @link(suffix operator).
+
+@specimen "undefined"
+    @@Blah.
+
+    @article "@t(undefined) @link <literal>"
+    Blah.
+
+@specimen "Unicode"
+    Blah.
+
+    @article "Unicode escape sequence"
+    Blah.
+
+@specimen "unreachable code"
+    Blah.
+
+@specimen "unshift"
+    @article "@t(unshift) @link <Array prototype function>"
+    Blah.
+
+@specimen "upper case"
+    See @link <case>.
+
+@specimen "URIError"
+    @article "@t(URIError) @link <primordial function>"
+    Blah.
+
+@specimen "use @reserved@"
+
+    @article "use strict"
+
+    See @link<strict>.

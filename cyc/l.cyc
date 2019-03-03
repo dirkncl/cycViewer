@@ -1,0 +1,393 @@
+@chapter "L"
+
+@specimen "label"
+
+    A label is a prefix before a @link(statement). A label is a name followed by a @link(:).
+    The label can then be used to with a @link(break statement) to break out of a
+    particular @link(loop statement) or @link(switch statement),
+    or with a @link(continue statement) to begin the next iteration of a particular loop.
+    Labels are rarely necessary, but are useful in situations where there are nested loops
+    and when it is necessary to break out of the inner loop. This can happen when searching.
+
+    @begin(program)
+    function string(current, next) {
+
+    // Produce a polished JSON string from a text. This function takes two
+    // functions, current and next, which return the current character of
+    // the text and the next character. Both return empty string if there
+    // are no more characters.
+
+        var i, result = '', hex, hhhh;
+
+    // The first character must be '"'.
+
+        if (current() == '"') {
+
+    // Loop while there are still more characters. This loop has an outer label.
+
+    outer:  while (next()) {
+
+    // If we find the closing '"', then return the result.
+
+                if (current() == '"') {
+                    next();
+                    return result;
+                }
+
+    // If we find a backslash, then look for an escape sequence.
+
+                if (current() == '\\') {
+                    switch (next()) {
+                    case 'b':
+                        result += '\b';
+                        break;
+                    case 'f':
+                        result += '\f';
+                        break;
+                    case 'n':
+                        result += '\n';
+                        break;
+                    case 'r':
+                        result += '\r';
+                        break;
+                    case 't':
+                        result += '\t';
+                        break;
+
+    // If we found \u, then take 4 hexadecimal digits.
+
+                    case 'u':
+                        hhhh = 0;
+                        for (i = 0; i < 4; i += 1) {
+                            hhhh = hhhh * 16 + parseInt(next(), 16);
+
+    // If the hex value is not finite (most likely NaN), then the text was not a
+    // well formed JSON text and must be rejected. Break out of the outer loop.
+
+                            if (!isFinite(hhhh)) {
+                                break outer;
+                            }
+                        }
+                        result += String.fromCharCode(hhhh);
+                        break;
+                    default:
+                        result += current();
+                    }
+                } else {
+                    result += current();
+                }
+            }
+        }
+
+    // We can get here if the string is not opened or closed correctly or if
+    // a \uhhhh sequence is badly formed.
+
+        throw new SyntaxError("Bad string");
+    }
+    @end(program)
+
+@specimen "lastIndexOf"
+
+    @article(@t(lastIndexOf) @link(Array prototype function))
+
+    Blah.
+
+    @article(@t(lastIndexOf) @link(String prototype function))
+
+    Blah.
+
+    @begin(program)
+    String.prototype.lastIndexOf = (function () {
+
+    // The lastIndexOf method returns the position at which a search_string last
+    // occurs within a search string, or -1 if it cannot be found. An optional
+    // position parameter (default this.length) determines a point within the point
+    // to not search.
+
+    // The following implements a simplified version of the Boyer Moore algorithm.
+
+    // These are memoized variables. They will retain their values between
+    // invocations, speeding up results when doing multiple searches on the same
+    // search_string.
+
+        var delta,                  // The delta table that allows for skipping
+            lengt,                  // The length of the search string - 1
+            length,                 // The length of the search string
+            previous_search_string = '';
+
+    // And here is the indexOf function itself.
+
+        return function lastIndexOf(search_string, position) {
+
+    // Normalize the inputs. Convert this and the search_string to strings just in
+    // case they are not already strings. Force position to an integer between 0
+    // and the length of this.
+
+            var j,                  // The loop variable
+                s = String(this);   // this converted to a string
+
+            search_string = String(search_string);
+            position = Math.min(Math.max(position === undefined ?
+                s.length : Math.floor(position), 0), s.length);
+
+    // If the search_string is the empty string, then we are done.
+
+            if (search_string === '') {
+                return position;
+            }
+
+    // If the search_string is the same as the previous_search_string, then we
+    // can skip the step of building the delta table. The delta table tells us
+    // how many characters we can skip if there is a mismatch. Typically, the
+    // number of characters we can skip is equal to the length of the search_string,
+    // so the longer the search_string, the faster the result.
+
+            if (search_string !== previous_search_string) {
+                length = search_string.length;
+                lengt = length - 1;
+                previous_search_string = search_string;
+                delta = {};
+                for (j = lengt; j >= 0; j -= 1) {
+                    delta[search_string.charAt(j)] = j;
+                }
+            }
+
+    // We start searching at the position, which by default is the end of this.
+    // We continue to search as long as the number of characters remaining is at
+    // least as long as the search_string.
+
+            while (position > length) {
+
+    // In the worst case, we will compare the search_string with every position
+    // in this string. First, compare the first character in the search_string.
+    // If that shows a total mismatch, then we don't need to look at any other
+    // characters within the position, so advance by the length of the
+    // search_string.
+
+                j = delta[s.charAt(position - length)];
+                if (j === undefined) {
+                    position -= length;
+
+    // If we found any character but the last in the search_string, then we can
+    // advance a smaller amount.
+
+                } else if (j) {
+                    position -= j;
+
+    // The last character matched, so try matching the remainder. If that fails,
+    // advance a single character. If it succeeds, then we return the position.
+
+                } else {
+                    j = 1;
+                    while (true) {
+                        if (s.charAt(position + j - lengt) !== search_string.charAt(j)) {
+                            position -= 1;
+                            break;
+                        }
+                        j += 1;
+                        if (j >= length) {
+                            return position;
+                        }
+                    }
+                }
+            }
+
+    // If we reach the beginning without success, then return -1.
+
+            return -1;
+        };
+    }());
+    @end(program)
+
+@specimen "lastLine"
+
+    @article(@t(lastLine) @link(Regexp prototype number))
+
+    Blah.
+
+@specimen "Law of Turns"
+
+    @list {
+        Never block.
+        Never wait.
+        Finish fast.
+    }
+
+    See @link(event loop).
+
+@specimen "length"
+
+    @article(@t(length) @link(Array prototype number))
+
+    Blah.
+
+    @article(@t(length) @link(ArrayBuffer prototype number))
+
+    Blah.
+
+    @article(@t(length) @link(String prototype number))
+
+    Blah.
+
+@specimen "let @reserved@"
+
+    @article(@t(let) @link(statement))
+
+    Blah.
+
+@specimen "lf @aka(linefeed)"
+
+    See @link(line terminator).
+
+@specimen "line terminator"
+
+    A line terminator is character or character sequence that indicates the end of a line.
+    The most popular line terminators are @link(cr) and @link(lf) or both. Avoid @link(ls) and @link(ps).
+
+    @begin(table)
+    @!Unicode escape sequence   @| @!alt    @| @!line terminator name   @_
+    @t(\u000A)                  @| @t(\n)   @| @link<lf>                @_
+    @t(\u000D)                  @| @t(\r)   @| @link<cr>                @_
+    @t(\\u000D\u000A)           @| @t(\r\n) @| @link<crlf>              @_
+    @t(\u2028)                  @|          @| @link<ls>                @_
+    @t(\u2029)                  @|          @| @link<ps>
+    @end(table)
+
+@specimen "literal"
+
+    A literal is a sequence of one or more tokens that creates a value within a program.
+
+    @list {
+    @link(array literal)
+    @link(boolean literal)
+    @link(function literal)
+    @link(object literal)
+    @link(null literal)
+    @link(number literal)
+    @link(regexp literal)
+    @link(string literal)
+    }
+
+    @link(Infinity), @link(NaN), and @link(undefined) are not formally literals.
+    Each is a @link(primordial variable).
+
+@specimen "LN10"
+
+    @article(@t(LN10) @link(Math number) @aka(natural logarithm of 10))
+
+    Math.LN10 contains a number that is approximately 2.302585092994046. It could be implemented as
+
+    @program{Math.LN10 = Math.log(10);}
+
+    LN10 can be used to raise 10 to a power.
+
+    @begin(program)
+    function exp10(x) {
+        return Math.exp(Math.LN10 * x);
+    }
+    @end(program)
+
+    Of course, exp10 is better written as
+
+    @begin(program)
+    function exp10(x) {
+        return Math.pow(10, x);
+    }
+    @end(program)
+
+@specimen "LN2"
+
+    @article(@t(LN2) @link(Math number) @aka(natural logarithm of 2))
+
+    Math.LN2 contains a number that is approximately 0.6931471805599453. It could be implemented as
+
+    @program {Math.LN2 = Math.log(2);}
+
+    LN2 can be used to raise 2 to a power.
+
+    @begin(program)
+    function exp2(x) {
+        return Math.exp(Math.LN2 * x);
+    }
+    @end(program)
+
+    Of course, @t(exp)2 is better written as
+
+    @begin(program)
+    function exp2(x) {
+        return Math.pow(2, x);
+    }
+    @end(program)
+
+@specimen "localeCompare"
+
+    @article(@t(localeCompare) @link(String prototype function))
+
+    Blah. See @link(case).
+
+@specimen "log"
+
+    @article(@t(log) @link(Math function) @aka(natural logarithm))
+
+    The Math.log(x) function returns the natural logarithm of x.
+
+@specimen "LOG10E"
+
+    @article(@t(LOG10E) @link(Math number) @aka(base 10 logarithm of @link(e)))
+
+    Math.LOG10E is the base 10 logarithm of @link(e). It is approximately 0.4342944819032518.
+
+    It can be used to implement a log10 function.
+
+    @begin(program)
+    function log10(x) {
+        return Math.LOG10E * Math.log(x);
+    }
+    @end(program)
+
+@specimen "LOG2E"
+
+    @article(@t(LOG2E) @link(Math number) @aka(base 2 logarithm of @link(e)))
+
+    Math.LOG2E is the base 2 logarithm of @link(e). It is approximately 1.4426950408889634.
+
+    It can be used to implement a log2 function.
+
+    @begin(program)
+    function log2(x) {
+        return Math.LOG2E * Math.log(x);
+    }
+    @end(program)
+
+@specimen "loop statement"
+
+    There are three loop statements.
+
+    @list {
+    @link(do statement)
+    @link(for statement)
+    @link(while statement)
+    }
+
+    Loops can also be implemented with @link(tail recursion).
+
+@specimen "lower case"
+
+    See @link(case).
+
+@specimen "ls @aka(line separator)"
+
+    See @link(line terminator).
+
+@specimen "lvalue"
+
+    An lvalue (or left value) is an expression on the left side of an @link(assignment infix operator), or on the left side of an assignment suffix operator, or on the right side of an assignment prefix operator. The lvalue specifies where the value is to be stored. An lvalue is more restricted than a general expression because not all expressions describe a place where a value can be stored. For example, a value cannot be stored in a literal, and a value cannot be stored in a subtraction. An lvalue must be one of these:
+
+    @list {
+    @link(. suffix operator)
+    @link([ ] suffix operator)
+    @link(parameter)
+    @link(variable)
+    }
+
+    An lvalue must be mutible.

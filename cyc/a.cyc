@@ -1,0 +1,687 @@
+@chapter "A"
+
+@specimen "abs"
+
+    @article(@t(abs) @link(Math function) @aka(absolute value))
+
+    The Math.abs(number) function returns the absolute value of its number parameter.
+    It could be implemented with this function:
+
+    @begin(program)
+    Math.abs = function (number) {
+        var result = +number;
+        return (result === 0)
+            ? 0
+            : (result > 0)
+                ? result
+                : -result;
+    };
+    @end(program)
+
+    The result is a non-negative number, or @link(NaN) if the argument cannot be converted to a valid number.
+
+    @begin(program)
+    math.abs(-40)          // 40
+    Math.abs(-Infinity)    // Infinity
+    Math.abs(-0)           // 0
+    Math.abs("8")          // 8
+    Math.abs("LOL")        // NaN
+    @end(program)
+
+    Also see @link(zero).
+
+@specimen "accessor property"
+
+    Blah. See @link(object).
+
+@specimen "acos"
+
+    @article(@t(acos) @link(Math function) @aka(arc cosine))
+
+    The Math.acos(x) function is the inverse cosine function, also known as
+    arc cosine and cos-1. Its argument x should be a number in the range -1 to 1.
+    The result will be an angle in radians in the range 0...Math.PI.
+
+    Example:
+
+    @begin(program)
+    function sphere_map(x, y, z, radius) {
+        var v, u;
+        v = Math.acos(z / radius) / Math.PI;
+        if (y >= 0) {
+            u = Math.acos(
+                x / (radius * Math.sin(Math.PI * v))
+            ) / (Math.PI * 2);
+        } else {
+            u = (Math.PI + Math.acos(
+                x / (radius * Math.sin(Math.PI * v))
+            )) / (Math.PI * 2);
+        }
+        return {x: v, y: u};
+    }
+    @end(program)
+
+    This is an approximate implemention of @t(Math.acos):
+
+    @begin(program)
+    Math.acos = function acos(x) {
+        return (Math.PI / 2) - Math.asin(x);
+    }
+    @end(program)
+
+@specimen "actor"
+
+    Blah.
+
+@specimen "addition"
+
+    See @link(+ infix operator).
+
+@specimen "alert"
+
+    @article(@t(alert) @link(primordial function))
+
+    The @t(alert) function is not formally a part of the language. It is a function
+    provided by the @link(web browser) and other platforms. The alert function can
+    take zero or more arguments. Each argument is converted to a string. All of
+    those strings are concatenated together and shown to the user. It suspends
+    execution of the program. Once the message is dismissed by the user, execution
+    can resume.
+
+    The @t(alert) function is often used in debugging to display the partial
+    results of a computation. It generally should not be used in applications
+    because it suspends the program thread. This locks up the browser, which could
+    cause problems with communications, timers, and other activities.
+
+@specimen "and"
+
+    Blah.
+
+    See @link(& infix operator) and @link(&& infix operator).
+
+@specimen "angle"
+
+    See @link(radians).
+
+@specimen "apply"
+
+    @article(@t(apply) @link(function prototype function))
+
+    Functions inherit the apply(thisArg, arguments) function from Function.prototype. The apply function takes two parameters: The thisArg parameter determines what value will be bound to the function's this parameter. The arguments parameter is an array containing the arguments to be passed to the function.
+
+    blah.
+
+    @article(apply @link(invocation))
+
+@specimen "argument"
+
+    An argument is the value of an expression that is passed to a function as part of its invocation. Each argument is bound to a parameter.
+
+    @article "argument list"
+
+    Blah.
+
+@specimen "arguments"
+
+    @article(@t(arguments) @link(parameter))
+
+    The @t(arguments) array is an implicit parameter that is made available to every function that not have an arguments parameter or arguments variable. It contains all of the actual arguments that were supplied with the invocation of the function, independent of the mapping of arguments to parameters. This makes it possible to make a function that can take a variable number of arguments. Such a function is a variadic or vararg function.
+
+    @begin(program)
+    function sum() {
+
+    // Add all of the arguments.
+
+        var i, total = 0;
+        for (i = 0; i < arguments.length; i += 1) {
+            total += arguments[i];
+        }
+        return total;
+    }
+    @end(program)
+
+    The arguments array is not a true array. Its @link(length) property is not as
+    magical as a true array's length property. The @link(isArray Array function)
+    produces @link(false) when its operand is an arguments array. Also, there can be
+    a weird linkage between the arguments array and the parameters of the function.
+    Changing one can change the other. The linkage can be broken by freezing the
+    arguments array with @t<Object.@link(freeze)(arguments)>.
+
+    Every function has its own arguments array, so it is not possible for one
+    function to access the arguments array of another function unless it is
+    explicitly provided access somehow.
+
+    It inherits from Object.prototype, not Array.prototype. If you want to use an
+    array method such as @link(slice) on arguments, then instead of writing
+
+    @begin(program)
+    arguments.slice(2)    // get an array containing all but the first two arguments
+    @end(program)
+
+    you must write
+
+    @begin(program)
+    Array.prototype.slice.call(arguments, 2);    // same thing only more so
+    @end(program)
+
+@specimen "arithmetic operator"
+
+    The five arithmetic infix operators are
+
+    @list{
+    @link(% infix operator)
+    @link(* infix operator)
+    @link(+ infix operator)
+    @link(- infix operator)
+    @link(/ infix operator)
+    }
+
+    The two arithmetic prefix operators are
+
+    @list{
+    @link(+ prefix operator)
+    @link(- prefix operator)
+    }
+
+    The other arithmetic operations are implemented as functions.
+    See @link(Number prototype function) and @link(Math function).
+
+@specimen "arity"
+
+    The arity of a function is the number of parameters it specifies.
+
+@specimen "array"
+
+    An array is a sequence of values. Each value is given an ordinal number.
+
+    Blah.
+
+    @begin(program)
+    function eratosthenes(n) {
+
+    // Produce an array of the prime numbers that are less than n.
+
+        var composite = [],
+            factor,
+            result = [],
+            series,
+            sqrt_n = Math.sqrt(n);
+
+        if (n > 2) {
+            result.push(2);
+            for (factor = 3; factor < n; factor += 2) {
+                if (!composite[factor]) {
+                    result.push(factor);
+                    if (factor <= sqrt_n) {
+                        for (series = factor * 2; series < n; series += factor) {
+                            composite[series] = true;
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    @end(program)
+
+    @article(@t(Array) @link(primordial function))
+
+    The @t(Array) primordial function is the constructor of arrays.
+    The @link([ ] array literal) form is perfered. Blah.
+
+    The @t(Array) function contains these methods in @t(Array.prototype):
+
+    @article(@t(Array) @link(function))
+
+    The Array function contains
+
+    @list {
+    @link(from Array function)
+    @link(isArray Array function)
+    @link(of Array function)
+    }
+
+    @article(@t(array) @link(literal))
+
+    An array literal is an expression that produces an array value. An array literal starts with @link([) and ends with @link(]). Between the brackets are zero or more expressions, separated by , comma. Each expression contributes one element to the array. An empty array is created by []. Every time an array literal is evaluated, it produces a new array, so
+
+    @begin(program)
+    function wrap_x(x) {
+        return [x];
+    }
+
+    wrap_x(x) === wrap_x(x)    // false
+    @end(program)
+
+    because even though the two arrays are similar in structure and content and were produced by the same array literal, they are two different arrays.
+
+    Elision is permitted, meaning that if an expression before a @link(,) is omitted, the the value @link(undefined) is used for the member's value. Elision is visually confusing and error-prone, so it is not recommended.
+
+    Every array literal inherits from Array.prototype.
+
+    Example:
+
+    @begin(program)
+    var roman = (function () {
+
+    // This immediate function returns the roman function, which converts a
+    // number to a Roman numeral string. The immediate function provides
+    // the roman function with a table that contains the elements of Roman
+    // numerals. The result will be compiled from these elements.
+
+        var table = [
+            ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'],
+            ['', 'X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC'],
+            ['', 'C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM']
+        ];
+
+        return function roman(n) {
+            var element, i, result = '';
+
+            n = String(Math.floor(Math.abs(n)));
+            for (i = 0; i < table.length; i += 1) {
+                element = table[i][n.slice(-1)];
+                if (element) {
+                    result = element + result;
+                }
+                n = n.slice(0, -1);
+            }
+            return 'M'.repeat(+n) + result;
+        };
+    }());
+    @end(program)
+
+    @article(@t(Array) @link(prototype))
+
+    @article(@t(Array) @link(prototype function))
+
+    @list {
+    @link(concat array prototype function)
+    @link(copyWithin array prototype function)
+    @link(entries array prototype function)
+    @link(every array prototype function)
+    @link(fill array prototype function)
+    @link(filter array prototype function)
+    @link(find array prototype function)
+    @link(findIndex array prototype function)
+    @link(forEach array prototype function)
+    @link(includes array prototype function)
+    @link(indexOf array prototype function)
+    @link(join array prototype function)
+    @link(lastIndexOf array prototype function)
+    @link(map array prototype function)
+    @link(pop array prototype function)
+    @link(push array prototype function)
+    @link(reduce array prototype function)
+    @link(reduceRight array prototype function)
+    @link(reverse array prototype function)
+    @link(shift array prototype function)
+    @link(slice array prototype function)
+    @link(some array prototype function)
+    @link(splice array prototype function)
+    @link(toLocaleString array prototype function)
+    @link(toString array prototype function)
+    @link(unshift array prototype function)
+    @link(values array prototype function)
+    }
+
+    @article(@t(Array) @link(prototype number))
+
+    @list {
+    @link(length array prototype number)
+    }
+
+@specimen "ArrayBuffer"
+
+    (Blah.)
+
+    @article "@t(ArrayBuffer) @link(function)"
+
+    @list {
+    @link(isView arraybuffer function)
+    }
+
+    @article "@t(ArrayBuffer) @link(primordial function)"
+
+    Blah.
+
+    @article "@t(ArrayBuffer) @link(prototype function)"
+
+    @list {
+    @link(slice arraybuffer prototype function)
+    }
+
+    @article "@t(ArrayBuffer) @link(prototype)"
+
+    Blah.
+
+    @article "@link(ArrayBuffer prototype) @link(function)"
+
+    Blah.
+
+    @article "@link(ArrayBuffer prototype) @link(number)"
+
+    Blah.
+
+    @list {
+    @link(byteLength arraybuffer prototype number)
+    @link(length arraybuffer prototype number)
+    }
+
+@specimen "ASCII"
+
+    American Standard Code for Information Interchange is a seven bit character set
+    designed for use with teletype machines. The set of 128 characters includes 26
+    uppercase letters, 26 lowercase letters, 10 decimal digits, 1 space, 32 special
+    characters, and 33 control codes. Most of the control codes are obsolete,
+    although a few of them have significance in JavaScript as @link(whitespace).
+
+    @list {
+    @link(cr)
+    @link(lf)
+    @link(tab)
+    }
+
+    All of the special characters used by JavaScript are in the ASCII set.
+    The first 128 characters in the @link(UNICODE) set are the ASCII set.
+
+    The letter A is 41 in hexadecimal.
+
+    @begin(table)
+    @!hex@|@!0 @|@!1@|@!2@|@!3@|@!4@|@!5@|@!6@|@!7@|@!8@|@!9@|@!A@|@!B@|@!C@|@!D@|@!E@|@!F
+    @_@!0@|nul @|soh@|stx@|etx@|eot@|enq@|ack@|bel@|bs @|tab@|lf @|vt @|ff @|cr @|so @|si
+    @_@!1@|dle @|dc1@|dc2@|dc3@|dc4@|nak@|syn@|etb@|can@|em @|sub@|esc@|fs @|gs @|rs @|us
+    @_@!2@|space@|! @|"  @|#  @|  $@|%  @|&  @|'  @|(  @|)  @|*  @|+  @|,  @|-  @|.  @|/
+    @_@!3@|0   @|1  @|2  @|3  @|  4@|5  @|6  @|7  @|8  @|9  @|:  @|;  @|<  @|=  @|>  @|?
+    @_@!4@|@@  @|A  @|B  @|C  @|  D@|E  @|F  @|G  @|H  @|I  @|J  @|K  @|L  @|M  @|N  @|O
+    @_@!5@|P   @|Q  @|R  @|S  @|  T@|U  @|V  @|W  @|X  @|Y  @|Z  @|[  @|\  @|]  @|^  @|_
+    @_@!6@|`   @|a  @|b  @|c  @|  d@|e  @|f  @|g  @|h  @|i  @|j  @|k  @|l  @|m  @|n  @|o
+    @_@!7@|p   @|q  @|r  @|s  @|  t@|u  @|v  @|w  @|x  @|y  @|z  @|{  @||  @|}  @|~  @|del
+    @end(table)
+
+@specimen "asi @aka(automatic semicolon insertion)"
+
+    See @link(automatic semicolon insertion).
+
+@specimen "asin"
+
+    @article(@t(asin) @link(Math function) @aka(arc sine))
+
+    The Math.asin(x) function is the inverse sine function, also known as
+    arc sine and sin-1. Its argument x should be a number in the range -1...1.
+    The result will be an angle in radians in the range (Math.PI / -2)...(Math.PI / 2).
+
+    This is an approximate implemention of Math.asin:
+
+    @begin(program)
+    Math.asin = function asin(x) {
+        x = +x;
+        var even = 0,
+            bottom = 1,
+            top = 1,
+            result = x,
+            x2 = x * x,
+            xxx = x;
+        for (stage = 0; stage < 70; stage += 1) {
+            even += 2;
+            xxx *= x2;
+            top *= even - 1;
+            bottom *= even;
+            result += (top * xxx) / (bottom * (even + 1));
+        }
+        return result;
+    };
+    @end(program)
+
+@specimen "assignment"
+
+    @article(assignment @link(infix operator))
+
+    An assignment infix operator replaces the contents of a variable or parameter
+    or a member of an object or an element of an array with a new value. The left
+    operand must be an @link(lvalue). The right operand can be any @link(expression).
+    The simplest assignment infix operator is @link(= assignment infix operator),
+    which stores the value of the right operand to the left operand.
+
+    @begin(program)
+    pascal = 1;
+    @end(program)
+
+    There are other assignment infix operators that first read the current value of the left operand, and then replace it with a computation performed with the current value and the value of the second operand. For example,
+
+    @begin(program)
+    power *= 2;
+    @end(program)
+
+    replaces power with its previous value multiplied by 2. This provides two advantages over
+
+    @begin(program)
+    power = power * 2;
+    @end(program)
+
+    It is slightly more compact, and the left operand is only evaluted once. This is beneficial if evaluation of the left operand is expensive or if it has side effects.
+
+    @begin(program)
+    my_object[expensive_function(++id)] += 1;
+    @end(program)
+
+    An assignment can be used as an expression, its value being the value that is stored into its left operand. It is possible to nest assignments into complicated expressions. This is generally a bad idea because it can result in code that is difficult understand and maintain.
+
+    There is a particular problem in using assignment expressions in the control part of an @link(if statement) or @link(while statement). The following line could possibly be correct
+
+    @begin(program)
+    while (count = limit) {
+    @end(program)
+
+    but it is more likely that it was intended to be
+
+    @begin(program)
+    while (count == limit) {
+    @end(program)
+
+    You should avoid programming conventions that are difficult to distinguish from common errors.
+
+    We distinguish between the assignment infix operator and the infix operator in this book because an assignment infix operator is weaker in precedence than an infix operator, and because assignment infix operators put lvalue restrictions on their left operands. An lvalue is a variable, a parameter, or an expression whose outermost operator is either . suffix operator select or [] suffix operator subscript.
+
+    The assignment infix operators are
+
+    @list {
+    @link(= assignment infix operator)
+    @link(%= assignment infix operator)
+    @link(&= assignment infix operator)
+    @link(*= assignment infix operator)
+    @link(+= assignment infix operator)
+    @link(-= assignment infix operator)
+    @link(/= assignment infix operator)
+    @link(<<= assignment infix operator)
+    @link(>>= assignment infix operator)
+    @link(>>>= assignment infix operator)
+    @link(^= assignment infix operator)
+    @link(|= assignment infix operator)
+    }
+
+    @article(assignment @link(operator))
+
+    There are three kinds of assignment operator.
+
+    @list {
+    @link(assignment infix operator)
+    @link(assignment prefix operator)
+    @link(assignment suffix operator)
+    }
+
+    The thing they all do in common is change the stored value of an @link(lvalue).
+
+    @article(assignment @link(prefix operator))
+
+    There are two assignment prefix operators:
+
+    @list {
+    @link(++ assignment prefix operator)
+    @link(-- assignment prefix operator)
+    }
+
+    @article(assignment @link(suffix operator))
+
+    There are two assignment suffix operators:
+
+    @list {
+    @link(++ assignment suffix operator)
+    @link(-- assignment suffix operator)
+    }
+
+@specimen "associative array"
+
+    See @link(object).
+
+@specimen "atan"
+
+    @article(@t(atan) @link(Math function) @aka(arc tangent))
+
+    The Math.atan(x) function is the inverse tangent function, also known as arc tangent and tan@super(-1). Its argument x should be a number. The result will be an angle in radians in the range (Math.PI / -2)...(Math.PI / 2).
+
+    The Math.atan(x) function converts the ratio of two sides of a right triangle
+    into the angle of the hypotenuse. This is useful when converting cartesian
+    coordinates to polar coordinates. But there are two problems to watch out for.
+    If one of the cartesian coordinates is zero, then the computation of the ratio
+    could result in a division by zero, which is something to be avoided.
+
+    The other problem is the selection of the quadrant. The two components of the
+    ratio each has its own sign. Those two signs together identify one of the four
+    quadrants. The ratio has only one sign, so the result may be in the wrong
+    quadrant. This must be corrected.
+
+    @begin(program)
+    function polar(point) {
+        var radians;
+        if (point.x === 0) {
+            radians = (point.y === 0)
+                ? 0
+                : (point.y > 0)
+                    ? Math.PI / 2
+                    : Math.PI / -2;
+        } else {
+            radians = Math.atan(point.y / point.x);
+            if (point.x < 0) {
+                if (point.y >= 0) {
+                    radians += Math.PI;
+                } else {
+                    radians -= Math.PI;
+                }
+            }
+        }
+        return {
+            distance: Math.sqrt(point.x * point.x + point.y * point.y),
+            radians:  radians
+        };
+    }
+    @end(program)
+
+    In cases like this, it is better to use the @link(atan2 Math function) because it does the corrections and avoids division by zero.
+
+    This is an approximate implemention of Math.atan:
+
+    @begin(program)
+    Math.atan = function atan(x) {
+        return Math.asin(x / Math.sqrt(x * x + 1));
+    };
+    @end(program)
+
+@specimen "atan2"
+
+    @article(@t(atan2) @link(Math function) @aka(arc tangent y/x))
+
+    The Math.atan2(y, x) function is the inverse tangent function, also known as arc tangent and tan@super(-1). Its two arguments x and y should be numbers. The result will be an angle in radians in the range (Math.PI / -2)...(Math.PI / 2).
+
+    @begin(program)
+    function polar(point) {
+        return {
+            distance: Math.sqrt(point.x * point.x + point.y * point.y),
+            radians:  Math.atan2(point.y, point.x)
+        };
+    }
+    @end(program)
+
+    See @link(atan Math function).
+
+@specimen "attribute"
+
+    An attribute is an internal characteristic of a property of an object. See @link(object).
+
+@specimen(automatic semicolon insertion)
+
+    The rules for placement of @link(;) at the end of a statement are a little complicated because some statements require it and some do not. The language provides a mechanism called semicolon insertion that makes it possible to leave out @link(;) in many (but not all) situations. The semicolon insertion feature was intended to make the language simpler, but it actually makes it more complicated and fragile. There are three cases when semicolons are inserted.
+
+    @begin(list)
+        When a break, continue, return or throw is followed by a @link(line terminator), a @link(;) is inserted.
+        When a syntax error is found at the end of a program, a @link(;) is inserted at the end of the program in an attempt to correct the error.
+        When a syntax error is found in the vicinity of a @link(}) or a @link(line terminator) (but not in the control part of a for statement), a @link(;) is inserted in an attempt to correct the error.
+    @end(list)
+
+    It is necessary that the expression part of a @link(return statement)
+    begin on the same line as @t(return). For example,
+
+    @begin(program)
+    function seconds(day, hour, minute, second) {
+
+    // This function will fail in a surprising way.
+
+        return
+            day    * 86400 +
+            hour   *  3600 +
+            minute *    60 +
+            second;
+    }
+    @end(program)
+
+    The value returned by @t(seconds) is always @link(undefined) because a
+    @link(;) is inserted between @t(return) and @t(day). In this case, that
+    behavior is clearly undesirable, but there is no way to turn semicolon insertion off.
+
+    In the next example, a @link(;) is not inserted after c because there is not a syntax error.
+
+    @begin(program)
+    a = b + c
+    (d + e).print()
+    @end(program)
+
+    It is understood to mean
+
+    @begin(program)
+    a = b + c(d + e).print();
+    @end(program)
+
+    which might be quite different than the intention. It is not wise to rely on semicolon insertion. It can mask errors and it can cause errors.
+
+    These should always end in @link(;):
+
+    @list {
+    @link(break statement)
+    @link(continue statement)
+    @link(debugger statement)
+    @link(do statement)
+    @link(expression statement)
+    @link(return statement)
+    @link(throw statement)
+    @link(var statement)
+    }
+
+    Fortunately, it is a short list and is not difficult to remember.
+    The situation is made more complicated because some of the other statements,
+    such as @link(if statement) and @link(while statement), are compound statements
+    that take a @link(block statement) or other @link(statement), and that other
+    statement might also end in @link(;). That confusion is easily avoided by always
+    using a block.
+
+    When assigning a function literal using @link(= assignment infix operator) in an
+    @link(expression statement) or @link(var statement), the statement should end with a @link(;). So this statement should end with @link(;):
+
+    @begin(program)
+    var double = function (number) {
+        return number * 2;
+    };
+    @end(program)
+
+    It resembles a @link(function statement) that does not end with @link(;),
+    but it is a @link(var statement), and a @link(var statement) always ends with @link(;).
+

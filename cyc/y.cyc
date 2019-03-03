@@ -1,0 +1,33 @@
+@chapter "Y"
+
+@specimen "y combinator"
+
+    Blah.
+
+@begin(program)
+function y(e) {
+    return (function (f) {
+        return f(f);
+    }(function (f) {
+        return e(function (x) {
+            return f(f)(x);
+        });
+    }));
+}
+
+var factorial = y(function (recur) {
+    return function (n) {
+        return (n <= 2)
+            ? n
+            : n * recur(n - 1);
+    };
+});
+
+var number120 = factorial(5);
+@end(program)
+
+@specimen "yield @reserved@"
+
+    @article "yield @link(operator)"
+
+    Blah. See @link <function *>.
