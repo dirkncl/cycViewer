@@ -33,4 +33,6 @@ make_book.js        Make a book as a single HTML file
 
 
 You can read directly with the chrome browser
-Use Ctrl-S to save it as a book
+Use Ctrl-S to save it as a book.
+If used locally use Ctrl-C to close
+https://dirkncl.github.io/cycViewer/cycViewer.html
